@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detective at Work: Find the Root Cause</title>
+
+<!-- =====================================================================
+     IMAGE CONFIGURATION  (edit this part only to add your own images)
+     ---------------------------------------------------------------------
+     Paste an image address between the quotation marks for each screen.
+       • Direct URL:        intro: "https://example.com/my-detective-image.png",
+       • Local file:        intro: "images/detective.png",
+         (put the images folder next to this HTML file)
+     Leave a value empty ("") to keep the placeholder on that screen.
+     You can also test an image live: type a URL into the placeholder box
+     on screen and press "Show". To keep it permanently, paste it here.
+     ===================================================================== -->
+<script>
+const COURSE_IMAGES = {
+  intro:        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx-YhXcRwVINsWVCTiLJhZPPSn1HpY9dIk_H47jGeOGjnklG4ggFsZ91kz&s=10",  // Screen 1  – Course introduction (detective illustration, 4:3)
+  hook:         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLjs54leyWBFjhfOh6zk7zzpwlkGx_ZD2Cv7sz3VZRfIotoy5hqIsyGKY&s=10",  // Screen 2  – "There's a problem!" (employee + overdue report, 16:9)
+  objectives:   "https://img.magnific.com/premium-photo/mysterious-detective-game-concept_926199-1996793.jpg?w=360",  // Screen 3  – Your mission (detective notebook / magnifying glass, 4:3)
+  fiveWhys:     "https://media.licdn.com/dms/image/v2/D5612AQEzFZDMBVHbeQ/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1698640011672?e=2147483647&v=beta&t=23EMEakRhcGH3CZeDX2u3pnIdiOjFG20BcbIsUp3LZc",  // Screen 4  – Meet your investigation tool (five-step chain banner, 3:1)
+  detectiveTip: "https://res.cloudinary.com/highereducation/images/fl_lossy,c_fill/f_auto,q_auto/v1685025433/TheBestSchools.org/Detective-map-photos-clues-board/Detective-map-photos-clues-board.jpg?_i=AA",  // Screen 5  – Detective tip (evidence / facts visual, 4:3)
+  caseFile001:  "https://media.licdn.com/dms/image/v2/D5612AQE3Zqc_j8fHDg/videocover-high/B56Z_Uk7xWGsBc-/0/1785977880992?e=2147483647&v=beta&t=h6eZLfrOhAjYzO9-3myhMWV1gKednbD1K-UyAfhUV9w",  // Screen 6  – Case File 001 (late report scene, 4:3)
+  rootCause:    "https://content.instructables.com/FMK/U9RB/K6Z4JW8W/FMKU9RBK6Z4JW8W.jpg?auto=webp",  // Screen 8  – What did we discover? (investigation board, 16:9)
+  caseFile002:  "https://imageio.forbes.com/specials-images/imageserve/608063a0dfb3420cd60bb05d/0x0.jpg?format=jpg&height=900&width=1600&fit=bounds",  // Screen 9  – Case File 002 (customer service email backlog, 4:3)
+  summary:      "https://blog.kotobee.com/wp-content/uploads/2023/05/3.jpg",  // Screen 11 – Case closed summary (detective closing notebook, 16:9)
+  completion:   "https://st3.depositphotos.com/1022914/18534/i/450/depositphotos_185342968-stock-photo-putting-case-closed-rubber-stamp.jpg"   // Screen 13 – Congratulations (detective + solved case, 4:3)
+};
+</script>
+
+<style>
+/* =====================================================================
+   DESIGN TOKENS
+   ===================================================================== */
+:root{
+  --navy:#142B4A; --blue:#1E3A5F; --gold:#F4C542; --gold-d:#d9a91c;
+  --bg:#F5F7FA; --white:#FFFFFF;
+  --green:#2E8B57; --green-d:#1d6b41; --green-t:#e5f4ec;
+  --red:#D9534F; --red-d:#a93430; --red-t:#fbe9e8;
+  --line:#d6dde8; --muted:#4a5b73;
+  --shadow:0 6px 20px rgba(20,43,74,.10);
+  --r:16px;
+  --font:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--navy);
+  font-size:clamp(15px,1.45vw,17px);line-height:1.5;
+  overflow:hidden;                       /* the page itself never scrolls */
+  -webkit-text-size-adjust:100%;
+}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid #2b6cb0;outline-offset:3px}
+h1,h2,h3{line-height:1.15}
+h1:focus,h2:focus{outline:none}
+
+/* =====================================================================
+   APP FRAME: top bar / stage (one screen at a time) / bottom nav
+   ===================================================================== */
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+
+.topbar{flex:none;background:var(--navy);color:#fff;padding:10px clamp(14px,3vw,28px)}
+.topbar-row,.progress-wrap{max-width:1200px;margin:0 auto}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px;min-width:0}
+.brand svg{width:26px;height:26px;color:var(--gold);flex:none}
+.brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .short{display:none}
+.meta{display:flex;align-items:center;gap:10px;font-size:.92rem;white-space:nowrap}
+.badge-done{display:none;align-items:center;gap:4px;background:var(--green-d);color:#fff;border-radius:99px;padding:2px 10px;font-weight:700;font-size:.8rem}
+.reached .badge-done{display:inline-flex}
+.progress-wrap{display:flex;align-items:center;gap:12px;margin-top:8px}
+.progress{flex:1;height:10px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:var(--gold);border-radius:99px;transition:width .4s ease,background .3s}
+.reached .progress-fill{background:#5fd08f}
+.percent{font-weight:700;min-width:3ch;text-align:right;font-size:.9rem}
+
+.stage{position:relative;flex:1;min-height:0;overflow:hidden}
+
+.bottombar{flex:none;background:#fff;border-top:1px solid var(--line);padding:10px clamp(14px,3vw,28px)}
+.bottombar-row{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-hint{color:var(--muted);font-size:.85rem;text-align:center;flex:1}
+
+/* =====================================================================
+   SCREENS: only the .active one is visible; others fade/slide away
+   ===================================================================== */
+.screen{
+  position:absolute;inset:0;display:flex;
+  overflow-x:hidden;overflow-y:auto;       /* internal safety scroll for very small viewports only */
+  padding:clamp(10px,2.2vh,24px) clamp(14px,3vw,32px);
+  opacity:0;visibility:hidden;transform:translateX(36px);
+  transition:opacity .35s ease,transform .35s ease,visibility 0s linear .35s;
+}
+.screen.before{transform:translateX(-36px)}
+.screen.active{opacity:1;visibility:visible;transform:none;transition:opacity .35s ease,transform .35s ease,visibility 0s}
+.inner{margin:auto;width:100%;max-width:1120px;display:flex;flex-direction:column;gap:clamp(10px,2vh,18px)}
+
+/* =====================================================================
+   BUTTONS
+   ===================================================================== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:48px;padding:10px 22px;border-radius:12px;border:2px solid transparent;
+  font-weight:700;cursor:pointer;transition:transform .12s,box-shadow .12s,background .15s,opacity .15s;
+  text-align:center;
+}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 10px rgba(20,43,74,.18)}
+.btn:active:not(:disabled){transform:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--gold);color:var(--navy);border-color:var(--gold-d)}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-ghost{background:#fff;color:var(--navy);border-color:var(--navy)}
+.btn-lg{min-height:54px;padding:12px 30px;font-size:1.08rem}
+.btn-mini{min-height:36px;padding:4px 12px;border-radius:8px;background:var(--navy);color:#fff;font-size:.85rem}
+
+/* =====================================================================
+   TYPOGRAPHY + CARDS
+   ===================================================================== */
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:.78rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+.eyebrow::before{content:"";width:26px;height:4px;border-radius:4px;background:var(--gold)}
+h1{font-size:clamp(1.9rem,4.6vw,3.1rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(1.45rem,3.1vw,2.2rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.05rem;font-weight:800}
+.lead{font-size:clamp(1rem,1.8vw,1.2rem);color:var(--muted)}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:clamp(14px,2.4vh,22px) clamp(16px,2.4vw,26px)}
+.card.dark{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border:0}
+.card.dark .lead{color:#d6e2f3}
+.card.dark .eyebrow{color:var(--gold)}
+.grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(14px,2.5vw,28px);align-items:center}
+.grid-2>*{min-width:0}
+.stack{display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 12px;font-size:.85rem;font-weight:700;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+.callout{border-left:6px solid var(--gold);background:#fff9e3;border-radius:0 12px 12px 0;padding:10px 16px}
+.callout.blue{border-left-color:var(--blue);background:#eaf1fb}
+
+/* =====================================================================
+   IMAGE SLOTS (placeholder system)
+   ===================================================================== */
+.img-slot{margin:0;width:100%}
+.img-slot img{display:block;max-width:100%;max-height:var(--maxh,40vh);width:auto;height:auto;margin:0 auto;border-radius:14px;box-shadow:var(--shadow)}
+.ph{
+  aspect-ratio:var(--ratio,4/3);max-height:max(var(--maxh,100vh),165px);overflow:hidden;
+  border:2px dashed #8fa3bf;border-radius:14px;
+  background:repeating-linear-gradient(45deg,#eef2f8,#eef2f8 12px,#e6ecf5 12px,#e6ecf5 24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;
+  padding:10px 14px;font-size:.84rem;color:var(--navy);
+}
+.ph-tag{letter-spacing:.08em;font-size:.85rem}
+.ph-size{color:var(--muted)}
+.ph-err{color:var(--red-d);font-weight:700}
+.ph-src{display:flex;flex-direction:column;gap:4px;width:100%;max-width:340px;margin-top:4px}
+.ph-lbl{font-weight:700}
+.ph-row{display:flex;gap:6px}
+.ph-row input{flex:1;min-width:0;border:2px solid var(--line);border-radius:8px;padding:6px 10px;background:#fff;font-size:.85rem}
+.ph-note{font-size:.74rem;color:var(--muted)}
+.on-dark .ph{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.55);color:#fff}
+.on-dark .ph-size,.on-dark .ph-note{color:#cfdcf0}
+
+/* =====================================================================
+   OPTION CARDS (radio buttons styled as answer cards)
+   ===================================================================== */
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{position:relative;display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--blue)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt-key{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.9rem;background:#e8eef7;color:var(--navy)}
+.opt-body{flex:1;min-width:0}
+.opt-tag{display:block;font-size:.8rem;font-weight:800;margin-top:2px}
+.opt:has(input:checked){border-color:var(--navy);background:#eef3fa}
+.opt input:checked ~ .opt-key{background:var(--navy);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid #2b6cb0;outline-offset:2px}
+.opt.locked{cursor:default}
+.opt.correct{border-color:var(--green-d);background:var(--green-t)}
+.opt.correct .opt-tag{color:var(--green-d)}
+.opt.correct .opt-key{background:var(--green-d)!important;color:#fff!important}
+.opt.wrong{border-color:var(--red-d);background:var(--red-t)}
+.opt.wrong .opt-tag{color:var(--red-d)}
+.opt.wrong .opt-key{background:var(--red-d)!important;color:#fff!important}
+.feedback{border-radius:12px;padding:12px 16px;font-weight:500}
+.feedback.info{background:#eaf1fb;border-left:6px solid var(--blue)}
+.feedback.ok{background:var(--green-t);border-left:6px solid var(--green-d)}
+.feedback.no{background:var(--red-t);border-left:6px solid var(--red-d)}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+
+/* =====================================================================
+   SCREEN-SPECIFIC VISUALS
+   ===================================================================== */
+/* notification mock-up (screen 2) */
+.notif{display:flex;gap:12px;align-items:center;background:#fff;border:2px solid var(--red);border-radius:12px;padding:10px 14px}
+.notif .ico{flex:none;width:38px;height:38px;border-radius:10px;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:900}
+.notif small{display:block;color:var(--red-d);font-weight:800;letter-spacing:.06em}
+.cal{display:flex;gap:4px;margin-top:8px}
+.cal span{flex:1;text-align:center;font-size:.72rem;font-weight:700;padding:4px 0;border-radius:6px;background:#e8eef7}
+.cal .due{background:var(--red);color:#fff}
+.cal .done{background:var(--gold)}
+
+/* detective notebook (screen 3) */
+.notebook{position:relative;background:#fffdf3;border-radius:6px 14px 14px 6px;box-shadow:var(--shadow);border:1px solid #e6dfbd;padding:18px 20px 18px 56px;
+  background-image:repeating-linear-gradient(transparent,transparent 31px,#cfe0f5 31px,#cfe0f5 32px)}
+.notebook::before{content:"";position:absolute;left:34px;top:0;bottom:0;width:2px;background:#e9a4a1}
+.notebook .rings{position:absolute;left:10px;top:14px;bottom:14px;display:flex;flex-direction:column;justify-content:space-around}
+.notebook .rings i{display:block;width:16px;height:16px;border-radius:50%;background:var(--navy)}
+.notebook .stamp{position:absolute;right:14px;top:10px;color:var(--navy);opacity:.18;width:56px;height:56px}
+.notebook ol{margin:8px 0 0 1.2em;display:flex;flex-direction:column;gap:14px;line-height:1.35}
+.notebook h3{text-transform:uppercase;letter-spacing:.1em;font-size:.85rem;color:var(--blue)}
+
+/* five-step cards (screen 4) */
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 12px;cursor:pointer;display:block;transition:border-color .15s,background .15s}
+.step:hover{border-color:var(--blue)}
+.step-head{display:flex;align-items:center;gap:12px;font-weight:800}
+.step-num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:.9rem}
+.step-hint{margin-left:auto;font-size:.78rem;font-weight:700;color:var(--blue);white-space:nowrap}
+.step-detail{margin:6px 0 2px 42px;color:var(--muted);font-size:.95rem}
+.step[aria-expanded="true"]{border-color:var(--gold-d);background:#fff9e3}
+.step[aria-expanded="true"] .step-num{background:var(--gold);color:var(--navy)}
+.step[aria-expanded="true"] .step-hint{visibility:hidden}
+.counter{font-size:.85rem;font-weight:700;color:var(--blue)}
+
+/* quote + fact vs assumption (screen 5) */
+.quote{position:relative;background:var(--navy);color:#fff;border-radius:var(--r);padding:clamp(16px,3vh,28px) clamp(18px,2.6vw,30px) clamp(16px,3vh,28px) clamp(70px,8vw,92px);box-shadow:var(--shadow)}
+.quote svg{position:absolute;left:clamp(14px,2vw,24px);top:50%;transform:translateY(-50%);width:clamp(40px,6vw,58px);height:clamp(40px,6vw,58px);color:var(--gold)}
+.quote strong{display:block;color:var(--gold);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.quote p{font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:700;line-height:1.3}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vs .card{padding:10px 14px}
+.vs b{display:block;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.vs .fact b{color:var(--green-d)} .vs .fact{border-top:5px solid var(--green-d)}
+.vs .assume b{color:var(--red-d)} .vs .assume{border-top:5px solid var(--red-d)}
+.vs p{font-size:.92rem}
+
+/* case file (screens 6, 9) */
+.casefile{position:relative;background:#f4e2a8;border-radius:4px 14px 14px 14px;padding:clamp(16px,2.6vh,24px) clamp(16px,2.4vw,26px);box-shadow:var(--shadow);margin-top:20px;border:1px solid #d9c27a}
+.casefile .tab{position:absolute;top:-24px;left:0;background:#f4e2a8;border:1px solid #d9c27a;border-bottom:0;border-radius:10px 10px 0 0;padding:3px 16px;font-weight:800;letter-spacing:.12em;font-size:.85rem}
+.casefile .paper{background:#fff;border-radius:8px;padding:14px 18px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.stamp-open{position:absolute;right:18px;top:-6px;transform:rotate(8deg);border:3px solid var(--red-d);color:var(--red-d);font-weight:900;letter-spacing:.18em;padding:2px 12px;border-radius:6px;background:rgba(255,255,255,.7)}
+.timeline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.pill{border-radius:10px;padding:6px 12px;font-weight:800;font-size:.9rem}
+.pill.due{background:#e8eef7}
+.pill.late{background:var(--red-t);color:var(--red-d);border:2px solid var(--red-d)}
+.arrow{font-weight:900;color:var(--muted)}
+
+/* investigation board + clues (screens 7, 9) */
+.board{background:var(--blue);border-radius:var(--r);padding:clamp(10px,2vh,16px) clamp(12px,2vw,20px);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;
+  background-image:radial-gradient(rgba(255,255,255,.07) 1.5px,transparent 1.5px);background-size:16px 16px}
+.board .problem{background:var(--red-t);border:2px solid var(--red-d);border-radius:12px;padding:8px 14px;color:var(--navy)}
+.board .problem b{color:var(--red-d);letter-spacing:.08em;font-size:.78rem}
+.clues{list-style:none;display:flex;flex-direction:column;gap:8px;position:relative}
+.clue{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:12px;padding:8px 12px;color:var(--navy);position:relative}
+.clue::before{content:"";position:absolute;left:-6px;top:50%;width:12px;height:12px;border-radius:50%;background:var(--red);border:2px solid #fff;transform:translateY(-50%)}
+.why-chip{flex:none;background:var(--navy);color:var(--gold);font-weight:800;font-size:.75rem;letter-spacing:.08em;border-radius:8px;padding:3px 8px;margin-top:2px}
+.clue .q{font-size:.88rem;color:var(--muted)}
+.clue .a{font-weight:700;line-height:1.3}
+.clue.pop{animation:pop .4s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.rootcause{background:var(--gold);color:var(--navy);border-radius:12px;padding:10px 16px;display:flex;gap:12px;align-items:center;border:2px solid var(--gold-d)}
+.rootcause svg{flex:none;width:34px;height:34px}
+.rootcause b{display:block;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+.rootcause p{font-weight:800;font-size:1.08rem}
+
+/* comparison (screen 8) */
+.compare{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch}
+.compare .card{padding:12px 16px}
+.compare .lab{display:block;font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.cmp-sur{border-top:6px solid var(--red-d)} .cmp-sur .lab{color:var(--red-d)}
+.cmp-root{border-top:6px solid var(--gold-d)} .cmp-root .lab{color:#8a6500}
+.cmp-sol{border-top:6px solid var(--green-d)} .cmp-sol .lab{color:var(--green-d)}
+.compare .arrow{align-self:center;font-size:1.6rem}
+
+/* summary steps (screen 11) */
+.recap{counter-reset:r;display:flex;flex-direction:column;gap:8px;list-style:none}
+.recap li{counter-increment:r;display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;font-weight:700;box-shadow:0 2px 6px rgba(20,43,74,.06)}
+.recap li::before{content:counter(r);flex:none;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:800}
+.reminders{list-style:none;display:flex;flex-direction:column;gap:8px}
+.reminders li{display:flex;gap:10px;align-items:flex-start;background:#fff9e3;border-left:6px solid var(--gold);border-radius:0 12px 12px 0;padding:8px 14px;font-weight:700}
+.reminders svg{flex:none;width:22px;height:22px;color:var(--green-d);margin-top:1px}
+
+/* quiz (screen 12) */
+.quiz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.q-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.q-card .qn{font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.q-card .qt{font-weight:800;line-height:1.3}
+.q-card .opt{padding:7px 10px;font-size:.93rem}
+.explain{font-size:.88rem;border-radius:10px;padding:8px 10px}
+.explain.ok{background:var(--green-t);border-left:5px solid var(--green-d)}
+.explain.no{background:var(--red-t);border-left:5px solid var(--red-d)}
+.result{border-radius:var(--r);padding:12px 18px;font-weight:700}
+.result.pass{background:var(--green-t);border:2px solid var(--green-d)}
+.result.fail{background:var(--red-t);border:2px solid var(--red-d)}
+.result .score{font-size:1.3rem;font-weight:800}
+.hint{color:var(--muted);font-size:.88rem}
+
+/* finish (screen 13) */
+.finish-msg{background:var(--green-t);border:2px solid var(--green-d);border-radius:12px;padding:12px 16px;font-weight:700;color:#10432a}
+.status-line{font-size:.9rem;color:#d6e2f3}
+.big-caps{font-weight:900;letter-spacing:.04em;font-size:clamp(1.05rem,2.2vw,1.45rem);color:var(--gold);line-height:1.25}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+@media (max-width:980px){
+  .quiz-grid{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .grid-2{grid-template-columns:1fr}
+  .compare{grid-template-columns:1fr}
+  .compare .arrow{transform:rotate(90deg);justify-self:center;font-size:1.2rem}
+  .brand .full{display:none}.brand .short{display:inline}
+  .nav-hint{display:none}
+  .bottombar-row .btn{flex:1}
+}
+@media (max-width:520px){
+  .vs{grid-template-columns:1fr}
+  .btn{padding:10px 14px}
+  .step-hint{display:none}
+}
+@media (max-height:800px){
+  .ph-note{display:none}                 /* keep placeholders compact on short screens */
+  .quote.compact{padding-top:10px;padding-bottom:10px}
+}
+@media (max-height:640px){
+  body{font-size:15px}
+  .topbar{padding-top:6px;padding-bottom:6px}.progress-wrap{margin-top:5px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+noscript{display:block;padding:20px;background:#fff3cd}
+</style>
+</head>
+
+<body>
+<!-- reusable icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-mag" viewBox="0 0 64 64"><circle cx="26" cy="26" r="16" fill="none" stroke="currentColor" stroke-width="6"/><path d="M38 38 L57 57" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs></svg>
+
+<noscript>This course needs JavaScript enabled to run.</noscript>
+
+<div class="app" id="app">
+
+  <!-- ============ PERSISTENT TOP BAR: title, screen counter, progress ============ -->
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <svg aria-hidden="true"><use href="#i-mag"/></svg>
+        <span class="full">Detective at Work</span><span class="short">Detective at Work</span>
+      </div>
+      <div class="meta">
+        <span class="badge-done" id="doneBadge"><svg width="14" height="14" aria-hidden="true"><use href="#i-check"/></svg> Course complete</span>
+        <span id="screenLabel" aria-hidden="true">Screen <b id="screenNow">1</b> of <b id="screenTotal">13</b></span>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress" id="progress" role="progressbar" aria-label="Course progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="percent" id="percent" aria-hidden="true">0%</span>
+    </div>
+  </header>
+
+  <!-- ============ STAGE: exactly one .screen is visible at a time ============ -->
+  <main class="stage" id="stage">
+
+    <!-- SCREEN 1: INTRODUCTION -->
+    <section class="screen" id="s1" data-title="Course introduction" aria-labelledby="t1">
+      <div class="inner">
+        <div class="card dark grid-2">
+          <div class="stack">
+            <div class="chips"><span class="chip">⏱ 10 minutes</span><span class="chip">Self-paced learning</span></div>
+            <p class="eyebrow">eLearning · All employees</p>
+            <h1 id="t1" tabindex="-1">Detective at Work: Find the Root Cause</h1>
+            <p class="lead">Look beyond the obvious. Find out what's really causing the problem.</p>
+            <div class="actions"><button class="btn btn-primary btn-lg" type="button" data-go="next">Start Course →</button></div>
+          </div>
+          <figure class="img-slot on-dark" data-img="intro" data-ratio="4 / 3" data-size="4:3, e.g. 1200 × 900 px" data-suggest="Detective investigating a workplace problem."></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: HOOK -->
+    <section class="screen" id="s2" data-title="There's a problem!" aria-labelledby="t2">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">The hook</p>
+          <h2 id="t2" tabindex="-1">There's a problem!</h2>
+        </div>
+        <div class="grid-2">
+          <div class="stack">
+            <div class="card">
+              <div class="notif">
+                <div class="ico" aria-hidden="true">!</div>
+                <div><small>OVERDUE</small><strong>An important report was submitted late.</strong></div>
+              </div>
+              <div class="cal" aria-label="Calendar: the Friday deadline has passed">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span class="due">Fri ✗</span><span>Sat</span><span class="done">Mon</span>
+              </div>
+            </div>
+            <figure class="img-slot" data-img="hook" data-ratio="16 / 9" data-maxh="26vh" data-size="16:9, e.g. 1280 × 720 px" data-suggest="Employee looking at an overdue report notification."></figure>
+          </div>
+          <div class="stack">
+            <h3 style="font-size:1.35rem" id="hookQ">What would you do?</h3>
+            <div class="opts" role="radiogroup" aria-labelledby="hookQ">
+              <label class="opt"><input type="radio" name="hook" value="remind"><span class="opt-key">A</span><span class="opt-body">Remind the employee to submit reports on time.</span></label>
+              <label class="opt"><input type="radio" name="hook" value="faster"><span class="opt-key">B</span><span class="opt-body">Ask the team to work faster.</span></label>
+              <label class="opt"><input type="radio" name="hook" value="investigate"><span class="opt-key">C</span><span class="opt-body">Investigate why the report was late.</span></label>
+            </div>
+            <div class="feedback info" id="hookFeedback" role="status" aria-live="polite" hidden></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: YOUR MISSION -->
+    <section class="screen" id="s3" data-title="Your mission" aria-labelledby="t3">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">Objectives</p>
+          <h2 id="t3" tabindex="-1">Your mission</h2>
+        </div>
+        <div class="grid-2">
+          <div class="stack">
+            <div class="notebook">
+              <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <svg class="stamp" aria-hidden="true"><use href="#i-mag"/></svg>
+              <h3>Detective's notebook</h3>
+              <p style="margin-top:6px"><b>By the end of this course, you should be able to:</b></p>
+              <ol>
+                <li>Apply the 5 Whys technique to investigate a workplace problem.</li>
+                <li>Identify a potential root cause by asking a series of Why questions.</li>
+              </ol>
+            </div>
+            <div class="callout"><b>Remember:</b> your goal is not to find someone to blame. It's to discover what needs to change to prevent the problem from happening again.</div>
+          </div>
+          <figure class="img-slot" data-img="objectives" data-ratio="4 / 3" data-maxh="38vh" data-size="4:3, e.g. 1200 × 900 px" data-suggest="Detective notebook with a magnifying glass and clues."></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 4: MEET YOUR INVESTIGATION TOOL -->
+    <section class="screen" id="s4" data-title="Meet your investigation tool" aria-labelledby="t4">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">Meet your investigation tool</p>
+          <h2 id="t4" tabindex="-1">What is the 5 Whys technique?</h2>
+        </div>
+        <div class="grid-2" style="align-items:start">
+          <div class="stack">
+            <p class="lead">The 5 Whys is a simple problem-solving technique that helps you uncover the underlying cause of a problem by repeatedly asking one question:</p>
+            <div class="quote compact" style="padding-left:clamp(18px,2.6vw,30px)"><p style="font-size:clamp(1.2rem,2.6vw,1.8rem);letter-spacing:.03em">WHY DID THIS HAPPEN?</p></div>
+            <p class="callout blue"><b>Five is a guide, not a strict rule.</b> Sometimes three Whys are enough; other times you need more. Keep going until you reach a cause you can address.</p>
+            <figure class="img-slot" data-img="fiveWhys" data-ratio="3 / 1" data-maxh="22vh" data-size="3:1 wide banner, e.g. 1500 × 500 px" data-suggest="Five connected steps / arrows showing the 5 Whys chain."></figure>
+          </div>
+          <div class="stack">
+            <p class="counter" id="stepCounter" aria-live="polite">Click each step to reveal it · 0 of 5 explored</p>
+            <div class="steps" id="steps"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 5: DETECTIVE TIP -->
+    <section class="screen" id="s5" data-title="Detective tip" aria-labelledby="t5">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">Detective tip</p>
+          <h2 id="t5" tabindex="-1">Follow the evidence</h2>
+        </div>
+        <div class="grid-2">
+          <div class="stack">
+            <div class="quote">
+              <svg aria-hidden="true"><use href="#i-mag"/></svg>
+              <strong>Detective tip</strong>
+              <p>Don't jump to conclusions! Base your answers on facts, not assumptions.</p>
+            </div>
+            <div class="vs">
+              <div class="card fact"><b>✓ Fact (evidence)</b><p>The report was submitted on Monday, not Friday.</p></div>
+              <div class="card assume"><b>? Assumption (no evidence)</b><p>The employee didn't care about the deadline.</p></div>
+            </div>
+          </div>
+          <figure class="img-slot" data-img="detectiveTip" data-ratio="4 / 3" data-maxh="36vh" data-size="4:3, e.g. 1200 × 900 px" data-suggest="Detective examining evidence markers and clue cards."></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 6: CASE FILE 001 -->
+    <section class="screen" id="s6" data-title="Case File 001: the late report" aria-labelledby="t6">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">See it in action</p>
+          <h2 id="t6" tabindex="-1">Case File 001: The late report</h2>
+        </div>
+        <div class="grid-2">
+          <div class="stack">
+            <div class="casefile">
+              <span class="tab">CASE FILE 001</span><span class="stamp-open">OPEN</span>
+              <div class="paper">
+                <h3 style="color:var(--red-d);letter-spacing:.08em;font-size:.8rem">THE PROBLEM</h3>
+                <p style="font-weight:800;font-size:1.15rem;margin:2px 0 6px">An important weekly report was submitted late.</p>
+                <p>The team was expected to submit the report every Friday. However, it was submitted on Monday instead.</p>
+                <div class="timeline" aria-label="Due Friday, submitted Monday">
+                  <span class="pill due">Due: Friday</span><span class="arrow" aria-hidden="true">→</span><span class="pill late">Submitted: Monday ✗ LATE</span>
+                </div>
+              </div>
+            </div>
+            <div class="callout"><b>Let's investigate what happened!</b> Next, we'll follow the trail one clue at a time.</div>
+          </div>
+          <figure class="img-slot" data-img="caseFile001" data-ratio="4 / 3" data-maxh="38vh" data-size="4:3, e.g. 1200 × 900 px" data-suggest="Computer screen with an overdue weekly report notification."></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 7: FOLLOW THE TRAIL (progressive reveal) -->
+    <section class="screen" id="s7" data-title="Follow the trail" aria-labelledby="t7">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">Follow the trail</p>
+          <h2 id="t7" tabindex="-1">The 5 Whys in action</h2>
+        </div>
+        <div class="board">
+          <div class="problem"><b>PROBLEM</b><br><strong>The weekly report was submitted late.</strong></div>
+          <ol class="clues" id="trailList" aria-live="polite"></ol>
+          <div class="rootcause" id="rootCause" hidden>
+            <svg aria-hidden="true"><use href="#i-mag"/></svg>
+            <div><b>Potential root cause</b><p>No clear ownership of the reporting schedule.</p></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" id="revealBtn" type="button">Reveal Next Clue (1 of 5)</button>
+          <span class="hint" id="trailHint">Click to uncover each Why, one clue at a time.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 8: WHAT DID WE DISCOVER? -->
+    <section class="screen" id="s8" data-title="What did we discover?" aria-labelledby="t8">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">Case solved</p>
+          <h2 id="t8" tabindex="-1">What did we discover?</h2>
+        </div>
+        <div class="grid-2">
+          <div class="stack">
+            <p class="lead" style="color:var(--navy)">The problem wasn't necessarily that employees were careless or inefficient. <b>The investigation revealed a gap in the process.</b></p>
+            <div class="callout blue"><b>Validate with evidence:</b> this is an illustrative cause-and-effect chain. In a real investigation, check each answer against facts before you act.</div>
+          </div>
+          <figure class="img-slot" data-img="rootCause" data-ratio="16 / 9" data-maxh="24vh" data-size="16:9, e.g. 1280 × 720 px" data-suggest="Investigation board with the root cause highlighted."></figure>
+        </div>
+        <div class="compare">
+          <div class="card cmp-sur"><span class="lab">✗ Surface problem</span><b>Late report.</b></div>
+          <span class="arrow" aria-hidden="true">→</span>
+          <div class="card cmp-root"><span class="lab">🔍 Potential root cause</span><b>No clear ownership of the reporting schedule.</b></div>
+          <span class="arrow" aria-hidden="true">→</span>
+          <div class="card cmp-sol"><span class="lab">✓ Possible solution</span><b>Assign ownership and communicate deadlines.</b><p style="font-size:.88rem;color:var(--muted)">Assign an owner to maintain the reporting calendar and communicate deadlines to everyone involved.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 9: CASE FILE 002 -->
+    <section class="screen" id="s9" data-title="Case File 002: customer emails" aria-labelledby="t9">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">Your turn</p>
+          <h2 id="t9" tabindex="-1">Case File 002: Customer emails</h2>
+        </div>
+        <div class="grid-2" style="align-items:start">
+          <div class="stack">
+            <div class="board">
+              <div class="problem"><b>PROBLEM</b><br><strong>Customers are waiting too long for responses to their emails.</strong></div>
+              <ol class="clues">
+                <li class="clue"><span class="why-chip">WHY 1</span><div><p class="q">Why are customer emails not being answered on time?</p><p class="a">Because the team has more emails waiting for responses than it can process.</p></div></li>
+                <li class="clue"><span class="why-chip">WHY 2</span><div><p class="q">Why is there a growing backlog of emails?</p><p class="a">Because employees spend too much time sorting and assigning emails manually.</p></div></li>
+                <li class="clue"><span class="why-chip">WHY 3</span><div><p class="q">Why does sorting and assigning emails take so much time?</p><p class="a">Because there is no standard process for categorizing and assigning incoming emails.</p></div></li>
+              </ol>
+            </div>
+            <div class="callout"><b>Now it's your turn to investigate further.</b></div>
+          </div>
+          <figure class="img-slot" data-img="caseFile002" data-ratio="4 / 3" data-maxh="38vh" data-size="4:3, e.g. 1200 × 900 px" data-suggest="Customer service employee facing a large email backlog."></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 10: YOUR TURN – SOLVE THE MYSTERY (scenario question) -->
+    <section class="screen" id="s10" data-title="Solve the mystery" aria-labelledby="t10">
+      <div class="inner" style="max-width:860px">
+        <div class="stack">
+          <p class="eyebrow">Your challenge</p>
+          <h2 id="t10" tabindex="-1">Your turn: Solve the mystery!</h2>
+        </div>
+        <div class="card stack">
+          <p>You've discovered that <b>there is no standard process for categorizing and assigning incoming emails.</b></p>
+          <p style="font-weight:800;font-size:1.15rem" id="c2Q">What should you investigate next?</p>
+          <div class="opts" role="radiogroup" aria-labelledby="c2Q" id="c2Opts">
+            <label class="opt"><input type="radio" name="c2" value="A"><span class="opt-key">A</span><span class="opt-body">Why is there no standard process for categorizing and assigning emails?<span class="opt-tag" aria-live="polite"></span></span></label>
+            <label class="opt"><input type="radio" name="c2" value="B"><span class="opt-key">B</span><span class="opt-body">Who is responsible for the email backlog?<span class="opt-tag" aria-live="polite"></span></span></label>
+            <label class="opt"><input type="radio" name="c2" value="C"><span class="opt-key">C</span><span class="opt-body">Can the team simply work faster?<span class="opt-tag" aria-live="polite"></span></span></label>
+          </div>
+          <div class="feedback" id="c2Feedback" role="status" aria-live="polite" hidden></div>
+          <div class="actions">
+            <button class="btn btn-dark" id="c2Submit" type="button" disabled>Submit Answer</button>
+            <button class="btn btn-ghost" id="c2Retry" type="button" hidden>Try Again</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 11: CASE CLOSED – SUMMARY -->
+    <section class="screen" id="s11" data-title="Case closed: summary" aria-labelledby="t11">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">Summary</p>
+          <h2 id="t11" tabindex="-1">Case closed!</h2>
+        </div>
+        <div class="grid-2" style="align-items:start">
+          <div class="stack">
+            <h3>Let's recap the 5 Whys technique</h3>
+            <ol class="recap">
+              <li>Identify the problem.</li>
+              <li>Ask Why.</li>
+              <li>Follow the chain of causes.</li>
+              <li>Continue asking Why.</li>
+              <li>Validate the root cause and address it.</li>
+            </ol>
+          </div>
+          <div class="stack">
+            <h3>Remember these three things</h3>
+            <ul class="reminders">
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Don't jump to conclusions.</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Base your answers on facts and evidence.</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Focus on fixing the process, not blaming people.</li>
+            </ul>
+            <figure class="img-slot" data-img="summary" data-ratio="16 / 9" data-maxh="22vh" data-size="16:9, e.g. 1280 × 720 px" data-suggest="Detective closing an investigation notebook."></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 12: FINAL KNOWLEDGE CHECK -->
+    <section class="screen" id="s12" data-title="Final knowledge check" aria-labelledby="t12">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow">Knowledge check · pass mark 2 of 3</p>
+          <h2 id="t12" tabindex="-1">Final knowledge check</h2>
+        </div>
+        <div class="quiz-grid" id="quizGrid"></div>
+        <div class="result" id="quizResult" role="status" aria-live="polite" hidden></div>
+        <div class="actions">
+          <button class="btn btn-dark" id="quizSubmit" type="button" disabled>Submit Answers</button>
+          <button class="btn btn-ghost" id="quizRetry" type="button" hidden>Try Again</button>
+          <span class="hint" id="quizHint">Answer all 3 questions to submit.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 13: CONGRATULATIONS -->
+    <section class="screen" id="s13" data-title="Congratulations, Detective!" aria-labelledby="t13">
+      <div class="inner">
+        <div class="card dark grid-2">
+          <div class="stack">
+            <p class="eyebrow">Case closed</p>
+            <h2 id="t13" tabindex="-1">Congratulations, Detective!</h2>
+            <p class="lead">You've learned how to look beyond the obvious, ask the right questions, and investigate the causes behind workplace problems.</p>
+            <p>The next time something goes wrong, don't just fix what you see.</p>
+            <p class="big-caps">PUT ON YOUR DETECTIVE HAT.<br>ASK WHY.<br>FIND THE ROOT CAUSE.</p>
+            <p class="lead" style="font-size:1rem">Because solving the real problem is better than fixing the same problem over and over again!</p>
+            <p class="status-line" id="passStatus"></p>
+            <div class="actions"><button class="btn btn-primary btn-lg" id="finishBtn" type="button">Finish Course ✓</button></div>
+            <div class="finish-msg" id="finishMsg" role="status" tabindex="-1" hidden>🎉 Course complete! Thank you for completing <i>Detective at Work</i>. You can now close this window.</div>
+          </div>
+          <figure class="img-slot on-dark" data-img="completion" data-ratio="4 / 3" data-maxh="40vh" data-size="4:3, e.g. 1200 × 900 px" data-suggest="Detective putting away a magnifying glass beside a solved case file."></figure>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ PERSISTENT BOTTOM NAV ============ -->
+  <footer class="bottombar">
+    <div class="bottombar-row">
+      <button class="btn btn-ghost" id="prevBtn" type="button">← Previous</button>
+      <span class="nav-hint" id="navHint">Use the buttons or the ← → arrow keys</span>
+      <button class="btn btn-primary" id="nextBtn" type="button">Next →</button>
+    </div>
+  </footer>
+</div>
+
+<div class="visually-hidden" id="announcer" aria-live="polite" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- helpers ---------- */
+  const $  = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  /* =====================================================================
+     1. IMAGE SLOTS
+        Every <figure class="img-slot" data-img="key"> shows either the
+        image from COURSE_IMAGES[key] or a placeholder. The placeholder also
+        has a box where you can paste a URL to preview it instantly.
+     ===================================================================== */
+  const liveOverrides = {};
+
+  function renderPlaceholder(slot, errMsg, prefill) {
+    const key = slot.dataset.img;
+    slot.classList.remove("has-img");
+    slot.innerHTML =
+      '<div class="ph" role="group" aria-label="Image placeholder">' +
+        '<strong class="ph-tag">[ IMAGE PLACEHOLDER ]</strong>' +
+        '<p><b>Suggested Image:</b> ' + esc(slot.dataset.suggest) + '</p>' +
+        '<p class="ph-size"><b>Recommended size:</b> ' + esc(slot.dataset.size) + '</p>' +
+        (errMsg ? '<p class="ph-err" role="alert">' + esc(errMsg) + '</p>' : '') +
+        '<div class="ph-src"><span class="ph-lbl">Image Source:</span>' +
+          '<span class="ph-row"><input type="text" inputmode="url" autocomplete="off" placeholder="PASTE YOUR IMAGE URL HERE" aria-label="Image URL for ' + esc(key) + '">' +
+          '<button class="btn btn-mini" type="button">Show</button></span></div>' +
+        '<p class="ph-note">To keep it, paste the URL into COURSE_IMAGES.' + esc(key) + ' at the top of the file.</p>' +
+      '</div>';
+    const ph = slot.querySelector(".ph");
+    if (slot.dataset.ratio) ph.style.setProperty("--ratio", slot.dataset.ratio);
+    if (slot.dataset.maxh) ph.style.setProperty("--maxh", slot.dataset.maxh);
+    const input = $("input", slot), btn = $("button", slot);
+    if (prefill) input.value = prefill;
+    const apply = () => {
+      const v = input.value.trim();
+      if (!v) { input.focus(); return; }
+      liveOverrides[key] = v;
+      renderSlot(slot);
+    };
+    btn.addEventListener("click", apply);
+    input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); apply(); } });
+  }
+
+  function renderSlot(slot) {
+    const key = slot.dataset.img;
+    /* COURSE_IMAGES is a top-level const, so it is NOT a window property: read it directly */
+    const configured = (typeof COURSE_IMAGES !== "undefined" && COURSE_IMAGES) ? COURSE_IMAGES[key] : "";
+    const src = String(liveOverrides[key] || configured || "").trim();
+    if (!src) { renderPlaceholder(slot); return; }
+    const img = new Image();
+    img.alt = slot.dataset.suggest || "";
+    img.decoding = "async";
+    if (slot.dataset.maxh) img.style.setProperty("--maxh", slot.dataset.maxh);
+    img.addEventListener("error", () => {
+      delete liveOverrides[key];
+      renderPlaceholder(slot, "Couldn't load that image. Check the URL or file path.", src);
+    });
+    img.addEventListener("load", () => slot.classList.add("has-img"));
+    slot.innerHTML = "";
+    slot.appendChild(img);
+    img.src = src;
+  }
+  $$(".img-slot").forEach(renderSlot);
+
+  /* =====================================================================
+     2. NAVIGATION (one screen at a time)
+     ===================================================================== */
+  const screens = $$(".screen");
+  const TOTAL = screens.length;
+  let current = 0, completed = false, quizPassed = false;
+  const prevBtn = $("#prevBtn"), nextBtn = $("#nextBtn");
+
+  $("#screenTotal").textContent = TOTAL;
+
+  function goTo(i, initial) {
+    i = Math.max(0, Math.min(TOTAL - 1, i));
+    screens.forEach((s, idx) => {
+      const active = idx === i;
+      s.classList.toggle("active", active);
+      s.classList.toggle("before", idx < i);
+      s.setAttribute("aria-hidden", String(!active));
+      try { s.inert = !active; } catch (e) {}
+    });
+    current = i;
+    const pct = Math.round(((i + 1) / TOTAL) * 100);
+    $("#screenNow").textContent = i + 1;
+    $("#percent").textContent = pct + "%";
+    $("#progressFill").style.width = pct + "%";
+    const pb = $("#progress");
+    pb.setAttribute("aria-valuenow", pct);
+    pb.setAttribute("aria-valuetext", "Screen " + (i + 1) + " of " + TOTAL + ", " + pct + " percent");
+    if (i === TOTAL - 1) document.body.classList.add("reached"); /* completion indicator */
+    updateNavButtons();
+    screens[i].scrollTop = 0;
+    if (!initial) {
+      $("#announcer").textContent = "Screen " + (i + 1) + " of " + TOTAL + ": " + screens[i].dataset.title;
+      const h = $("h1, h2", screens[i]);
+      if (h) h.focus({ preventScroll: true });
+    }
+  }
+
+  function updateNavButtons() {
+    prevBtn.disabled = current === 0;
+    if (current === TOTAL - 1) {
+      nextBtn.textContent = completed ? "Course Completed ✓" : "Finish Course ✓";
+      nextBtn.disabled = completed;
+    } else {
+      nextBtn.textContent = "Next →";
+      nextBtn.disabled = false;
+    }
+  }
+
+  function next() { current === TOTAL - 1 ? finishCourse() : goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+  prevBtn.addEventListener("click", prev);
+  nextBtn.addEventListener("click", next);
+  $$("[data-go='next']").forEach(b => b.addEventListener("click", next));
+
+  document.addEventListener("keydown", e => {
+    const t = e.target;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
+    if (e.key === "ArrowRight") { if (!nextBtn.disabled) next(); }
+    else if (e.key === "ArrowLeft") { if (!prevBtn.disabled) prev(); }
+  });
+
+  function finishCourse() {
+    completed = true;
+    document.body.classList.add("reached");
+    $("#finishMsg").hidden = false;
+    $("#finishBtn").disabled = true;
+    $("#finishBtn").textContent = "Course Completed ✓";
+    updateNavButtons();
+    $("#finishMsg").focus();
+  }
+  $("#finishBtn").addEventListener("click", finishCourse);
+
+  /* =====================================================================
+     3. SCREEN 2 – HOOK (no single correct answer)
+     ===================================================================== */
+  const HOOK_FB = {
+    remind: "A reminder might help, but it assumes the employee is the cause. What if the report was late for a reason outside their control? Before you act, find out why.",
+    faster: "Working faster adds pressure without fixing anything. If the delay comes from somewhere else, the same problem will return next week. It's worth finding out why first.",
+    investigate: "Great instinct! Investigating first lets you see what's really happening instead of reacting to what's on the surface."
+  };
+  $$("input[name=hook]").forEach(r => r.addEventListener("change", () => {
+    const fb = $("#hookFeedback");
+    fb.innerHTML = "<p>" + esc(HOOK_FB[r.value]) + "</p><p style='margin-top:6px'><b>There's no single right answer yet.</b> The point is to get curious before taking action.</p>";
+    fb.hidden = false;
+  }));
+
+  /* =====================================================================
+     4. SCREEN 4 – CLICK-TO-REVEAL STEPS
+     ===================================================================== */
+  const STEPS = [
+    ["Identify the problem.", "State the problem clearly and factually. Describe what happened, not who to blame."],
+    ["Ask Why.", "Ask: \u201CWhy did this happen?\u201D Answer with what you know or can verify, not a guess."],
+    ["Investigate the reason behind your answer.", "Check your answer against facts, data or conversations before you move on."],
+    ["Continue asking Why.", "Use each answer to ask Why again. Follow the chain of causes. It may take three Whys or more than five."],
+    ["Validate the potential root cause.", "Confirm the cause is supported by evidence and that fixing it would help prevent the problem from happening again."]
+  ];
+  const explored = new Set();
+  $("#steps").innerHTML = STEPS.map((s, i) =>
+    '<button class="step" type="button" id="stepBtn' + i + '" aria-expanded="false" aria-controls="stepDetail' + i + '">' +
+      '<span class="step-head"><span class="step-num">' + (i + 1) + '</span><span>' + esc(s[0]) + '</span><span class="step-hint">Click to reveal</span></span>' +
+      '<span class="step-detail" id="stepDetail' + i + '" hidden>' + esc(s[1]) + '</span></button>').join("");
+  $$(".step").forEach((b, i) => b.addEventListener("click", () => {
+    const open = b.getAttribute("aria-expanded") === "true";
+    b.setAttribute("aria-expanded", String(!open));
+    $("#stepDetail" + i).hidden = open;
+    if (!open) explored.add(i);
+    const n = explored.size;
+    $("#stepCounter").textContent = n === 5 ? "All 5 steps explored ✓" : "Click each step to reveal it · " + n + " of 5 explored";
+  }));
+
+  /* =====================================================================
+     5. SCREEN 7 – PROGRESSIVE CLUE REVEAL
+     ===================================================================== */
+  const TRAIL = [
+    ["Why was the report submitted late?", "Because the team received the required data late."],
+    ["Why did the team receive the data late?", "Because the other department submitted its data late."],
+    ["Why did the other department submit its data late?", "Because employees were unsure when the data was due."],
+    ["Why were employees unsure about the deadline?", "Because there was no clearly communicated submission schedule."],
+    ["Why was there no clearly communicated submission schedule?", "Because no one had been assigned responsibility for maintaining and communicating the reporting schedule."]
+  ];
+  let trailStep = 0;
+  $("#trailList").innerHTML = TRAIL.map((t, i) =>
+    '<li class="clue" hidden><span class="why-chip">WHY ' + (i + 1) + '</span><div><p class="q">' + esc(t[0]) + '</p><p class="a">' + esc(t[1]) + '</p></div></li>').join("");
+  const revealBtn = $("#revealBtn");
+  function updateRevealBtn() {
+    if (trailStep < 5) revealBtn.textContent = "Reveal Next Clue (" + (trailStep + 1) + " of 5)";
+    else if (trailStep === 5) revealBtn.textContent = "Reveal the Root Cause";
+  }
+  revealBtn.addEventListener("click", () => {
+    if (trailStep < 5) {
+      const li = $$("#trailList .clue")[trailStep];
+      li.hidden = false; li.classList.add("pop");
+      li.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      trailStep++;
+    } else if (trailStep === 5) {
+      $("#rootCause").hidden = false;
+      $("#rootCause").scrollIntoView({ block: "nearest", behavior: "smooth" });
+      trailStep++;
+    }
+    if (trailStep > 5) {
+      revealBtn.hidden = true;
+      $("#trailHint").textContent = "Case solved! Click Next to see what we discovered.";
+    } else updateRevealBtn();
+  });
+  updateRevealBtn();
+
+  /* =====================================================================
+     6. SCREEN 10 – SCENARIO QUESTION (submit, feedback, retry)
+     ===================================================================== */
+  const c2Radios = $$("input[name=c2]"), c2Submit = $("#c2Submit"), c2Retry = $("#c2Retry"), c2Fb = $("#c2Feedback");
+  c2Radios.forEach(r => r.addEventListener("change", () => { c2Submit.disabled = false; }));
+  c2Submit.addEventListener("click", () => {
+    const sel = c2Radios.find(r => r.checked);
+    if (!sel) return;
+    const ok = sel.value === "A";
+    const lab = sel.closest(".opt");
+    $$("#c2Opts .opt-tag").forEach(t => t.textContent = "");
+    c2Fb.hidden = false;
+    c2Fb.className = "feedback " + (ok ? "ok" : "no");
+    if (ok) {
+      lab.classList.add("correct", "locked");
+      $(".opt-tag", lab).textContent = "✓ Correct answer";
+      c2Radios.forEach(r => r.disabled = true);
+      c2Fb.innerHTML = "<strong>✓ Great detective work!</strong> You've chosen to investigate the reason behind the missing process. This continues the chain of Why questions and helps uncover the underlying cause.";
+      c2Submit.hidden = true; c2Retry.hidden = true;
+    } else {
+      lab.classList.add("wrong");
+      $(".opt-tag", lab).textContent = "✗ Not the best next question";
+      c2Fb.innerHTML = "<strong>✗ Not quite!</strong> The goal is to investigate the reason behind the previous answer, not immediately assign blame or jump to a solution. Try asking Why again.";
+      c2Submit.disabled = true; c2Retry.hidden = false;
+    }
+  });
+  c2Retry.addEventListener("click", () => {
+    c2Radios.forEach(r => { r.checked = false; });
+    $$("#c2Opts .opt").forEach(l => l.classList.remove("wrong", "correct"));
+    $$("#c2Opts .opt-tag").forEach(t => t.textContent = "");
+    c2Fb.hidden = true; c2Retry.hidden = true; c2Submit.disabled = true;
+    c2Radios[0].focus();
+  });
+
+  /* =====================================================================
+     7. SCREEN 12 – KNOWLEDGE CHECK (score, explanations, retry)
+     ===================================================================== */
+  const PASS_MARK = 2;
+  const QUIZ = [
+    { q: "What is the main purpose of the 5 Whys technique?",
+      o: ["To identify who is responsible for a problem.", "To uncover the underlying cause of a problem.", "To find a quick solution without investigation."],
+      a: 1, e: "The 5 Whys helps uncover underlying causes so that problems can be addressed effectively." },
+    { q: "When should you stop asking Why?",
+      o: ["Always after exactly five questions.", "When you find someone responsible.", "When you reach an actionable cause supported by evidence."],
+      a: 2, e: "Five is a guide, not a strict rule. Validate that the cause is supported by evidence." },
+    { q: "What should you do after identifying a potential root cause?",
+      o: ["Ignore the problem if it has been resolved temporarily.", "Address the cause and take steps to prevent recurrence.", "Wait for the problem to happen again."],
+      a: 1, e: "The goal is to address the underlying cause and reduce the chance of the problem recurring." }
+  ];
+  const KEYS = ["A", "B", "C"];
+  $("#quizGrid").innerHTML = QUIZ.map((q, qi) =>
+    '<div class="q-card" id="qcard' + qi + '"><span class="qn">Question ' + (qi + 1) + ' of ' + QUIZ.length + '</span>' +
+    '<p class="qt" id="qt' + qi + '">' + esc(q.q) + '</p>' +
+    '<div class="opts" role="radiogroup" aria-labelledby="qt' + qi + '">' +
+      q.o.map((t, oi) =>
+        '<label class="opt"><input type="radio" name="q' + qi + '" value="' + oi + '"><span class="opt-key">' + KEYS[oi] + '</span>' +
+        '<span class="opt-body">' + esc(t) + '<span class="opt-tag"></span></span></label>').join("") +
+    '</div><p class="explain" id="qexp' + qi + '" hidden></p></div>').join("");
+
+  const quizSubmit = $("#quizSubmit"), quizRetry = $("#quizRetry"), quizHint = $("#quizHint"), quizResult = $("#quizResult");
+  const answeredCount = () => QUIZ.filter((_, qi) => $("input[name=q" + qi + "]:checked")).length;
+  $$("#quizGrid input").forEach(r => r.addEventListener("change", () => {
+    const n = answeredCount();
+    quizSubmit.disabled = n < QUIZ.length;
+    quizHint.textContent = n < QUIZ.length ? "Answer all " + QUIZ.length + " questions to submit (" + n + " answered)." : "Ready to submit.";
+  }));
+
+  quizSubmit.addEventListener("click", () => {
+    if (answeredCount() < QUIZ.length) return;
+    let score = 0;
+    QUIZ.forEach((q, qi) => {
+      const chosen = +$("input[name=q" + qi + "]:checked").value;
+      const ok = chosen === q.a;
+      if (ok) score++;
+      $$("#qcard" + qi + " .opt").forEach((lab, oi) => {
+        lab.classList.add("locked");
+        $("input", lab).disabled = true;
+        const tag = $(".opt-tag", lab);
+        if (oi === q.a) { lab.classList.add("correct"); tag.textContent = oi === chosen ? "✓ Your answer · Correct" : "✓ Correct answer"; }
+        else if (oi === chosen) { lab.classList.add("wrong"); tag.textContent = "✗ Your answer · Incorrect"; }
+      });
+      const ex = $("#qexp" + qi);
+      ex.className = "explain " + (ok ? "ok" : "no");
+      ex.innerHTML = "<strong>" + (ok ? "✓ Correct." : "✗ Not quite.") + "</strong> " + esc(q.e);
+      ex.hidden = false;
+    });
+    const pct = Math.round(score / QUIZ.length * 100);
+    const pass = score >= PASS_MARK;
+    quizPassed = quizPassed || pass;
+    quizResult.hidden = false;
+    quizResult.className = "result " + (pass ? "pass" : "fail");
+    quizResult.innerHTML = '<span class="score">Score: ' + score + ' of ' + QUIZ.length + ' (' + pct + '%)</span><br>' +
+      (pass ? "🎉 <b>Passed!</b> Case closed. Great detective work. Click Next to finish the course."
+            : "You need at least " + PASS_MARK + " out of " + QUIZ.length + " to pass. Review the explanations above, then try again.");
+    quizSubmit.hidden = true; quizRetry.hidden = false; quizHint.hidden = true;
+    updatePassStatus();
+    /* the explanations make this screen taller: bring the score and buttons into view */
+    quizRetry.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  });
+
+  quizRetry.addEventListener("click", () => {
+    $$("#quizGrid .opt").forEach(l => { l.classList.remove("correct", "wrong", "locked"); $(".opt-tag", l).textContent = ""; });
+    $$("#quizGrid input").forEach(r => { r.checked = false; r.disabled = false; });
+    QUIZ.forEach((_, qi) => { $("#qexp" + qi).hidden = true; });
+    quizResult.hidden = true;
+    quizSubmit.hidden = false; quizSubmit.disabled = true;
+    quizRetry.hidden = true; quizHint.hidden = false;
+    quizHint.textContent = "Answer all " + QUIZ.length + " questions to submit.";
+    const first = $("#quizGrid input"); if (first) first.focus();
+  });
+
+  function updatePassStatus() {
+    $("#passStatus").textContent = quizPassed
+      ? "✓ Knowledge check passed"
+      : "Tip: you haven't passed the knowledge check yet. You can go back and try it again.";
+  }
+  updatePassStatus();
+
+  /* ---------- start on screen 1 ---------- */
+  goTo(0, true);
+})();
+</script>
+</body>
+</html>
