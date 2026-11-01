@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#2d2a23">
-<title>Learning Preference Discovery Test</title>
+<title>Learning Style Test</title>
 <!-- Fonts load from Google Fonts when online; the page falls back to Georgia / system fonts offline. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -433,7 +433,7 @@ noscript{display:block;padding:20px;background:var(--sun);color:var(--dark)}
       <div class="inner grid-2">
         <div class="stack">
           <div class="chips"><span class="chip">⏱ 5 minutes</span><span class="chip pink">Self-assessment</span></div>
-          <p class="eyebrow" style="--c:var(--sun)">Learning Preference Discovery Test</p>
+          <p class="eyebrow" style="--c:var(--sun)">Learning Style Test</p>
           <h1 id="t-intro" tabindex="-1">Discover how you <em>learn</em> &amp; share <span class="hl">what you know</span></h1>
           <p class="lead">Everyone has different ways of receiving information and sharing what they know.</p>
           <div class="actions"><button class="btn btn-hot btn-lg" type="button" data-go="next">Start the test →</button></div>
@@ -678,7 +678,7 @@ noscript{display:block;padding:20px;background:var(--sun);color:var(--dark)}
           <button class="btn btn-ghost" id="retakeBtn" type="button">↺ Retake the test</button>
           <span class="copied" id="copiedMsg" role="status" aria-live="polite"></span>
         </div>
-        <div class="finish-msg" id="finishMsg" role="status" tabindex="-1" hidden>🎉 <b>End of assessment.</b> Thank you for taking the Learning Preference Discovery Test. You can now close this window.</div>
+        <div class="finish-msg" id="finishMsg" role="status" tabindex="-1" hidden>🎉 <b>End of assessment.</b> Thank you for taking the Learning Style Test. You can now close this window.</div>
       </div>
     </section>
   </main>
@@ -1045,7 +1045,7 @@ noscript{display:block;padding:20px;background:var(--sun);color:var(--dark)}
 
   function resultsText() {
     const P = profileInfo(), fmt = c => "Visual " + c.vis + ", Auditory " + c.aud + ", Tactile " + c.tac;
-    return ["LEARNING PREFERENCE DISCOVERY TEST: MY RESULTS", "",
+    return ["Learning Style Test: MY RESULTS", "",
       "Learning Input: " + P.inName + " (" + P.di.max + "/4)  [" + fmt(P.ic) + "]",
       "Learning Output: " + P.outName + " (" + P.dO.max + "/4)  [" + fmt(P.oc) + "]",
       "My Combined Profile: " + P.label, "",
