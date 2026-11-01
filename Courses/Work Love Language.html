@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workplace Love Language Assessment</title>
+    <style>
+        /* --- VINTAGE EDITORIAL NEWSPAPER THEME --- */
+        :root {
+            --bg-image-url: url('https://img.magnific.com/premium-photo/pink-hearts-dots-seamless-pattern-white-background-cute-romantic-greeting-card-design-wrapping-paper-love-theme-festive-fabric_1003186-1536.jpg?semt=ais_hybrid&w=740&q=80assionate%20Career%20Choice.jpg?h=119335f7&itok=fCX4T0EM');
+            --bg-canvas: #FAF5EE;
+            --bg-paper: #F4EFE6;
+            --bg-card: #FFFFFF;
+            --text-main: #221F1E;
+            --text-muted: #665F57;
+            --crimson: #8B1E1E;
+            --crimson-soft: #F5EBEB;
+            --border-dark: #221F1E;
+            --border-light: #DCD4C7;
+            --font-serif: "Georgia", "Times New Roman", Times, serif;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            --shadow-subtle: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
+            font-family: var(--font-serif);
+            line-height: 1.6;
+            padding: 24px 12px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- EDITORIAL BLURRED BACKGROUND --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background-image: var(--bg-image-url);
+            background-size: cover;
+            background-position: center;
+            filter: blur(1px) brightness(0.9);
+            transform: scale(1.05);
+            z-index: -1;
+        }
+
+        .editorial-container {
+            max-width: 840px;
+            width: 100%;
+            background-color: var(--bg-paper);
+            border: 3px double var(--border-dark);
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            position: relative;
+            margin: 10px 0;
+            z-index: 1;
+        }
+
+        @media (max-width: 640px) {
+            .editorial-container {
+                padding: 20px 16px;
+            }
+        }
+
+        /* Masthead Header */
+        .masthead {
+            text-align: center;
+            border-bottom: 2px solid var(--border-dark);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .masthead-meta {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-dark);
+            border-top: 1px solid var(--border-dark);
+            padding: 5px 0;
+            margin-bottom: 15px;
+            color: var(--text-muted);
+        }
+
+        h1.publication-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            color: var(--crimson);
+            margin: 8px 0 4px 0;
+            line-height: 1.1;
+        }
+
+        .publication-subtitle {
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .source-tag {
+            font-family: var(--font-sans);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+        }
+
+        .source-tag a {
+            color: var(--crimson);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .source-tag a:hover {
+            text-decoration: underline;
+        }
+
+        /* Screen Visibility */
+        .wizard-screen {
+            display: none;
+        }
+
+        .wizard-screen.active {
+            display: block;
+        }
+
+        /* Headings & Text */
+        h2.editorial-heading {
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-dark);
+            padding-bottom: 6px;
+            margin-bottom: 20px;
+            color: var(--crimson);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        p.lead-paragraph {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            text-align: justify;
+            color: var(--text-main);
+        }
+
+        p.lead-paragraph::first-letter {
+            font-size: 3rem;
+            float: left;
+            line-height: 0.8;
+            padding-right: 10px;
+            color: var(--crimson);
+            font-weight: bold;
+        }
+
+        /* Image Placeholder */
+        .image-placeholder {
+            width: 100%;
+            height: 180px;
+            background-color: #EDE6D8;
+            border: 1px dashed var(--border-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            text-align: center;
+            padding: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .image-slot-caption {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            color: var(--crimson);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            background-color: var(--bg-paper);
+            padding: 6px 12px;
+            border: 1px solid var(--border-dark);
+            z-index: 1;
+        }
+
+        /* Forms */
+        .form-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-dark);
+            background: #FFF;
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--crimson);
+            box-shadow: 0 0 0 2px var(--crimson-soft);
+        }
+
+        /* Buttons */
+        .btn-editorial {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--crimson);
+            color: #FFF;
+            border: 1px solid var(--border-dark);
+            padding: 12px 24px;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-editorial:hover {
+            background-color: var(--border-dark);
+            color: #FFF;
+            box-shadow: 3px 3px 0px var(--crimson);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-light);
+            color: var(--text-main);
+            box-shadow: 3px 3px 0px var(--border-dark);
+        }
+
+        /* Mode Cards */
+        .mode-cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .mode-card {
+            border: 1px solid var(--border-dark);
+            padding: 20px;
+            background-color: var(--bg-card);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mode-card:hover {
+            border-color: var(--crimson);
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0px var(--crimson);
+        }
+
+        .mode-card-content h3 {
+            font-size: 1.25rem;
+            color: var(--crimson);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .mode-card-content p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Wizard Quiz Elements */
+        .wizard-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background-color: var(--border-light);
+            margin-bottom: 24px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--crimson);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--text-main);
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-button {
+            border: 1px solid var(--border-dark);
+            background-color: var(--bg-canvas);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: flex-start;
+            text-align: left;
+            width: 100%;
+        }
+
+        .option-button:hover {
+            background-color: var(--crimson-soft);
+            border-color: var(--crimson);
+        }
+
+        .option-button.selected {
+            background-color: var(--crimson);
+            color: #FFF;
+            border-color: var(--crimson);
+        }
+
+        .option-tag {
+            font-family: var(--font-sans);
+            font-weight: bold;
+            margin-right: 14px;
+            font-size: 0.9rem;
+            padding: 2px 8px;
+            border: 1px solid currentColor;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .option-body {
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .wizard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* Results Screen */
+        .certificate-header {
+            text-align: center;
+            border: 2px solid var(--border-dark);
+            padding: 24px;
+            margin-bottom: 30px;
+            background-color: var(--bg-card);
+        }
+
+        .user-name-display {
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--crimson);
+            margin-bottom: 4px;
+        }
+
+        .user-dept-display {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .dominant-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .dominant-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dominant-card {
+            border: 1px solid var(--border-dark);
+            padding: 20px;
+            background-color: var(--bg-card);
+        }
+
+        .dominant-card-tag {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .dominant-card-title {
+            font-size: 1.35rem;
+            color: var(--crimson);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed var(--border-dark);
+            padding-bottom: 6px;
+        }
+
+        .dominant-card-body {
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .stats-section {
+            margin-bottom: 30px;
+        }
+
+        .stats-title {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--border-dark);
+            padding-bottom: 6px;
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            margin-bottom: 14px;
+        }
+
+        .stat-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-family: var(--font-sans);
+            margin-bottom: 5px;
+        }
+
+        .stat-bar-outer {
+            width: 100%;
+            height: 16px;
+            border: 1px solid var(--border-dark);
+            background-color: #FFF;
+            padding: 2px;
+        }
+
+        .stat-bar-inner {
+            height: 100%;
+            background-color: var(--crimson);
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .editorial-box {
+            border: 1px solid var(--border-dark);
+            padding: 20px;
+            background-color: var(--bg-card);
+            margin-bottom: 25px;
+        }
+
+        .editorial-box h4 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            color: var(--crimson);
+            margin-bottom: 10px;
+        }
+
+        .editorial-box p {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .tip-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+
+        .tip-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .tip-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--crimson);
+            font-size: 0.75rem;
+        }
+
+        .divider-ornament {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            letter-spacing: 8px;
+        }
+
+        /* Print Formatting */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+                color: #000;
+            }
+
+            body::before {
+                display: none !important;
+            }
+
+            .editorial-container {
+                border: 2px solid #000;
+                box-shadow: none;
+                max-width: 100%;
+                width: 100%;
+                padding: 20px;
+                margin: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .stat-bar-outer {
+                border: 1px solid #000;
+            }
+
+            .stat-bar-inner {
+                background-color: #000 !important;
+            }
+
+            .user-name-display, h1.publication-title, h2.editorial-heading, .dominant-card-title {
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="editorial-container">
+        <!-- Masthead -->
+        <header class="masthead">
+            <div class="masthead-meta">
+                <span>Vol. I — Assessment Edition</span>
+                <span>Workplace Appreciation</span>
+                <span>Self-Guided Wizard</span>
+            </div>
+            <h1 class="publication-title">Work Love Language</h1>
+            <div class="publication-subtitle">Understanding Appreciation & Workplace Interactions</div>
+            <div class="source-tag">
+                Created by <a href="https://www.linkedin.com/in/amitjamesmadr/" target="_blank">James Amit</a> | Derived from CareerContessa.com Assessment Model
+            </div>
+        </header>
+
+        <!-- STEP 1: WELCOME & PROFILE -->
+        <div id="step-welcome" class="wizard-screen active">
+            <h2 class="editorial-heading">
+                <span>Welcome</span>
+                <span>§</span>
+            </h2>
+
+            <p class="lead-paragraph">
+                People experience appreciation in distinct ways within the workplace. Some employees thrive on encouraging words, while others prioritize targeted professional opportunities, direct assistance, or regular structured touchpoints. Discovering how you prefer to receive recognition and how you naturally express it creates stronger, more collaborative workplace relationships.
+            </p>
+
+            <div class="image-placeholder">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3U-EuAka6VZoGPXMYxXUZcOvZCMtG3TqbwAlD6H-BiXyNYxisoTorV4DT&s=10">
+                <span class="image-slot-caption" style="display:none;">[ Paste Cover Image URL in img src ]</span>
+            </div>
+
+            <div class="form-box">
+                <div class="form-group">
+                    <label for="user-name">Your Name</label>
+                    <input type="text" id="user-name" class="form-input" placeholder="e.g. Eleanor Vance">
+                </div>
+                <div class="form-group">
+                    <label for="user-dept">Department / Role</label>
+                    <input type="text" id="user-dept" class="form-input" placeholder="e.g. Product Strategy">
+                </div>
+            </div>
+
+            <div style="text-align: right;">
+                <button class="btn-editorial" onclick="goToStep('step-mode')">Begin Assessment &rarr;</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: MODE SELECTION -->
+        <div id="step-mode" class="wizard-screen">
+            <h2 class="editorial-heading">
+                <span>What do you want to take?</span>
+                <span>✦</span>
+            </h2>
+
+            <p style="font-size: 1rem; margin-bottom: 20px; color: var(--text-muted);">
+                Select the specific assessment dimension you wish to evaluate:
+            </p>
+
+            <div class="mode-cards-grid">
+                <div class="mode-card" onclick="startAssessment('receive')">
+                    <div class="mode-card-content">
+                        <h3>Part 1: Receive Mode</h3>
+                        <p>How you prefer colleagues and managers to show appreciation and support to you. (9 Questions)</p>
+                    </div>
+                    <div>
+                        <span class="btn-editorial" style="font-size: 0.75rem; padding: 8px 16px;">Select</span>
+                    </div>
+                </div>
+
+                <div class="mode-card" onclick="startAssessment('give')">
+                    <div class="mode-card-content">
+                        <h3>Part 2: Give Mode</h3>
+                        <p>How you naturally express appreciation and encouragement to your coworkers. (9 Questions)</p>
+                    </div>
+                    <div>
+                        <span class="btn-editorial" style="font-size: 0.75rem; padding: 8px 16px;">Select</span>
+                    </div>
+                </div>
+
+                <div class="mode-card" style="border-color: var(--crimson);" onclick="startAssessment('both')">
+                    <div class="mode-card-content">
+                        <h3>Full Assessment (Two-Way)</h3>
+                        <p>Complete both Receive & Give assessments back-to-back for a full appreciation profile. (18 Questions)</p>
+                    </div>
+                    <div>
+                        <span class="btn-editorial" style="font-size: 0.75rem; padding: 8px 16px;">Select</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wizard-nav">
+                <button class="btn-editorial btn-secondary" onclick="goToStep('step-welcome')">&larr; Back</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: SINGLE QUESTION WIZARD -->
+        <div id="step-quiz" class="wizard-screen">
+            <div class="wizard-meta">
+                <span id="quiz-section-label">PART 1: HOW I WANT TO RECEIVE</span>
+                <span id="quiz-counter">Question 1 of 9</span>
+            </div>
+
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="image-placeholder" id="question-image-box" style="height: 140px; margin-bottom: 16px;">
+                    <!-- Question Image Tag dynamically rendered -->
+                </div>
+                <div class="question-title" id="question-text">Question text goes here...</div>
+
+                <div class="options-group" id="options-list">
+                    <!-- Options populated dynamically -->
+                </div>
+            </div>
+
+            <div class="wizard-nav">
+                <button class="btn-editorial btn-secondary" id="btn-prev" onclick="previousQuestion()">&larr; Back</button>
+                <button class="btn-editorial" id="btn-next" onclick="nextQuestion()">Next &rarr;</button>
+            </div>
+        </div>
+
+        <!-- STEP 4: RESULTS & STATISTICS -->
+        <div id="step-results" class="wizard-screen">
+            <div class="certificate-header">
+                <div class="user-name-display" id="res-name">Participant Name</div>
+                <div class="user-dept-display" id="res-dept">Department / Role</div>
+                <div style="font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 8px;">
+                    Official Assessment & Workplace Dynamics Profile
+                </div>
+            </div>
+
+            <div class="dominant-cards-grid" id="dominant-grid">
+                <!-- Dominant cards inserted dynamically -->
+            </div>
+
+            <div class="divider-ornament">❖ ❖ ❖</div>
+
+            <!-- RECEIVE STATS -->
+            <div class="stats-section" id="receive-stats-box">
+                <div class="stats-title">Part 1: How You Prefer to Receive Appreciation</div>
+                <div id="receive-bars-list"></div>
+            </div>
+
+            <!-- GIVE STATS -->
+            <div class="stats-section" id="give-stats-box">
+                <div class="stats-title">Part 2: How You Naturally Express Appreciation</div>
+                <div id="give-bars-list"></div>
+            </div>
+
+            <!-- INTERPRETATION -->
+            <div class="editorial-box" id="interpretation-box">
+                <h4>Editorial Analysis</h4>
+                <div id="interpretation-text"></div>
+            </div>
+
+            <!-- WORKPLACE ACTION GUIDELINES -->
+            <div class="editorial-box">
+                <h4>Workplace Action Guidelines</h4>
+                <ul class="tip-list">
+                    <li><strong>Words of Affirmation:</strong> Share specific praise and constructive feedback regularly.</li>
+                    <li><strong>Quality Time:</strong> Schedule uninterrupted 1-on-1 conversations and team check-ins.</li>
+                    <li><strong>New Opportunities & Challenges:</strong> Provide career growth initiatives and challenging tasks.</li>
+                    <li><strong>Acts of Service:</strong> Pitch in during peak workloads and share helpful resources.</li>
+                    <li><strong>Encouraging Touchpoints:</strong> Send thoughtful check-ins and ongoing positive notes.</li>
+                </ul>
+            </div>
+
+            <div class="wizard-nav no-print">
+                <button class="btn-editorial btn-secondary" onclick="goToStep('step-mode')">&larr; Retake / Start Over</button>
+                <button class="btn-editorial" onclick="window.print()">Print / Export PDF ✦</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* --- QUESTION BANK (PDF DERIVED) --- */
+        const questionsReceive = [
+            {
+                id: 1,
+                stem: "You have just joined a new company. During your first week, what would make you feel most welcomed and appreciated?",
+                options: [
+                    { letter: "A", text: "Your manager shares positive feedback about your potential and provides helpful advice for your success.", type: "A" },
+                    { letter: "B", text: "Your team organizes a lunch so you can get to know your new colleagues.", type: "B" },
+                    { letter: "C", text: "You are invited to participate in an exciting project that will help develop your skills.", type: "C" },
+                    { letter: "D", text: "An experienced colleague offers to guide you through the processes and help you settle into your role.", type: "D" },
+                    { letter: "E", text: "Your manager regularly checks in and sends encouraging messages about your progress.", type: "E" }
+                ]
+            },
+            {
+                id: 2,
+                stem: "You have successfully completed a challenging project ahead of schedule. What type of recognition would mean the most to you?",
+                options: [
+                    { letter: "A", text: "Your manager publicly recognizes your achievement and highlights your contribution.", type: "A" },
+                    { letter: "B", text: "Your team invites you to celebrate together after completing the project.", type: "B" },
+                    { letter: "C", text: "You are given an opportunity to lead another challenging project.", type: "C" },
+                    { letter: "D", text: "Your manager provides additional resources and support to help you handle your next assignment.", type: "D" },
+                    { letter: "E", text: "Your manager sends a thoughtful message expressing appreciation for your dedication.", type: "E" }
+                ]
+            },
+            {
+                id: 3,
+                stem: "You are experiencing a particularly stressful week because of your workload. What would make you feel most supported?",
+                options: [
+                    { letter: "A", text: "Your manager acknowledges your hard work and provides encouraging feedback.", type: "A" },
+                    { letter: "B", text: "A colleague invites you for a break and takes time to listen to your concerns.", type: "B" },
+                    { letter: "C", text: "Your manager discusses opportunities to develop better skills and improve your work processes.", type: "C" },
+                    { letter: "D", text: "A colleague volunteers to help complete some of your pending tasks.", type: "D" },
+                    { letter: "E", text: "Your manager regularly checks in and reminds you that your efforts are valued.", type: "E" }
+                ]
+            },
+            {
+                id: 4,
+                stem: "You have been working hard but feel that your contributions are going unnoticed. What would help you feel appreciated?",
+                options: [
+                    { letter: "A", text: "Receiving specific recognition and constructive feedback about your performance.", type: "A" },
+                    { letter: "B", text: "Having more meaningful conversations and opportunities to connect with your manager.", type: "B" },
+                    { letter: "C", text: "Being considered for a new project or professional development opportunity.", type: "C" },
+                    { letter: "D", text: "Having your manager provide the resources and assistance you need to succeed.", type: "D" },
+                    { letter: "E", text: "Receiving regular messages of appreciation and encouragement.", type: "E" }
+                ]
+            },
+            {
+                id: 5,
+                stem: "Your manager wants to help you grow professionally. Which approach would you appreciate most?",
+                options: [
+                    { letter: "A", text: "Receiving regular feedback and mentoring to improve your performance.", type: "A" },
+                    { letter: "B", text: "Having dedicated one-on-one meetings to discuss your career interests.", type: "B" },
+                    { letter: "C", text: "Being given opportunities to handle new responsibilities and challenging projects.", type: "C" },
+                    { letter: "D", text: "Receiving practical guidance, resources, and assistance when learning new tasks.", type: "D" },
+                    { letter: "E", text: "Receiving consistent encouragement and reassurance about your potential.", type: "E" }
+                ]
+            },
+            {
+                id: 6,
+                stem: "Your team has successfully completed a demanding quarter. What would be the most meaningful way for management to recognize the team's efforts?",
+                options: [
+                    { letter: "A", text: "Publicly recognizing each employee's contributions and achievements.", type: "A" },
+                    { letter: "B", text: "Organizing a team celebration or activity to strengthen relationships.", type: "B" },
+                    { letter: "C", text: "Providing opportunities for employees to participate in new initiatives.", type: "C" },
+                    { letter: "D", text: "Giving the team additional support and resources to improve future performance.", type: "D" },
+                    { letter: "E", text: "Sending thoughtful messages that recognize everyone's dedication and hard work.", type: "E" }
+                ]
+            },
+            {
+                id: 7,
+                stem: "You make a mistake while completing an important assignment. What response from your manager would help you most?",
+                options: [
+                    { letter: "A", text: "Receiving constructive feedback that explains what went wrong and how to improve.", type: "A" },
+                    { letter: "B", text: "Having a private conversation where your manager listens and understands your situation.", type: "B" },
+                    { letter: "C", text: "Being given another opportunity to apply what you have learned.", type: "C" },
+                    { letter: "D", text: "Receiving practical guidance and assistance to correct the mistake.", type: "D" },
+                    { letter: "E", text: "Receiving reassurance and encouragement that mistakes are part of professional growth.", type: "E" }
+                ]
+            },
+            {
+                id: 8,
+                stem: "Your company is introducing a new initiative that will require teamwork. What would motivate you to participate?",
+                options: [
+                    { letter: "A", text: "Receiving recognition for your contributions and ideas.", type: "A" },
+                    { letter: "B", text: "Having opportunities to collaborate and build stronger relationships with colleagues.", type: "B" },
+                    { letter: "C", text: "Being involved in a challenging initiative that expands your experience.", type: "C" },
+                    { letter: "D", text: "Having access to the resources and support needed to complete the initiative.", type: "D" },
+                    { letter: "E", text: "Receiving regular encouragement and positive communication throughout the project.", type: "E" }
+                ]
+            },
+            {
+                id: 9,
+                stem: "Imagine your ideal workplace. Which experience would make you feel most valued as an employee?",
+                options: [
+                    { letter: "A", text: "A culture where achievements are recognized and managers provide helpful feedback.", type: "A" },
+                    { letter: "B", text: "A culture where colleagues build meaningful relationships and spend quality time together.", type: "B" },
+                    { letter: "C", text: "A culture that provides opportunities for learning, growth, and new challenges.", type: "C" },
+                    { letter: "D", text: "A culture where people proactively help one another and share responsibilities.", type: "D" },
+                    { letter: "E", text: "A culture where employees regularly receive encouragement, appreciation, and positive communication.", type: "E" }
+                ]
+            }
+        ];
+
+        const questionsGive = [
+            {
+                id: 1,
+                stem: "A colleague has successfully completed a difficult assignment. How would you naturally show your appreciation?",
+                options: [
+                    { letter: "A", text: "Tell them specifically what they did well and recognize their achievement.", type: "A" },
+                    { letter: "B", text: "Invite them to have lunch or coffee to celebrate their success.", type: "B" },
+                    { letter: "C", text: "Recommend them for another exciting project or learning opportunity.", type: "C" },
+                    { letter: "D", text: "Offer to help with their next assignment or share useful resources.", type: "D" },
+                    { letter: "E", text: "Send them a thoughtful message expressing how much you appreciate their effort.", type: "E" }
+                ]
+            },
+            {
+                id: 2,
+                stem: "A new employee joins your team. How would you normally help them feel welcome?",
+                options: [
+                    { letter: "A", text: "Share encouraging feedback and helpful advice about succeeding in the role.", type: "A" },
+                    { letter: "B", text: "Spend time getting to know them and introduce them to other colleagues.", type: "B" },
+                    { letter: "C", text: "Suggest projects or activities that could help them develop their skills.", type: "C" },
+                    { letter: "D", text: "Offer to guide them through processes and assist with their initial tasks.", type: "D" },
+                    { letter: "E", text: "Send them welcoming messages and check in regularly during their first few weeks.", type: "E" }
+                ]
+            },
+            {
+                id: 3,
+                stem: "You notice that a colleague is struggling with a difficult workload. What would you most likely do?",
+                options: [
+                    { letter: "A", text: "Encourage them by recognizing their efforts and reminding them of their strengths.", type: "A" },
+                    { letter: "B", text: "Invite them to take a break and give them time to talk about their concerns.", type: "B" },
+                    { letter: "C", text: "Suggest opportunities to learn new approaches that could make their work easier.", type: "C" },
+                    { letter: "D", text: "Offer to take on some tasks or help them find practical solutions.", type: "D" },
+                    { letter: "E", text: "Send them encouraging messages to let them know they are not alone.", type: "E" }
+                ]
+            },
+            {
+                id: 4,
+                stem: "A colleague has been feeling discouraged after receiving negative feedback. How would you naturally support them?",
+                options: [
+                    { letter: "A", text: "Help them understand the feedback and offer constructive advice.", type: "A" },
+                    { letter: "B", text: "Spend time listening to their concerns and discussing the situation.", type: "B" },
+                    { letter: "C", text: "Encourage them to take on a new challenge where they can demonstrate their abilities.", type: "C" },
+                    { letter: "D", text: "Help them address the issues by sharing resources or practical assistance.", type: "D" },
+                    { letter: "E", text: "Send a thoughtful message reminding them of their value and capabilities.", type: "E" }
+                ]
+            },
+            {
+                id: 5,
+                stem: "Your team has achieved an important milestone. How would you prefer to recognize everyone's efforts?",
+                options: [
+                    { letter: "A", text: "Publicly acknowledge each person's contribution and share positive feedback.", type: "A" },
+                    { letter: "B", text: "Organize a team lunch or informal gathering to celebrate together.", type: "B" },
+                    { letter: "C", text: "Recommend team members for new projects or professional development opportunities.", type: "C" },
+                    { letter: "D", text: "Help the team prepare for the next milestone by providing resources and assistance.", type: "D" },
+                    { letter: "E", text: "Send personalized appreciation messages to team members.", type: "E" }
+                ]
+            },
+            {
+                id: 6,
+                stem: "A colleague is celebrating a work anniversary. What would you most likely do?",
+                options: [
+                    { letter: "A", text: "Tell them how much you appreciate their contributions to the organization.", type: "A" },
+                    { letter: "B", text: "Spend time celebrating with them or organizing a small team gathering.", type: "B" },
+                    { letter: "C", text: "Recommend them for a new responsibility or growth opportunity.", type: "C" },
+                    { letter: "D", text: "Offer practical assistance with their work to make their next year easier.", type: "D" },
+                    { letter: "E", text: "Send them a thoughtful message recognizing their commitment and dedication.", type: "E" }
+                ]
+            },
+            {
+                id: 7,
+                stem: "You are working with a colleague who is new to a particular task. How would you naturally help them?",
+                options: [
+                    { letter: "A", text: "Explain the task and provide helpful feedback as they learn.", type: "A" },
+                    { letter: "B", text: "Schedule time to work together and answer their questions.", type: "B" },
+                    { letter: "C", text: "Give them an opportunity to take ownership of a manageable challenge.", type: "C" },
+                    { letter: "D", text: "Share templates, resources, or practical instructions that can make the task easier.", type: "D" },
+                    { letter: "E", text: "Send encouraging messages as they progress through the task.", type: "E" }
+                ]
+            },
+            {
+                id: 8,
+                stem: "A colleague has contributed significantly to a team project but has received little recognition. What would you do?",
+                options: [
+                    { letter: "A", text: "Highlight their contribution during a team meeting or conversation with management.", type: "A" },
+                    { letter: "B", text: "Make time to personally thank them and acknowledge their efforts.", type: "B" },
+                    { letter: "C", text: "Recommend them for future opportunities where their abilities can be recognized.", type: "C" },
+                    { letter: "D", text: "Offer to support them with upcoming tasks as a way of showing appreciation.", type: "D" },
+                    { letter: "E", text: "Send a personal message expressing how much their contribution means to the team.", type: "E" }
+                ]
+            },
+            {
+                id: 9,
+                stem: "Imagine you want to create a more positive and supportive workplace. What would you naturally prioritize?",
+                options: [
+                    { letter: "A", text: "Giving regular recognition, constructive feedback, and encouragement.", type: "A" },
+                    { letter: "B", text: "Creating opportunities for meaningful conversations and team bonding.", type: "B" },
+                    { letter: "C", text: "Encouraging colleagues to pursue new challenges and professional growth.", type: "C" },
+                    { letter: "D", text: "Offering practical assistance and helping colleagues overcome work challenges.", type: "D" },
+                    { letter: "E", text: "Regularly communicating appreciation and reminding colleagues that their efforts matter.", type: "E" }
+                ]
+            }
+        ];
+
+        const loveLanguageMeta = {
+            "A": { name: "Words of Affirmation", desc: "You value or express appreciation through mentorship, constructive feedback, positive recognition, and praise." },
+            "B": { name: "Quality Time", desc: "You value or express appreciation through dedicated 1-on-1 check-ins, personal connections, and collaborative time." },
+            "C": { name: "New Opportunities & Challenges", desc: "You value or express appreciation through growth opportunities, new responsibilities, professional development, and challenging projects." },
+            "D": { name: "Acts of Service", desc: "You value or express appreciation through practical support, sharing templates/resources, and helping complete heavy workloads." },
+            "E": { name: "Encouraging Touchpoints", desc: "You value or express appreciation through thoughtful written messages, warm check-ins, and consistent positive communication." }
+        };
+
+        /* --- STATE --- */
+        let userProfile = { name: "Participant", department: "Organization" };
+        let selectedMode = "both";
+        let activeQueue = [];
+        let currentIndex = 0;
+        let receiveAnswers = Array(9).fill(null);
+        let giveAnswers = Array(9).fill(null);
+
+        /* --- STEP NAVIGATION --- */
+        function goToStep(stepId) {
+            const name = document.getElementById('user-name').value.trim();
+            const dept = document.getElementById('user-dept').value.trim();
+            if (name) userProfile.name = name;
+            if (dept) userProfile.department = dept;
+
+            document.querySelectorAll('.wizard-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(stepId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function startAssessment(mode) {
+            selectedMode = mode;
+            currentIndex = 0;
+            receiveAnswers = Array(9).fill(null);
+            giveAnswers = Array(9).fill(null);
+
+            if (mode === 'receive') {
+                activeQueue = questionsReceive.map(q => ({ ...q, mode: 'receive' }));
+            } else if (mode === 'give') {
+                activeQueue = questionsGive.map(q => ({ ...q, mode: 'give' }));
+            } else {
+                activeQueue = [
+                    ...questionsReceive.map(q => ({ ...q, mode: 'receive' })),
+                    ...questionsGive.map(q => ({ ...q, mode: 'give' }))
+                ];
+            }
+
+            renderCurrentQuestion();
+            goToStep('step-quiz');
+        }
+
+        /* --- QUESTION RENDER --- */
+        function renderCurrentQuestion() {
+            const q = activeQueue[currentIndex];
+            const isReceive = q.mode === 'receive';
+            const localIdx = q.id - 1;
+            const answers = isReceive ? receiveAnswers : giveAnswers;
+            const currentSelection = answers[localIdx];
+
+            // Header Labels
+            document.getElementById('quiz-section-label').textContent = isReceive ? "PART 1: HOW I WANT TO RECEIVE" : "PART 2: HOW I NATURALLY GIVE";
+            document.getElementById('quiz-counter').textContent = `Question ${currentIndex + 1} of ${activeQueue.length}`;
+
+            // Progress Fill
+            const pct = ((currentIndex + 1) / activeQueue.length) * 100;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+
+            // Image Placeholder Container for Question
+            const imgBox = document.getElementById('question-image-box');
+            const imgId = `${q.mode}-q${q.id}`;
+            imgBox.innerHTML = `
+                <img src="https://static.vecteezy.com/system/resources/previews/006/831/704/large_2x/panoramic-banner-of-business-partner-meeting-in-success-concept-businessman-corporate-teamwork-with-professional-team-partnership-celebration-greeting-with-a-work-deal-free-photo.jpg" id="img-slot-${imgId}" alt="Question Image ${currentIndex + 1}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="image-slot-caption" style="display:none;">[ Replace Image URL in src for ${q.mode.toUpperCase()} Q${q.id} ]</span>
+            `;
+
+            // Question Stem
+            document.getElementById('question-text').textContent = q.stem;
+
+            // Render Options
+            const listContainer = document.getElementById('options-list');
+            listContainer.innerHTML = '';
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = `option-button ${currentSelection === opt.type ? 'selected' : ''}`;
+                btn.onclick = () => selectOption(opt.type);
+
+                btn.innerHTML = `
+                    <span class="option-tag">${opt.letter}</span>
+                    <span class="option-body">${opt.text}</span>
+                `;
+                listContainer.appendChild(btn);
+            });
+
+            // Nav buttons
+            document.getElementById('btn-prev').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+            const nextBtn = document.getElementById('btn-next');
+            nextBtn.innerHTML = currentIndex === activeQueue.length - 1 ? "Complete Assessment ✦" : "Next Question &rarr;";
+        }
+
+        function selectOption(type) {
+            const q = activeQueue[currentIndex];
+            const localIdx = q.id - 1;
+
+            if (q.mode === 'receive') {
+                receiveAnswers[localIdx] = type;
+            } else {
+                giveAnswers[localIdx] = type;
+            }
+
+            renderCurrentQuestion();
+        }
+
+        function previousQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCurrentQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            const q = activeQueue[currentIndex];
+            const localIdx = q.id - 1;
+            const answers = q.mode === 'receive' ? receiveAnswers : giveAnswers;
+
+            if (!answers[localIdx]) {
+                alert("Please select an answer to proceed.");
+                return;
+            }
+
+            if (currentIndex < activeQueue.length - 1) {
+                currentIndex++;
+                renderCurrentQuestion();
+            } else {
+                compileResults();
+            }
+        }
+
+        /* --- RESULTS COMPILATION --- */
+        function compileResults() {
+            const calculateTally = (arr) => {
+                const map = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+                arr.forEach(val => { if (val) map[val]++; });
+                return map;
+            };
+
+            const recTally = calculateTally(receiveAnswers);
+            const giveTally = calculateTally(giveAnswers);
+
+            document.getElementById('res-name').textContent = userProfile.name;
+            document.getElementById('res-dept').textContent = userProfile.department;
+
+            // Get Dominant
+            const getDominants = (map) => {
+                let max = -1;
+                let keys = [];
+                for (let [k, v] of Object.entries(map)) {
+                    if (v > max) { max = v; keys = [k]; }
+                    else if (v === max && max > 0) { keys.push(k); }
+                }
+                return keys;
+            };
+
+            const domRec = getDominants(recTally);
+            const domGive = getDominants(giveTally);
+
+            // Dominant Cards
+            const grid = document.getElementById('dominant-grid');
+            grid.innerHTML = '';
+
+            if (selectedMode === 'receive' || selectedMode === 'both') {
+                const title = domRec.map(k => loveLanguageMeta[k].name).join(" / ");
+                const desc = domRec.map(k => loveLanguageMeta[k].desc).join(" ");
+                grid.innerHTML += `
+                    <div class="dominant-card">
+                        <div class="dominant-card-tag">Dominant Receive Preference</div>
+                        <div class="dominant-card-title">${title}</div>
+                        <div class="dominant-card-body">${desc}</div>
+                    </div>
+                `;
+            }
+
+            if (selectedMode === 'give' || selectedMode === 'both') {
+                const title = domGive.map(k => loveLanguageMeta[k].name).join(" / ");
+                const desc = domGive.map(k => loveLanguageMeta[k].desc).join(" ");
+                grid.innerHTML += `
+                    <div class="dominant-card">
+                        <div class="dominant-card-tag">Dominant Give Preference</div>
+                        <div class="dominant-card-title">${title}</div>
+                        <div class="dominant-card-body">${desc}</div>
+                    </div>
+                `;
+            }
+
+            // Stats Bars
+            const recBox = document.getElementById('receive-stats-box');
+            const giveBox = document.getElementById('give-stats-box');
+
+            if (selectedMode === 'give') {
+                recBox.style.display = 'none';
+            } else {
+                recBox.style.display = 'block';
+                renderBarList('receive-bars-list', recTally, 9);
+            }
+
+            if (selectedMode === 'receive') {
+                giveBox.style.display = 'none';
+            } else {
+                giveBox.style.display = 'block';
+                renderBarList('give-bars-list', giveTally, 9);
+            }
+
+            // Interpretation
+            const interpText = document.getElementById('interpretation-text');
+            if (selectedMode === 'both') {
+                const match = domRec.some(r => domGive.includes(r));
+                if (match) {
+                    interpText.innerHTML = `<p><strong>Aligned Giving & Receiving Profile:</strong> Your primary workplace love language is identical across both receiving and giving dimensions. You show appreciation in the exact manner you prefer to receive it. Keep in mind that coworkers may have different preferences.</p>`;
+                } else {
+                    interpText.innerHTML = `<p><strong>Divergent Giving & Receiving Profile:</strong> How you naturally express appreciation differs from how you prefer to receive it. Communicating this to your team ensures your efforts are properly understood and your own needs are met.</p>`;
+                }
+            } else {
+                interpText.innerHTML = `<p>Your single-dimension profile provides clear guidance on your workplace interactions. Share these results during 1-on-1 check-ins with your team or manager.</p>`;
+            }
+
+            goToStep('step-results');
+        }
+
+        function renderBarList(elementId, tallyMap, total) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+
+            ['A', 'B', 'C', 'D', 'E'].forEach(k => {
+                const val = tallyMap[k];
+                const pct = Math.round((val / total) * 100);
+                const info = loveLanguageMeta[k];
+
+                const item = document.createElement('div');
+                item.className = 'stat-item';
+                item.innerHTML = `
+                    <div class="stat-meta">
+                        <span><strong>${k}. ${info.name}</strong></span>
+                        <span>${val} / ${total} (${pct}%)</span>
+                    </div>
+                    <div class="stat-bar-outer">
+                        <div class="stat-bar-inner" style="width: ${pct}%"></div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>
