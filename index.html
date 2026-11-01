@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="color-scheme" content="dark"/>
+<meta name="theme-color" content="#2d2a23"/>
+<title>James Amit — Instructional Designer</title>
+<meta name="description" content="James Amit — Instructional Designer. Courses, work experience, video demos, certificates, and ways to connect."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  color-scheme:dark;
+  --paper:#2d2a23; --paper-2:#26231d; --ink:#fefdf9; --muted:#b4ac9c;
+  --accent:#ff6a4d; --accent-2:#8f8af0; --sun:#ffc93c; --mint:#8fe3c0; --pink:#ffb3c7;
+  --rule:2px solid #595957;
+  --shadow:#14120f;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
+  --gutter:clamp(16px,4vw,24px); --section-y:clamp(56px,8vw,80px); --header-h:66px;
+  --chip-bg:#171717; --chip-shadow:#14120f;
+  --book-bg:#1a1713; --cream:#f4efe6; --dark:#16130f;
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif; --mono:'Space Mono',ui-monospace,monospace;
+}
+html{background:#2d2a23;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-synthesis:none}
+input,textarea,select,button{font:inherit;color:inherit}
+.form input:not([type=checkbox]):not([type=radio]),.form textarea{-webkit-appearance:none;-moz-appearance:none;appearance:none;box-shadow:none}
+body{-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + var(--space-4))}
+section[id],[id].sec{scroll-margin-top:calc(var(--header-h) + var(--space-4))}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip;min-height:100vh}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 var(--gutter)}
+.mono{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+::selection{background:var(--accent);color:#fff}
+:focus-visible{outline:3px solid var(--accent-2);outline-offset:3px}
+.form input:focus-visible,.form textarea:focus-visible,.search:focus-visible{outline-color:var(--sun);outline-offset:0}
+/* grid/flex children may shrink: stops long words or wide content from forcing sideways scroll */
+.hero-grid>*,.about-grid>*,.book-grid>*,.contact-grid>*,.cards>*,.vgrid>*,.exp li>*,.stats>*,.ai-grid>*{min-width:0}
+
+/* grain */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* top ticker */
+.ticker{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;border-bottom:var(--rule)}
+.ticker-track{display:inline-flex;gap:3rem;padding:.5rem 0;animation:slide 40s linear infinite}
+.ticker span{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* masthead */
+header.mast{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:var(--rule)}
+.mast-in{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);height:64px}
+.logo{font-family:var(--serif);font-weight:800;font-size:1.4rem;text-decoration:none;letter-spacing:-.02em}
+.logo i{color:var(--accent);font-style:normal}
+nav.links{display:flex;gap:4px;align-items:center}
+nav.links a{white-space:nowrap;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;padding:8px 12px;border-radius:99px;transition:.2s}
+nav.links a:hover,nav.links a.on{background:var(--ink);color:var(--paper)}
+.icon-btn{border:var(--rule);background:transparent;color:var(--ink);width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1rem;display:grid;place-items:center;transition:.2s}
+.icon-btn:hover{background:var(--sun);color:#16130f;transform:rotate(-12deg)}
+.burger{display:none}
+@media(max-width:1040px){
+  nav.links{position:fixed;inset:var(--header-h) 0 auto 0;background:var(--paper);flex-direction:column;align-items:stretch;padding:var(--space-4) var(--gutter);border-bottom:var(--rule);transform:translateY(-130%);transition:transform .3s;z-index:-1}
+  nav.links.open{transform:none}
+  nav.links a{padding:14px 12px;border-bottom:1px dashed var(--muted);border-radius:0}
+  .burger{display:grid}
+}
+
+/* hero */
+.hero{padding:clamp(32px,6vw,56px) 0 clamp(32px,5vw,48px);border-bottom:var(--rule);position:relative}
+.hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(var(--space-5),5vw,var(--space-7));align-items:center}
+.kicker{display:inline-flex;flex-wrap:wrap;gap:var(--space-2);align-items:center;margin-bottom:var(--space-4)}
+.kicker b{background:var(--accent);color:#fff;padding:3px 10px;border-radius:99px;font-weight:800}
+h1.big{font-family:var(--serif);font-weight:900;font-size:clamp(3.4rem,10vw,8.5rem);line-height:.9;letter-spacing:-.045em}
+h1.big em{font-style:italic;font-weight:500;color:var(--accent)}
+h1.big .hl{color:var(--sun);padding:0 .04em;background:linear-gradient(transparent 88%,var(--mint) 88%,var(--mint) 95%,transparent 95%)}
+.lede{font-family:var(--serif);font-size:clamp(1.15rem,2vw,1.5rem);max-width:34ch;margin:var(--space-5) 0 var(--space-6);font-weight:400;line-height:1.35}
+.btn-row{display:flex;flex-wrap:wrap;gap:var(--space-3) var(--space-4)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;gap:10px;padding:12px 22px;border:var(--rule);border-radius:99px;font-weight:600;text-decoration:none;cursor:pointer;background:var(--paper);color:var(--ink);box-shadow:4px 4px 0 var(--shadow);transition:transform .15s,box-shadow .15s;font-size:.95rem;font-family:var(--sans)}
+.btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow)}
+.btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--shadow)}
+.btn.li{background:#0a66c2;color:#fff;border-color:#16130f}
+.btn.hot{background:var(--accent);color:#fff}
+.btn.sun{background:var(--sun);color:#16130f}
+.portrait{position:relative;justify-self:center;width:min(100%,380px)}
+.portrait .frame{aspect-ratio:4/5;border:var(--rule);border-radius:200px 200px 24px 24px;overflow:hidden;background:var(--mint);box-shadow:10px 10px 0 var(--shadow)}
+.portrait img{width:100%;height:100%;object-fit:cover;filter:contrast(1.05) saturate(1.05)}
+.sticker{position:absolute;display:grid;place-items:center;text-align:center;font-family:var(--mono);font-weight:700;text-transform:uppercase;font-size:.7rem;letter-spacing:.06em;border:var(--rule);color:#16130f}
+.sticker.s1{width:110px;height:110px;border-radius:50%;background:var(--pink);top:-18px;right:-26px;transform:rotate(12deg);animation:wob 5s ease-in-out infinite}
+.sticker.s2{padding:8px 14px;background:var(--cream);bottom:30px;left:-34px;transform:rotate(-8deg);border-radius:8px}
+@keyframes wob{50%{transform:rotate(-6deg) scale(1.06)}}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.portrait{order:-1;width:min(80%,320px)}}
+@media(max-width:520px){.sticker.s1{right:-8px;width:92px;height:92px}.sticker.s2{left:-8px}.portrait .frame{box-shadow:6px 6px 0 var(--shadow)}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(var(--space-6),5vw,var(--space-7));border:var(--rule);background:var(--paper-2)}
+.stats div{padding:var(--space-4) clamp(var(--space-3),2vw,22px);border-right:var(--rule)}
+.stats div:last-child{border-right:0}
+.stats strong{font-family:var(--serif);font-size:2.4rem;font-weight:800;display:block;line-height:1}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.stats div:nth-child(2){border-right:0}.stats div:nth-child(-n+2){border-bottom:var(--rule)}}
+
+/* sections */
+section.sec{padding:var(--section-y) 0;border-bottom:var(--rule)}
+.sec-head{display:flex;align-items:baseline;gap:var(--space-3) var(--space-5);margin-bottom:clamp(var(--space-5),5vw,44px);flex-wrap:wrap}
+.sec-no{font-family:var(--mono);font-size:.8rem;border:var(--rule);border-radius:99px;padding:4px 12px}
+h2.title{font-family:var(--serif);font-weight:800;font-size:clamp(2.4rem,6vw,4.6rem);letter-spacing:-.035em;line-height:1}
+h2.title em{font-weight:400;font-style:italic;color:var(--accent-2)}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(var(--space-5),5vw,var(--space-7))}
+.dropcap::first-letter{font-family:var(--serif);font-weight:800;font-size:5.4rem;float:left;line-height:.8;padding:8px 12px 0 0;color:var(--accent)}
+.about p{font-size:1.1rem;margin-bottom:1.1rem;max-width:56ch}
+.video-box{aspect-ratio:16/9;border:var(--rule);box-shadow:8px 8px 0 var(--shadow);background:var(--book-bg);position:relative;overflow:hidden}
+.video-box iframe{width:100%;height:100%;border:0}
+.play-card{display:block;width:100%;height:100%;border:0;padding:0;cursor:pointer;position:relative;font:inherit;text-align:left}
+.play-card:focus-visible{outline:3px solid var(--accent-2);outline-offset:-8px}
+.play-card .cap{position:absolute;left:14px;bottom:12px;z-index:5;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#fff}
+.expertise{margin-top:clamp(var(--space-6),6vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border:var(--rule)}
+.expertise article{padding:24px;border-right:var(--rule);border-bottom:var(--rule);margin:-1px -1px 0 0;transition:.2s}
+.expertise article:hover{background:var(--sun);color:#16130f}
+.expertise h4{font-family:var(--serif);font-size:1.25rem;margin:8px 0}
+.expertise p{font-size:.92rem;color:var(--muted)}
+.expertise article:hover p{color:#16130f}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr}}
+
+/* marquee */
+.marquee{overflow:hidden;border-bottom:var(--rule);background:var(--accent);color:#fff;padding:14px 0;white-space:nowrap}
+.marquee div{display:inline-flex;gap:2.4rem;animation:slide 28s linear infinite;font-family:var(--serif);font-weight:800;font-size:2.2rem;letter-spacing:-.02em}
+.marquee .o{-webkit-text-stroke:1.5px #fff;color:transparent;font-style:italic}
+
+/* experience */
+.exp{list-style:none}
+.exp li{display:grid;grid-template-columns:90px 1fr 220px;gap:var(--space-5);padding:var(--space-6) 0;border-top:var(--rule);transition:padding .25s}
+.exp li:last-child{border-bottom:var(--rule)}
+.exp li:hover{padding-left:14px}
+.exp .n{font-family:var(--serif);font-size:3rem;font-weight:800;color:var(--accent);line-height:1}
+.exp h3{font-family:var(--serif);font-size:1.8rem;letter-spacing:-.02em;line-height:1.1;margin-bottom:10px}
+.exp ul{padding-left:1.1rem;color:var(--muted);font-size:.97rem}
+.exp ul li{display:list-item;border:0;padding:3px 0;grid-template-columns:none}
+.exp ul li:hover{padding-left:0}
+.exp .when{text-align:right;font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.pill{display:inline-block;background:var(--mint);color:#16130f;border:var(--rule);padding:2px 10px;border-radius:99px;margin-top:8px;font-size:.7rem}
+@media(max-width:800px){.exp li{grid-template-columns:56px 1fr}.exp .when{grid-column:2;text-align:left}}
+
+/* courses */
+.tools{display:flex;gap:var(--space-3);align-items:center;margin-bottom:var(--space-5);flex-wrap:wrap}
+.search{flex:1;min-width:220px;border:var(--rule);padding:12px 18px;border-radius:99px;background:var(--paper);color:var(--ink);font-family:var(--mono);font-size:.82rem}
+.search:focus{outline:3px solid var(--sun)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(290px,100%),1fr));gap:var(--space-5)}
+.card{border:var(--rule);background:var(--paper);box-shadow:6px 6px 0 var(--shadow);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.card:nth-child(3n+1):hover{transform:rotate(-1.2deg) translateY(-4px)}
+.card:nth-child(3n+2):hover{transform:rotate(1deg) translateY(-4px)}
+.card:nth-child(3n):hover{transform:rotate(-.6deg) translateY(-4px)}
+.card .img{aspect-ratio:16/10;border-bottom:var(--rule);overflow:hidden;background:var(--paper-2)}
+.card .img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.card:hover .img img{transform:scale(1.06)}
+.card .body{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card h3{font-family:var(--serif);font-size:1.25rem;line-height:1.15}
+.card p{font-size:.92rem;color:var(--muted);flex:1}
+.link{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;background:none;border:0;color:var(--ink);cursor:pointer;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;text-align:left;padding:0}
+.link:hover{color:var(--accent)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px}
+
+/* ---- editorial thumbnails -------------------------------------------
+   Layers (bottom → top): blur · photo/GIF · scrim · halftone dots · type · button.
+   If there is no photo/GIF (or it fails to load) the blur is simply what you see. */
+.thumb{--bg:#ffc93c;--c1:#ff4d2e;--c2:#ffb3c7;--c3:#fff3c4;position:relative;display:block;width:100%;height:100%;min-height:150px;overflow:hidden;isolation:isolate;background:var(--bg);color:#16130f}
+.thumb.k1{--bg:#8fe3c0;--c1:#2b4cff;--c2:#ffc93c;--c3:#e6fff4}
+.thumb.k2{--bg:#ffb3c7;--c1:#ffc93c;--c2:#8e44ff;--c3:#fff0f5}
+.thumb.k3{--bg:#ff4d2e;--c1:#ffc93c;--c2:#ffb3c7;--c3:#ff9a82;color:#fff}
+.thumb.k4{--bg:#2b4cff;--c1:#8fe3c0;--c2:#ff4d2e;--c3:#7b93ff;color:#fff}
+.thumb.k5{--bg:#1c9c74;--c1:#8fe3c0;--c2:#ffc93c;--c3:#52d6a8;color:#fff}
+.thumb.k6{--bg:#8e44ff;--c1:#ffb3c7;--c2:#2b4cff;--c3:#b88aff;color:#fff}
+.thumb .bl{position:absolute;inset:-25%;z-index:0;filter:blur(30px) saturate(1.25);transition:transform 1s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.thumb .bl i{position:absolute;display:block;border-radius:50%}
+.thumb .bl i:nth-child(1){width:55%;height:65%;left:2%;top:0;background:var(--c1)}
+.thumb .bl i:nth-child(2){width:50%;height:55%;right:0;bottom:2%;background:var(--c2)}
+.thumb .bl i:nth-child(3){width:35%;height:40%;left:34%;top:30%;background:var(--c3);opacity:.85}
+.card:hover .thumb .bl,.play-card:hover .bl{transform:scale(1.15) rotate(8deg)}
+.thumb .ghost{position:absolute;right:-4%;top:50%;z-index:1;font-size:7.5rem;line-height:1;filter:blur(9px);opacity:.55;transform:translateY(-50%) rotate(-10deg);pointer-events:none}
+.thumb .media{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover}
+.play-card .media{transition:transform .6s}
+.play-card:hover .media{transform:scale(1.06)}
+.thumb .media ~ .ghost{display:none}
+/* blurred copy of the REAL content (video thumbnail / certificate page) */
+.thumb .media.blurred{filter:blur(9px) saturate(1.15);transform:scale(1.25);animation:edfade .6s both}
+.play-card:hover .media.blurred{transform:scale(1.32)}
+@keyframes edfade{from{opacity:0}}
+/* course thumbnails: just the photo (flat placeholder until one is added) */
+.thumb.flat{background:var(--paper-2);background-image:radial-gradient(rgba(22,19,15,.14) 1.2px,transparent 1.5px);background-size:12px 12px}
+.thumb.flat .glyph{position:absolute;inset:0;display:grid;place-items:center;font-size:4rem;opacity:.75}
+.thumb.flat .pic{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover}
+.thumb .scrim{display:none;position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(10,8,5,.3),transparent 38%),linear-gradient(to top,rgba(10,8,5,.62),transparent 55%)}
+.thumb .media ~ .scrim{display:block}
+.thumb .dots{position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(22,19,15,.16) 1.2px,transparent 1.5px);background-size:12px 12px}
+.thumb .media ~ .dots{opacity:.45}
+.thumb .cv-tag{position:absolute;left:14px;top:12px;z-index:4;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  background:#f4efe6;color:#16130f;border:2px solid #16130f;border-radius:99px;padding:2px 10px;line-height:1.5}
+.thumb .cv-no{position:absolute;left:16px;bottom:8px;z-index:4;font-family:var(--serif);font-weight:800;font-style:italic;font-size:2.4rem;line-height:1;letter-spacing:-.04em;color:inherit}
+.thumb .media ~ .cv-no{color:#fff;text-shadow:2px 2px 0 rgba(22,19,15,.45)}
+.card .img[data-launch],.card .img[data-pdf]{cursor:pointer}
+
+/* editorial button: solid disc + a type ring that spins in on hover */
+.ed-btn{position:absolute;left:50%;top:50%;width:96px;height:96px;margin:-48px 0 0 -48px;z-index:5;display:grid;place-items:center;pointer-events:none}
+.ed-btn .ring-wrap{position:absolute;inset:-12px;opacity:0;transform:scale(.65) rotate(-50deg);transition:opacity .3s,transform .7s cubic-bezier(.2,1.25,.4,1)}
+.ed-btn .ring{width:100%;height:100%;overflow:visible;animation:edspin 16s linear infinite}
+.ed-btn .ring text{font-family:var(--mono);font-size:10.5px;font-weight:700;fill:#fff;stroke:#16130f;stroke-width:3.2px;stroke-linejoin:round;paint-order:stroke}
+.ed-btn::before{content:"";position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(closest-side,rgba(10,8,5,.5) 55%,transparent);pointer-events:none}
+.ed-btn .disc{position:relative;width:58px;height:58px;border-radius:50%;background:#16130f;color:#f4efe6;border:3px solid #f4efe6;
+  box-shadow:0 0 0 2px #16130f,4px 4px 0 2px #16130f;display:grid;place-items:center;transition:transform .3s cubic-bezier(.3,1.6,.5,1),box-shadow .2s,background .2s,color .2s,border-color .2s}
+.ed-btn .disc svg{width:24px;height:24px;fill:currentColor}
+.ed-btn .disc svg path:only-child{transform:translateX(1.5px)}
+.ed-btn .eye .pupil{fill:currentColor;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.card:hover .ed-btn .disc,.play-card:hover .ed-btn .disc,.play-card:focus-visible .ed-btn .disc{transform:scale(1.14) rotate(8deg);background:var(--sun);color:#16130f;border-color:#16130f;box-shadow:0 0 0 2px #f4efe6,5px 5px 0 2px #16130f}
+.card:hover .ed-btn .ring-wrap,.play-card:hover .ed-btn .ring-wrap,.play-card:focus-visible .ed-btn .ring-wrap{opacity:1;transform:none}
+.card:hover .ed-btn .pupil,.play-card:hover .ed-btn .pupil{transform:translate(1.6px,-1px)}
+@keyframes edspin{to{transform:rotate(360deg)}}
+.card .meta{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* course groups + launcher */
+.group-head{grid-column:1/-1;font-family:var(--serif);font-weight:800;font-size:1.7rem;letter-spacing:-.02em;display:flex;align-items:baseline;gap:14px;margin-top:14px;padding-bottom:10px;border-bottom:var(--rule)}
+.group-head:first-child{margin-top:0}
+.group-head span{font-family:var(--mono);font-weight:400;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.btn.sm{padding:10px 18px;font-size:.88rem;align-self:flex-start;margin-top:6px;box-shadow:3px 3px 0 var(--shadow)}
+.soon{align-self:flex-start;margin-top:6px;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;border:2px dashed var(--muted);border-radius:99px;padding:8px 16px;color:var(--muted)}
+
+/* case study modal */
+.case{padding:32px 36px 40px}
+.case .cover{min-height:180px;border:var(--rule);margin-bottom:26px;box-shadow:6px 6px 0 var(--shadow)}
+.case h2{font-family:var(--serif);font-weight:800;font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.02;letter-spacing:-.03em;margin-bottom:10px}
+.case .lead{font-family:var(--serif);font-size:1.25rem;font-weight:300;line-height:1.4;max-width:46ch;margin-bottom:24px}
+.case-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:var(--rule);margin-bottom:28px}
+.case-meta div{padding:12px 16px;border-right:var(--rule)}
+.case-meta div:last-child{border-right:0}
+.case-meta b{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.case h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:22px 0 6px}
+.case p.t{max-width:62ch}
+.case .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.case .tags span{border:var(--rule);border-radius:99px;padding:3px 12px;font-size:.85rem;background:var(--paper-2)}
+.case .cta{margin-top:32px;padding-top:22px;border-top:var(--rule);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.case .cta p{flex:1;min-width:200px;font-family:var(--serif);font-size:1.15rem}
+
+/* AI toolkit */
+.ai-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin:6px 0 14px;display:flex;align-items:center;gap:10px}
+.ai-label::after{content:"";flex:1;border-top:2px dashed var(--muted);opacity:.5}
+.ai-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(230px,100%),1fr));gap:var(--space-4);margin-bottom:var(--space-6)}
+.ai-card{display:flex;gap:14px;align-items:flex-start;border:var(--rule);background:var(--paper);padding:16px;box-shadow:4px 4px 0 var(--shadow);transition:transform .2s}
+.ai-card:hover{transform:translateY(-5px) rotate(-1.2deg)}
+.ai-card .mono-ico{flex:none;width:48px;height:48px;border-radius:50%;border:var(--rule);display:grid;place-items:center;font-family:var(--serif);font-weight:800;font-size:1.5rem;color:#16130f}
+.ai-card .mono-ico.k0{background:var(--sun)}.ai-card .mono-ico.k1{background:var(--mint)}.ai-card .mono-ico.k2{background:var(--pink)}
+.ai-card .mono-ico.k3{background:var(--accent);color:#fff}.ai-card .mono-ico.k4{background:var(--accent-2);color:#fff}
+.ai-card h4{font-family:var(--serif);font-size:1.2rem;line-height:1.1}
+.ai-card p{font-size:.85rem;color:var(--muted);margin-top:4px;line-height:1.4}
+.ai-grid.core .ai-card{box-shadow:5px 5px 0 var(--accent)}
+
+/* videos */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:clamp(var(--space-5),4vw,36px)}
+.vgrid figure .video-box{box-shadow:6px 6px 0 var(--shadow)}
+.vgrid figcaption{margin-top:16px}
+.vgrid h3{font-family:var(--serif);font-size:1.5rem;line-height:1.1;margin-bottom:6px}
+.vgrid p{color:var(--muted);font-size:.95rem}
+
+/* certificates & resume */
+.tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:var(--space-5)}
+.tab{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;border:var(--rule);background:var(--paper);color:var(--ink);min-height:44px;padding:10px 20px;border-radius:99px;cursor:pointer}
+.tab.on{background:var(--ink);color:var(--paper)}
+.panel[hidden]{display:none}
+.resume-frame{border:var(--rule);box-shadow:8px 8px 0 var(--shadow);aspect-ratio:4/5;max-height:900px;width:100%;background:#fff}
+.resume-frame iframe{width:100%;height:100%;border:0}
+
+/* tools & companies */
+.chips{display:flex;flex-wrap:wrap;gap:var(--space-4)}
+.chip{background:var(--chip-bg);border:var(--rule);border-radius:16px;padding:14px 20px;height:84px;min-width:130px;display:grid;place-items:center;transition:transform .2s;box-shadow:3px 3px 0 var(--chip-shadow);color:#f4efe6}
+.chip:hover{transform:translateY(-6px) rotate(-3deg)}
+.chip img{max-height:48px;max-width:120px;object-fit:contain;filter:grayscale(1);transition:filter .3s}
+.chip:hover img{filter:none}
+.chip img.inv{filter:grayscale(1) invert(1) brightness(1.15)}
+.chip:hover img.inv{filter:invert(1) brightness(1.15)}
+.subhead{font-family:var(--serif);font-size:1.7rem;margin:var(--space-7) 0 var(--space-2)}
+.subhead:first-of-type{margin-top:0}
+.subp{color:var(--muted);margin-bottom:var(--space-5)}
+
+/* visitor book */
+.book{background:var(--book-bg);color:var(--cream);border-bottom:var(--rule)}
+.book .sec-no{border-color:var(--cream)}
+.book h2.title em{color:var(--sun)}
+.book-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(var(--space-6),6vw,56px)}
+.book p.lede{color:var(--cream)}
+.form{background:#f4efe6;color:#16130f;border:2px solid #f4efe6;padding:clamp(var(--space-4),4vw,28px);box-shadow:8px 8px 0 var(--accent);transform:rotate(.6deg)}
+.form.on-paper{border-color:var(--ink);transform:rotate(-.5deg)}
+.form .hint{font-size:.78rem;color:#5d564a;margin-top:12px}
+.form input[type=email]{width:100%;border:2px solid #16130f;padding:12px 14px;font-family:var(--sans);font-size:1rem;background:#fff;color:#16130f;border-radius:0}
+.form input[type=email]:focus{outline:3px solid var(--sun)}
+.form label{display:block;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;margin:14px 0 6px}
+.form input[type=text],.form input[type=url],.form textarea{width:100%;border:2px solid #16130f;padding:12px 14px;font-family:var(--sans);font-size:1rem;background:#fff;color:#16130f;border-radius:0}
+.form input:focus,.form textarea:focus{outline:3px solid var(--sun)}
+.form .check{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;margin:16px 0;color:#16130f}
+.form .check input{margin-top:4px;accent-color:var(--accent);width:18px;height:18px}
+.form .hp{position:absolute;left:-9999px}
+.form .btn{box-shadow:4px 4px 0 #16130f;color:#fff}
+.msg{margin-top:14px;font-weight:600;font-size:.95rem;min-height:1.4em}
+.msg.ok{color:#117a50}.msg.err{color:#c22a10}
+@media(max-width:900px){.book-grid{grid-template-columns:1fr}}
+
+/* contact */
+.contact{padding:clamp(56px,9vw,90px) 0 clamp(44px,7vw,70px)}
+.contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(var(--space-6),6vw,56px);align-items:center}
+.contact h2{font-family:var(--serif);font-weight:800;font-size:clamp(2.8rem,7vw,6rem);letter-spacing:-.04em;line-height:.95;margin-bottom:32px}
+.contact h2 em{color:var(--accent);font-weight:400}
+.contact .sub{font-family:var(--serif);font-weight:300;font-size:1.25rem;max-width:30ch;margin-bottom:26px}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}}
+footer{border-top:var(--rule);padding:22px 0;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3)}
+
+/* floating LinkedIn */
+.fab{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:60;background:#0a66c2;color:#fff;text-decoration:none;border:var(--rule);border-color:#16130f;border-radius:99px;padding:12px 20px;font-weight:600;font-size:.9rem;display:flex;gap:10px;align-items:center;box-shadow:4px 4px 0 #16130f;transition:.15s}
+.fab:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #16130f}
+@media(max-width:520px){.fab span{display:none}.fab{padding:14px;border-radius:50%}footer{padding-bottom:88px}}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:90;display:none;place-items:center;background:rgba(10,8,5,.78);padding:20px}
+.modal.on{display:grid}
+.modal-box{background:var(--paper);border:var(--rule);width:min(1000px,100%);height:min(88vh,900px);height:min(88dvh,900px);max-height:100%;display:flex;flex-direction:column;box-shadow:10px 10px 0 var(--accent)}
+.modal-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:var(--rule);gap:12px}
+.modal-bar h3{font-family:var(--serif);font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modal-body{flex:1;background:#fff;overflow:auto}
+.modal-body.case-body{background:var(--paper)}
+.modal-body iframe{width:100%;height:100%;border:0}
+
+/* full-screen course player (in-page, no new tab, no address shown) */
+.stage{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;background:var(--paper);height:100vh;height:100dvh}
+.stage.on{display:flex}
+.stage-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 14px;border-bottom:var(--rule);background:var(--paper)}
+.stage-bar .now{display:flex;align-items:center;gap:12px;min-width:0}
+.stage-bar .now .mono{flex:none;background:var(--accent);color:#fff;border-radius:99px;padding:2px 10px;font-weight:700}
+.stage-bar h3{font-family:var(--serif);font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage-bar .acts{display:flex;gap:8px;flex:none}
+.stage-btn{display:inline-flex;align-items:center;gap:8px;border:var(--rule);background:var(--paper);color:var(--ink);border-radius:99px;padding:8px 16px;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:3px 3px 0 var(--shadow);transition:transform .15s,box-shadow .15s}
+.stage-btn:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.stage-btn[hidden]{display:none}
+.stage-btn.x{background:var(--sun);color:#16130f}
+.stage-btn:focus-visible{outline:3px solid var(--accent-2);outline-offset:3px}
+.stage-body{flex:1;min-height:0;background:var(--paper)}
+.stage-body iframe{width:100%;height:100%;border:0;display:block;background:var(--paper)}
+@media(max-width:520px){.stage-bar .now .mono{display:none}.stage-btn span{display:none}.stage-btn{padding:10px 14px}}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><path id="edRing" d="M15 60a45 45 0 1 1 90 0a45 45 0 1 1-90 0"/></defs></svg>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<header class="mast">
+  <div class="wrap mast-in">
+    <a class="logo" href="#top">James<i>.</i>Amit</a>
+    <nav class="links" id="nav" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#work">Experience</a>
+      <a href="#courses">Courses</a>
+      <a href="#videos">Videos</a>
+      <a href="#proof">Certificates</a>
+      <a href="#visitors">Visitor Book</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div style="display:flex;gap:8px">
+      <button class="icon-btn burger" id="burger" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker mono"><b>Career Portofolio</b><span>Learn More About Me! </span></div>
+        <h1 class="big">Making<br/><span class="hl">complex</span><br/>details <em>easy.</em></h1>
+        <p class="lede">I'm James Amit, an instructional designer and former training supervisor. I turn dense information into learning people actually remember, and can measure.</p>
+        <div class="btn-row">
+          <a class="btn li" href="https://www.linkedin.com/in/amitjamesmadr/" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg> Message me on LinkedIn</a>
+          <a class="btn hot" href="#courses">See my work →</a>
+          <a class="btn sun" href="#visitors">Sign the visitor book ✍</a>
+        </div>
+      </div>
+      <div class="portrait">
+        <div class="frame"><img alt="Portrait of James Amit" width="380" height="475" referrerpolicy="no-referrer" src="https://7haym.github.io/james-amit-portfolio/images/james-amit.jpg" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://raw.githubusercontent.com/7haym/james-amit-portfolio/refs/heads/main/images/james-amit.jpg';}"/></div>
+        <div class="sticker s1">Let's<br/>work<br/>together!</div>
+        <div class="sticker s2">ID · L&amp;D · Artist</div>
+      </div>
+    </div>
+    <div class="stats">
+      <div><strong data-count="20" data-suffix="+">0</strong><span class="mono">New-hire classes led</span></div>
+      <div><strong data-count="97" data-suffix="%">0</strong><span class="mono">Avg. throughput rate</span></div>
+      <div><strong data-count="4">0</strong><span class="mono">Companies</span></div>
+      <div><strong data-count="11">0</strong><span class="mono">Certifications</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="sec-no">01</span><h2 class="title">About <em>me</em></h2></div>
+    <div class="about-grid">
+      <div class="about rv">
+        <p class="dropcap">I'm a Learning and Development professional passionate about transforming complex information into meaningful, engaging, and measurable learning experiences. Having grown from a frontline training role into instructional design and curriculum development, I've worked across diverse industries, including retail, content moderation,  telecommunications, energy and gas operations.</p>
+        <p>My approach combines instructional strategy, creativity, technology, and a strong understanding of how people learn to create experiences that translate knowledge into real-world performance.</p>
+        <p>Watch the video to learn more about how I work, my approach to training, and my perspectives on effective learning and development.</p>
+      </div>
+      <div class="rv" id="introVideo"></div>
+    </div>
+
+    <div class="expertise rv">
+      <article><span class="mono">A</span><h4>Curriculum &amp; Instructional Design</h4><p>Curricula, lesson plans and training modules across traditional, e-learning and blended formats.</p></article>
+      <article><span class="mono">B</span><h4>L&amp;D Software</h4><p>Articulate 360 including Storyline, Adobe Photoshop, Microsoft Office and more.</p></article>
+      <article><span class="mono">C</span><h4>Training &amp; Facilitation</h4><p>Leading dynamic group sessions, plus coaching and mentoring individuals.</p></article>
+      <article><span class="mono">D</span><h4>Classroom &amp; Time Management</h4><p>Structured, timely delivery so every learning objective is met.</p></article>
+      <article><span class="mono">E</span><h4>Assessment &amp; Evaluation</h4><p>Strategies that measure learning outcomes and improve program effectiveness.</p></article>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div id="marqueeTrack"></div></div>
+
+<!-- EXPERIENCE -->
+<section class="sec" id="work">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="sec-no">02</span><h2 class="title">Work <em>experience</em></h2></div>
+    <ol class="exp">
+      <li class="rv"><div class="n">04</div>
+        <div><h3>Instructional Designer</h3>
+          <ul>
+            <li>Designing and developing curricula for complex systems and procedures in telecommunications infrastructure, energy distribution and gas pipeline operations.</li>
+            <li>Design and develop learning materials for ACMA compliance training, translating regulatory requirements into clear, structured learning content.</li>
+            <li>Develop employee learning video series focused on strengthening essential soft skills, including heightened focus and active listening.</li>
+            <li>Create training materials, facilitator resources, and supporting learning assets to facilitate new product launches and business process changes.</li>
+            <li>Facilitate project kick-offs, topic review sessions, and T3 training sessions to align stakeholders and ensure effective knowledge transfer.</li>
+             <li>Observe training classes to evaluate facilitation effectiveness, learner engagement, and the application of instructional content.</li>
+             <li>Translate complex technical information, operational procedures, and product updates into accessible, learner-centred training materials.</li>
+            <li>Develop and refine instructional content across various learning formats, including instructor-led training (ILT), presentations, facilitator guides, participant guides, and digital learning resources.</li>
+             <li>Collaborate with subject matter experts and business stakeholders to validate learning content, maintain technical accuracy, and address identified training needs.</li></ul></div>
+        <div class="when">Feb 2025 – Present<br/><span class="pill">Current</span></div></li>
+
+      <li class="rv"><div class="n">03</div>
+        <div><h3>Training Lead</h3>
+          <ul>
+            <li>Led development of a live workbook, improving team efficiency and delivering a 5% improvement in operational performance.</li>
+            <li>Partnered with the Assistant Manager to plan and run training bootcamps.</li>
+            <li>Analyzed existing training materials and developed solutions to improve learner outcomes.</li>
+            <li>Led the team in program engagement and development.</li>
+          </ul></div>
+        <div class="when">Sep 2024 – Feb 2025</div></li>
+
+      <li class="rv"><div class="n">02</div>
+        <div><h3>Training Consultant <small style="font-weight:300;font-style:italic">(Project-based)</small></h3>
+          <ul>
+            <li>Built a SessionLab library of icebreakers and wellness activities, and designed the Work-Love Language test sheet.</li>
+            <li>Authored English 101 modules and the Training Fundamentals curriculum for existing trainers.</li>
+            <li>Ran resource improvement and feedback sessions, and facilitated trainer workshops.</li>
+            <li>Completed pending documentation for an existing DICT project and helped run the M365-FLI Caravan.</li>
+            <li>Worked with external providers on Microsoft M365, Google Workspace and CCaaS training programs.</li>
+          </ul></div>
+        <div class="when">May – Jul 2024</div></li>
+
+      <li class="rv"><div class="n">01</div>
+        <div><h3>Senior Trainer I</h3>
+          <ul>
+            <li>Developed strategic training plans aligned to operations objectives and client needs; supervised and coached a team of trainers.</li>
+            <li>Point of Contact for two Lines of Business.</li>
+            <li>Led the Agent Lifecycle Playbook reports and built a training simulator for social media campaign practice.</li>
+            <li>Designed a Nesting performance evaluation system with immediate impact on Operations metrics.</li>
+            <li>Pioneered Trainer II for Social Media Campaigns across all four lines of business.</li>
+            <li>Delivered 20+ new-hire classes at an average throughput rate of 97%.</li>
+            <li>Mentored and certified Program Ready Trainers (Observation, Co-Facilitation, Solo); tracked 30/60/90 and PAMM performance and coached Team Leaders.</li>
+          </ul></div>
+        <div class="when">Apr 2022 – May 2024</div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="sec" id="courses" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="sec-no">03</span><h2 class="title">Microlearning <em>courses</em></h2></div>
+    <p class="subp" style="max-width:56ch;margin-top:-20px;margin-bottom:28px">Bite-sized courses built to show how I turn everyday workplace skills into short, practical learning. Hit <b>Launch course</b> to try one.</p>
+    <div class="tools"><input class="search" id="search" type="search" placeholder="Search projects…" aria-label="Search projects"/></div>
+    <div class="cards" id="projectList"></div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section class="sec" id="videos">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="sec-no">04</span><h2 class="title">Learning <em>videos</em></h2></div>
+    <div class="vgrid" id="videoGrid"></div>
+  </div>
+</section>
+
+<!-- CERTIFICATES & RESUME -->
+<section class="sec" id="proof" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="sec-no">05</span><h2 class="title">Certificates <em>&amp; resume</em></h2></div>
+    <div class="tabs">
+      <button class="tab on" data-tab="certs">Certificates</button>
+      <button class="tab" data-tab="resume">Resume</button>
+    </div>
+    <div class="panel" id="certs"><div class="cards" id="certList"></div></div>
+    <div class="panel" id="resume" hidden>
+      <div class="btn-row" style="margin-bottom:22px">
+        <a class="btn hot" id="resumeOpen" target="_blank" rel="noopener">Open full resume ↗</a>
+      </div>
+      <div class="resume-frame"><iframe id="resumeFrame" title="Resume preview" loading="lazy"></iframe></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS + COMPANIES -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="sec-no">06</span><h2 class="title">Tools <em>&amp; teams</em></h2></div>
+    <h3 class="subhead">Companies</h3>
+    <p class="subp">Organizations I've worked with and contributed to over the years.</p>
+    <div class="chips" id="companies"></div>
+    <h3 class="subhead">Tools of the trade</h3>
+    <p class="subp">Applications and platforms I use to design, deliver and manage learning.</p>
+    <div class="chips" id="tools"></div>
+    <h3 class="subhead">AI in my workflow</h3>
+    <p class="subp">The AI assistants I use to research, draft, prototype and polish learning content, always with a human in the loop.</p>
+    <div class="ai-label">Daily drivers</div>
+    <div class="ai-grid core" id="aiCore"></div>
+    <div class="ai-label">Also in the toolbox</div>
+    <div class="ai-grid" id="aiMore"></div>
+  </div>
+</section>
+
+<!-- VISITOR BOOK -->
+<section class="sec book" id="visitors">
+  <div class="wrap book-grid">
+    <div class="rv">
+      <div class="sec-head" style="margin-bottom:24px"><span class="sec-no">07</span><h2 class="title">Visitor <em>book</em></h2></div>
+      <p class="lede">Dropped by? Sign the book. Leave your name and LinkedIn profile so I can say hello and connect. It's completely optional.</p>
+      <p style="max-width:44ch;opacity:.8;font-size:.95rem">I only keep what you choose to type here, and only use it to get in touch with you. No hidden tracking, ever.</p>
+    </div>
+    <form class="form rv" id="visitorForm" novalidate>
+      <label for="vName">Your name</label>
+      <input type="text" id="vName" name="name" required maxlength="80" autocomplete="name"/>
+      <label for="vLi">Your LinkedIn profile URL</label>
+      <input type="url" id="vLi" name="linkedin" required placeholder="https://www.linkedin.com/in/your-name" autocomplete="url"/>
+      <label for="vNote">A note (optional)</label>
+      <textarea id="vNote" name="note" rows="3" maxlength="400"></textarea>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"/>
+      <label class="check"><input type="checkbox" id="vConsent" required/> <span>I agree to share my name and LinkedIn profile with James so he can contact or connect with me.</span></label>
+      <button class="btn hot" type="submit">Sign the book ✍</button>
+      <div class="msg" id="vMsg" role="status"></div>
+    </form>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap contact-grid rv">
+    <div>
+      <p class="mono" style="margin-bottom:18px">Let's work together</p>
+      <h2>Got a project?<br/><em>Say hello.</em></h2>
+      <p class="sub">Send a note straight to my inbox, or find me on LinkedIn.</p>
+      <div class="btn-row">
+        <a class="btn li" href="https://www.linkedin.com/in/amitjamesmadr/" target="_blank" rel="noopener">Message me on LinkedIn ↗</a>
+        <a class="btn sun" href="mailto:jamesbrian.amit@gmail.com">Email directly</a>
+      </div>
+    </div>
+    <form class="form on-paper" id="msgForm" novalidate>
+      <label for="mName">Your name</label>
+      <input type="text" id="mName" name="name" required maxlength="80" autocomplete="name"/>
+      <label for="mEmail">Your email</label>
+      <input type="email" id="mEmail" name="email" required maxlength="120" autocomplete="email"/>
+      <label for="mMsg">Message</label>
+      <textarea id="mMsg" name="message" rows="5" required maxlength="1500" placeholder="Tell me about your project or role…"></textarea>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"/>
+      <button class="btn hot" type="submit" style="margin-top:18px">Send message ✉</button>
+      <p class="hint">I'll reply to the email you enter. It's used only to answer you.</p>
+      <div class="msg" id="mMsgOut" role="status"></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap mono"><span>© 2026 James Amit</span><span>All Rights Reserved · Career Portfolio</span></div></footer>
+
+<a class="fab" href="https://www.linkedin.com/in/amitjamesmadr/" target="_blank" rel="noopener" aria-label="Message James on LinkedIn">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+  <span>Message me</span>
+</a>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Document viewer">
+  <div class="modal-box">
+    <div class="modal-bar"><h3 id="modalTitle"></h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a class="link" id="modalOpen" target="_blank" rel="noopener">Open in new tab ↗</a>
+        <button class="icon-btn" id="modalClose" aria-label="Close">✕</button>
+      </div></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Full-screen course player: covers the whole page, shows no address, no "open in new tab" -->
+<div class="stage" id="stage" role="dialog" aria-modal="true" aria-label="Course player">
+  <div class="stage-bar">
+    <div class="now"><span class="mono">Now playing</span><h3 id="stageTitle"></h3></div>
+    <div class="acts">
+      <button class="stage-btn" id="stageFs" type="button" hidden>⛶ <span>Full screen</span></button>
+      <button class="stage-btn x" id="stageClose" type="button" aria-label="Close course">✕ <span>Close</span></button>
+    </div>
+  </div>
+  <div class="stage-body" id="stageBody"></div>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIG — edit these
+   ===================================================================== */
+const CONFIG = {
+  linkedinProfile: "https://www.linkedin.com/in/amitjamesmadr/",
+  email: "jamesbrian.amit@gmail.com",
+
+  // Visitor book destination. Create a free form at https://formspree.io (or any
+  // endpoint that accepts a JSON POST) and paste its URL here.
+  // Example: "https://formspree.io/f/abcdwxyz"
+  // If left empty, the form falls back to opening an email to you.
+  visitorEndpoint: "https://script.google.com/macros/s/AKfycbzdLlACm51Wan3EMNcyceKqfB9-0YJaJNxlx-TO8e2La-XyrMCW_bFZC9AyBgjXpto/exec",
+
+  // "Send me a message" form on the Contact section. Can be the same Formspree
+  // URL as above (you'll get both in one inbox), or a separate one.
+  // If empty, it reuses visitorEndpoint; if that is empty too, it opens an email.
+  messageEndpoint: "",
+
+  // Intro video on the About section. Paste a YouTube embed URL, e.g.
+  // "https://www.youtube.com/embed/XXXXXXXXXXX" — or leave empty to hide.
+  introVideoEmbed: "https://7haym.github.io/james-amit-portfolio/ask%20me/index.html",
+
+  // Optional GIF preview for the intro video thumbnail. Paste a direct image link
+  // (ends in .gif). Leave empty and the thumbnail shows the editorial blur instead.
+  introGif: "Video GIFs/Intro GIF.gif",
+
+  resumePdf: "https://raw.githubusercontent.com/7haym/james-amit-portfolio/main/Resume/James_Amit_CV.pdf"
+};
+
+const BASE = "https://7haym.github.io/james-amit-portfolio/Logos/";
+const CERT_BASE = "https://raw.githubusercontent.com/7haym/james-amit-portfolio/main/certificates/";
+
+/* ---------------------------------------------------------------------
+   MICROLEARNING COURSES
+   To make a course launchable, paste its link into `url`. That's it.
+   The "Launch course" button then opens it in a full-screen player inside
+   the page (no new tab, no address shown).
+
+   What works for `url`:
+   - Articulate Rise / Storyline published link (Articulate Review or 360 share link)
+   - A course you host yourself, e.g. put the published folder in this repo
+     as courses/5s/ and use  url: "courses/5s/index.html"
+   - Genially, YouTube or Google Drive video links
+     (YouTube "watch" links and Drive "view" links are converted automatically)
+   Leave `url` empty and the card shows "Coming soon".
+   Optional: `duration` (e.g. "5 min"), `embed` (use a different iframe URL
+   than `url`).
+
+   THUMBNAIL: paste a photo link into `photo` (e.g. "Courses/5S/cover.jpg" or a
+   full https:// link). Until you add one, the card shows a plain placeholder.
+   --------------------------------------------------------------------- */
+const courseGroups = ["Skill Improvement Courses","Personality Tests & Career Courses"];
+const projects = [
+  { group:0, title:"5S: Turn Workplace Chaos into Order", tag:"5S", glyph:"🧹",
+    summary:"Workplace organization and process improvement.", duration:"15 mins", url:"Courses/5S/5S Micro Learning.html", photo:"https://img.magnific.com/premium-photo/messy-office-with-orange-office-chair-computer-with-scattered-papers-other-objects-floor_1383642-13470.jpg?semt=ais_hybrid&w=740&q=80" },
+  { group:0, title:"Beat the Busy Trap: Eisenhower Decision Matrix", tag:"Eisenhower", glyph:"🗓️",
+    summary:"Prioritization and time management.", duration:"10 mins", url:"Courses/Eisenhower/Eisenhower Micro Learning.html", photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ8Qfd4Vch2T0HmuzSN8a64tDd-Sejb-hc5n87DO4-kZauVypOUBvkEdOo&s=10" },
+  { group:0, title:"Detective at Work: Find the Root Cause", tag:"5 Whys", glyph:"🕵️",
+    summary:"Problem-solving using the 5 Whys technique.", duration:"10 mins", url:"Courses/5Whys.html", photo:"https://img.magnific.com/free-vector/office-stress-cartoon-concept-with-burnout-office-employee-vector-illustration_1284-78761.jpg?semt=ais_hybrid&w=740&q=80" },
+  { group:1, title:"Work Love Language", tag:"Workplace Appreciation", glyph:"📌",
+    summary:"Understanding Appreciation & Workplace Interactions", duration:"5 mins", url:"Courses/Work Love Language.html", photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJSmXhvkWuVrtGmrBHIitpvARb42iw1UVo9yGF4JCtw4mXV2ghUzR3G70&s=10" },
+  { group:1, title:"Feedback That Moves People Forward", tag:"Feedback", glyph:"💬",
+    summary:"Giving constructive, actionable feedback.", duration:"", url:"", photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVz1UdO--2mvE6nATPJ1bIRDISM9o_Dyb9TCESyra8dA&s=10" },
+  { group:1, title:"Think Before You Decide", tag:"Decisions", glyph:"🤔",
+    summary:"Practical decision-making and critical thinking.", duration:"", url:"", photo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVz1UdO--2mvE6nATPJ1bIRDISM9o_Dyb9TCESyra8dA&s=10" }
+];
+
+/* ---------------------------------------------------------------------
+   VIDEOS: `ep` is the episode number on the card.
+   `gif` = paste a direct link to a GIF preview (ends in .gif). Leave it empty
+   and the thumbnail is a blurred frame of the actual video (its Google Drive
+   thumbnail). If that can't load, you get a soft colour blur.
+   --------------------------------------------------------------------- */
+const videos = [
+  { title:"Cultural Dimensions", cls:"c1", glyph:"🌏", ep:"01", gif:"Video GIFs/Cultural Dimensions GIF.gif", id:"1vhh2bbHsaZzgqoSLNJEu1fGuvEbZrPUW", text:"One of the videos I created as part of our Foundation Training. It prepares learners to understand Australian culture." },
+  { title:"Heightened Focus", cls:"c2", glyph:"🎯", ep:"02", gif:"Video GIFs/Heightened Focus Ep. 6.gif", id:"1-mVeeRgqcHQfzpn7C7TBholABwEJG8_g", text:"One of the episodes I created for my Heightened Focus course series." },
+  { title:"Active Listening · Ep. 6", cls:"c3", glyph:"👂", ep:"03", gif:"Video GIFs/Active Listening Ep. 6.gif", id:"1CFZRxxOVru1Ia8r2RsCywvLhTOeDWDCm", text:"One of the episodes I created for my Active Listening course series." },
+  { title:"Product Feature", cls:"c1", glyph:"📣", ep:"04", gif:"Video GIFs/Dodo App GIF.gif", id:"1gdwRFQBr1QVhqCIyac52OmJxJ7utc4T4", text:"A sample product video update in a marketing design, made to hype team members and encourage them to educate customers about its benefits." }
+];
+
+/* CERTIFICATES: [title, cover label, emoji, pdf filename in /certificates] */
+const certs = [
+  ["4DX Certificate","Execution","🎯","4DX_Certificate_Amit.pdf"],
+  ["CEET Certificate: Language Evaluation (Concentrix)","Concentrix","🗣️","CEET_Certificate_AMIT.pdf"],
+  ["CET Certificate: Standard Facilitation Skills (Concentrix)","Concentrix","🎤","CET_Certificate_Amit.pdf"],
+  ["CNX EVOLVE Certificate","Concentrix","🚀","CNX_EVOLVE_Certificate.pdf"],
+  ["21st Century Executive Toolkit: Leadership and Management","Process Doctors","🧭","James-Amit-21st-Century-Executive-Toolkit-2-8211-Leadership-and-Management-21st-Century-Executive-Toolkit2-Leadership-vs-Management-Process-Doctors-Academy.pdf"],
+  ["21st Century Executive Toolkit: Servant Leadership","Process Doctors","🤝","James-Amit-21st-Century-Executive-Toolkit-2-8211-Servant-Leadership-21st-Century-Executive-Toolkit2-Servant-Leadership-Process-Doctors-Academy.pdf"],
+  ["21st Century Executive Toolkit: Leadership Essentials","Process Doctors","🌟","James-Amit-21st-Century-Executive-Toolkit-8211-Leadership-Essentials-21sLE-New-Branding-Certificate-Process-Doctors-Academy.pdf"],
+  ["21st Century Executive Toolkit: Management Essentials","Process Doctors","🗂️","James-Amit-21st-Century-Executive-Toolkit-8211-Management-Essentials-21st-Century-Executive-Toolkit1-Management-Essentials-Process-Doctors-Academy.pdf"],
+  ["21st Century Executive Toolkit: Productivity Essentials","Process Doctors","⚡","James-Amit-21st-Century-Executive-Toolkit-8211-Productivity-Essentials-21st-Century-Toolkit-Productivity-Essentials-Process-Doctors-Academy.pdf"],
+  ["Attitude of Gratitude: 21C Learning Skills","Process Doctors","🙏","James-Amit-Attitude-of-Gratitude-21C-Learning-Skills-Attitude-of-Gratitude-Process-Doctors-Academy.pdf"],
+  ["LSSYB Certified Certificate","Lean Six Sigma","🟡","LSSYB_Certified_Certificate.pdf"]
+].map(([title,tag,glyph,pdf])=>({title,tag,glyph,link:CERT_BASE+pdf}));
+
+/* ---------------------------------------------------------------------
+   AI TOOLKIT: [name, what you use it for, isCore]
+   The "core" four are the ones you named. EVERYTHING ELSE is my suggestion
+   for an instructional designer, so delete anything you don't actually use.
+   --------------------------------------------------------------------- */
+const aiTools = [
+  ["Claude","Drafting, rewriting and structuring learning content",true],
+  ["ChatGPT","Brainstorming activities, quiz items and scenarios",true],
+  ["Gemini","Research and working with Google Workspace",true],
+  ["Odysseus","",true],
+  ["Microsoft Copilot","Drafting inside Word, PowerPoint and Excel",false],
+  ["NotebookLM","Study guides and summaries grounded in source documents",false],
+  ["Perplexity","Quick research with cited sources",false],
+  ["Articulate AI Assistant","Building course content inside Articulate 360",false],
+  ["ElevenLabs","Realistic voice-overs for e-learning and video",false],
+  ["Synthesia","AI presenter videos for training",false],
+  ["Gamma","First-draft slide decks from an outline",false],
+  ["Canva Magic Studio","Graphics and layouts for learning assets",false],
+  ["Napkin AI","Turning text into simple diagrams",false],
+  ["Descript","Editing audio and video by editing the transcript",false]
+];
+
+const companies = [
+  ["Acquire Intelligence","Companies/Acquire_Intelligence_logo.png"],
+  ["Concentrix","Companies/Concentrix_logo.png"],
+  ["Hexaware","Companies/Hexaware_logo.png"],
+  ["ePLDT","Companies/ePLDT-logo.png"]
+];
+const tools = [
+  ["Articulate 360","Articulate%20360.png"],["Canva","Canva_logo_PNG12.png"],["CapCut","CapCut-Logo.png"],
+  ["Confluence","Confluence-Logo-PNG-001.png"],["Cornerstone OnDemand","Cornerstone_OnDemand_logo.png"],
+  ["Genially","Genially-Logo-Vector.png"],["Google Workspace","Google-Workspace-PNG_004.png"],
+  ["Lightworks","Lightworks_logo.png"],["Mentimeter","Mentimeter-Logo-Vector.png"],
+  ["Microsoft Office","Microsoft_Office_logo.png"],["Moodle","Moodle-Logo.wine.png"],
+  ["Photoshop","Photoshop-logo-500x281.png"],["Workplace","Workplace_logo.png"],["Vyond","VYOND_logo.png"]
+].map(([n,f])=>[n,"Tools/"+f]);
+
+/* ===================================================================== */
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ticker + marquee */
+const tick = ["Instructional Design","E-learning","Curriculum Development","Facilitation","Articulate 360","Assessment","Coaching","Blended Learning"];
+$('#tickerTrack').innerHTML = [...tick,...tick,...tick,...tick].map(t=>`<span>✦ ${t}</span>`).join('');
+const mq = ["Learn","Design","Measure","Repeat"];
+$('#marqueeTrack').innerHTML = Array(6).fill(0).map(()=>mq.map((w,i)=>`<span class="${i%2?'o':''}">${w} ✺</span>`).join('')).join('');
+
+document.documentElement.dataset.theme='dark';
+
+/* mobile nav */
+$('#burger').addEventListener('click',e=>{
+  const o=$('#nav').classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded',o);
+});
+$$('#nav a').forEach(a=>a.addEventListener('click',()=>$('#nav').classList.remove('open')));
+
+/* scrollspy */
+const spy = new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){ $$('#nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)); }
+}),{rootMargin:'-45% 0px -50% 0px'});
+$$('section[id]').forEach(s=>spy.observe(s));
+
+/* reveal */
+const rvObs = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('in');rvObs.unobserve(e.target);} }),{threshold:.12});
+function observeReveals(){ $$('.rv:not(.in)').forEach(el=>rvObs.observe(el)); }
+
+/* counters */
+const cObs = new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return; cObs.unobserve(e.target);
+  const el=e.target, end=+el.dataset.count, suf=el.dataset.suffix||''; let n=0;
+  const step=()=>{ n+=Math.max(1,Math.ceil(end/40)); if(n>=end){el.textContent=end+suf;return;} el.textContent=n+suf; requestAnimationFrame(step); };
+  step();
+}),{threshold:.6});
+$$('[data-count]').forEach(el=>cObs.observe(el));
+
+/* editorial thumbnail: blur underneath, optional photo/GIF on top, type + button over it */
+const pad2 = n => String(n+1).padStart(2,'0');
+const ICON = {
+  play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.2v15.6L20 12z"/></svg>',
+  eye:'<svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12S5.6 5 12 5s10.5 7 10.5 7-4.1 7-10.5 7S1.5 12 1.5 12z"/><circle class="pupil" cx="12" cy="12" r="3"/></svg>'
+};
+/* ring text is spaced so it closes the circle exactly (circumference ≈ 282.7) */
+const edBtn = (icon,label) => {
+  const n = Math.max(2,Math.round(27/(label.length+3)));
+  const txt = Array(n).fill(label).join(' · ')+' · ';
+  const ls = (282.7/txt.length - 6.3).toFixed(2);
+  return `<span class="ed-btn" aria-hidden="true"><span class="ring-wrap"><svg class="ring" viewBox="0 0 120 120"><text style="letter-spacing:${ls}px"><textPath href="#edRing">${txt}</textPath></text></svg></span><span class="disc">${ICON[icon]}</span></span>`;
+};
+/* if a GIF/photo fails, drop back to the blurred real-content thumbnail, then to the colour blur */
+function edFallback(img){
+  const fb = img.dataset.fb;
+  if(fb){ img.removeAttribute('data-fb'); img.classList.add('blurred'); img.src = fb; } else img.remove();
+}
+const thumbInner = ({tag,no,glyph,media,blurSrc,btn}) =>
+  `<span class="bl"><i></i><i></i><i></i></span>`
+  + (media ? `<img class="media" src="${esc(media)}" ${blurSrc?`data-fb="${esc(blurSrc)}"`:''} alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="edFallback(this)"/>`
+    : blurSrc ? `<img class="media blurred" src="${esc(blurSrc)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"/>` : '')
+  + `<span class="scrim"></span><span class="ghost">${glyph||''}</span><span class="dots"></span>`
+  + (tag ? `<span class="cv-tag">${esc(tag)}</span>` : '')
+  + (no ? `<span class="cv-no">No. ${esc(no)}</span>` : '')
+  + (btn||'');
+
+/* intro video */
+(function(){
+  const box=$('#introVideo');
+  if(CONFIG.introVideoEmbed){
+    box.innerHTML=`<div class="video-box"><button class="play-card thumb k4" data-embed="${esc(CONFIG.introVideoEmbed)}" aria-label="Play introduction video">${thumbInner({tag:'Intro',glyph:'👋',media:CONFIG.introGif,btn:edBtn('play','WATCH')})}</button></div>`;
+  } else {
+    box.innerHTML=`<div class="video-box"><div class="play-card thumb k4" style="cursor:default">${thumbInner({tag:'Intro',glyph:'👋'})}<span class="cap" style="left:50%;bottom:50%;transform:translate(-50%,50%);font-size:.9rem">Intro video coming soon</span></div></div>`;
+  }
+})();
+
+/* videos */
+const VK = {c1:'k3',c2:'k5',c3:'k6'};
+$('#videoGrid').innerHTML = videos.map(v=>`
+  <figure class="rv">
+    <div class="video-box"><button class="play-card thumb ${VK[v.cls]||'k3'}" data-embed="https://drive.google.com/file/d/${v.id}/preview" aria-label="Play ${esc(v.title)}">${thumbInner({tag:'Video',no:v.ep,glyph:v.glyph,media:v.gif,blurSrc:`https://drive.google.com/thumbnail?id=${v.id}&sz=w800`,btn:edBtn('play','PLAY')})}</button></div>
+    <figcaption><h3>${esc(v.title)}</h3><p>${esc(v.text)}</p></figcaption>
+  </figure>`).join('');
+
+document.addEventListener('click',e=>{
+  const p=e.target.closest('[data-embed]');
+  if(p){
+    let src=p.dataset.embed; if(src.includes('youtube.com')) src+=(src.includes('?')?'&':'?')+'autoplay=1';
+    const f=document.createElement('iframe'); f.src=src; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true; f.title='Video player';
+    p.replaceWith(f);
+  }
+});
+
+/* microlearning courses */
+function toEmbed(u){
+  if(!u) return u;
+  let m;
+  if((m=u.match(/drive\.google\.com\/file\/d\/([^/]+)/))) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  if((m=u.match(/youtube\.com\/watch\?v=([\w-]{6,})/))||(m=u.match(/youtu\.be\/([\w-]{6,})/))) return `https://www.youtube.com/embed/${m[1]}`;
+  return u;
+}
+function renderProjects(list){
+  if(!list.length){ $('#projectList').innerHTML='<p class="empty">No courses found.</p>'; return; }
+  let html='';
+  courseGroups.forEach((g,gi)=>{
+    const items=list.filter(p=>p.group===gi); if(!items.length) return;
+    html+=`<h3 class="group-head">${esc(g)}<span>${items.length} course${items.length>1?'s':''}</span></h3>`;
+    html+=items.map(p=>{
+      const i=projects.indexOf(p), live=!!p.url;
+      return `
+      <article class="card">
+        <div class="img"${live?` data-launch="${i}"`:''}><div class="thumb flat"><span class="glyph" aria-hidden="true">${p.glyph}</span>${p.photo?`<img class="pic" src="${esc(p.photo)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"/>`:''}</div></div>
+        <div class="body">
+          <span class="meta">Microlearning${p.duration?' · '+esc(p.duration):''}</span>
+          <h3>${esc(p.title)}</h3><p>${esc(p.summary)}</p>
+          ${live?`<button class="btn hot sm" data-launch="${i}">▶ Launch course</button>`
+                :`<span class="soon">⏳ Coming soon</span>`}
+        </div>
+      </article>`;}).join('');
+  });
+  $('#projectList').innerHTML=html;
+}
+renderProjects(projects);
+$('#search').addEventListener('input',e=>{
+  const q=e.target.value.trim().toLowerCase();
+  renderProjects(projects.filter(p=>[p.title,p.summary,p.tag,courseGroups[p.group]].join(' ').toLowerCase().includes(q)));
+});
+
+/* certificates */
+$('#certList').innerHTML = certs.map((c,i)=>`
+  <article class="card">
+    <div class="img" data-pdf="${esc(c.link)}" data-title="${esc(c.title)}"><div class="thumb k${i%5}">${thumbInner({tag:c.tag,no:pad2(i),glyph:c.glyph,btn:edBtn('eye','PREVIEW')})}</div></div>
+    <div class="body"><h3>${esc(c.title)}</h3>
+      <button class="link" data-pdf="${esc(c.link)}" data-title="${esc(c.title)}">View certificate →</button></div>
+  </article>`).join('');
+
+/* certificate thumbnails: first page of the real PDF, rendered with pdf.js and blurred.
+   Falls back to the colour blur if the PDF can't be fetched/rendered. */
+const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+let pdfLibP;
+const loadPdfJs = () => pdfLibP || (pdfLibP = new Promise((res,rej)=>{
+  const sc=document.createElement('script'); sc.src=PDFJS_CDN+'pdf.min.js';
+  sc.onload=()=>{ try{
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_CDN+'pdf.worker.min.js';  /* cross-origin worker is blocked, so pdf.js quietly runs it on the main thread */
+    res(window.pdfjsLib); }catch(e){ rej(e); } };
+  sc.onerror=rej; document.head.appendChild(sc);
+}));
+async function paintCert(thumb){
+  try{
+    const lib = await loadPdfJs();
+    const pdf = await lib.getDocument({url:thumb.closest('[data-pdf]').dataset.pdf}).promise;
+    const page = await pdf.getPage(1);
+    const vp = page.getViewport({scale: 520/page.getViewport({scale:1}).width});
+    const cv = document.createElement('canvas'); cv.width=vp.width; cv.height=vp.height; cv.className='media blurred';
+    await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
+    thumb.querySelector('.bl').after(cv);
+  }catch(e){ /* keep the colour blur */ }
+}
+const certObs = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ certObs.unobserve(e.target); paintCert(e.target); } }),{rootMargin:'250px'});
+$$('#certList .thumb').forEach(t=>certObs.observe(t));
+
+/* AI toolkit */
+const aiCard = ([name,use],i) => `
+  <div class="ai-card"><div class="mono-ico k${i%5}">${esc(name[0])}</div>
+    <div><h4>${esc(name)}</h4>${use?`<p>${esc(use)}</p>`:''}</div></div>`;
+$('#aiCore').innerHTML = aiTools.filter(t=>t[2]).map(aiCard).join('');
+$('#aiMore').innerHTML = aiTools.filter(t=>!t[2]).map((t,i)=>aiCard(t,i+4)).join('');
+
+/* tabs */
+$$('.tab').forEach(b=>b.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>x.classList.toggle('on',x===b));
+  $$('.panel').forEach(p=>p.hidden = p.id!==b.dataset.tab);
+  if(b.dataset.tab==='resume' && !$('#resumeFrame').src){
+    $('#resumeFrame').src='https://docs.google.com/viewer?embedded=true&url='+encodeURIComponent(CONFIG.resumePdf);
+  }
+}));
+$('#resumeOpen').href=CONFIG.resumePdf;
+
+/* logos */
+function fixLogo(img){
+  try{
+    const c=document.createElement('canvas'), w=c.width=48, h=c.height=48, x=c.getContext('2d');
+    x.drawImage(img,0,0,w,h);
+    const d=x.getImageData(0,0,w,h).data; let sum=0,n=0;
+    for(let i=0;i<d.length;i+=4){ if(d[i+3]>60){ sum+=(0.2126*d[i]+0.7152*d[i+1]+0.0722*d[i+2])/255; n++; } }
+    if(n && sum/n<0.45) img.classList.add('inv');
+  }catch(e){ img.classList.add('inv'); }
+}
+const chipHtml=([n,f])=>`<div class="chip" title="${esc(n)}"><img src="${BASE+f}" alt="${esc(n)}" loading="lazy" crossorigin="anonymous" onload="fixLogo(this)" onerror="this.replaceWith(document.createTextNode('${esc(n)}'))"/></div>`;
+$('#companies').innerHTML=companies.map(chipHtml).join('');
+$('#tools').innerHTML=tools.map(chipHtml).join('');
+
+/* modal */
+const modal=$('#modal');
+function openPdf(url,title){
+  $('#modalTitle').textContent=title; $('#modalOpen').href=url; $('#modalOpen').style.display='';
+  $('#modalBody').className='modal-body';
+  $('#modalBody').innerHTML=`<iframe title="${esc(title)}" src="https://docs.google.com/viewer?embedded=true&url=${encodeURIComponent(url)}"></iframe>`;
+  modal.classList.add('on'); document.body.style.overflow='hidden';
+}
+/* full-screen course player */
+const stage=$('#stage'); let stageFrom=null;
+function openCourse(i,trigger){
+  const p=projects[i]; if(!p||!p.url) return;
+  stageFrom=trigger||null;
+  $('#stageTitle').textContent=p.title;
+  $('#stageBody').innerHTML=`<iframe title="${esc(p.title)}" src="${esc(p.embed||toEmbed(p.url))}" referrerpolicy="no-referrer" allow="autoplay; fullscreen; encrypted-media; clipboard-write" allowfullscreen></iframe>`;
+  stage.classList.add('on'); document.body.style.overflow='hidden';
+  $('#stageFs').hidden = !(stage.requestFullscreen||stage.webkitRequestFullscreen);
+  $('#stageClose').focus();
+}
+function closeStage(){
+  if(!stage.classList.contains('on')) return;
+  if(document.fullscreenElement && document.exitFullscreen){ try{document.exitFullscreen();}catch(_){} }
+  stage.classList.remove('on'); $('#stageBody').innerHTML=''; document.body.style.overflow='';
+  if(stageFrom && stageFrom.focus) stageFrom.focus(); stageFrom=null;
+}
+$('#stageClose').addEventListener('click',closeStage);
+$('#stageFs').addEventListener('click',()=>{
+  const el=stage;
+  if(document.fullscreenElement){ document.exitFullscreen&&document.exitFullscreen(); }
+  else (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+});
+function closeModal(){ modal.classList.remove('on'); $('#modalBody').innerHTML=''; document.body.style.overflow=''; }
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pdf]'); if(b) openPdf(b.dataset.pdf,b.dataset.title);
+  const c=e.target.closest('[data-launch]'); if(c) openCourse(+c.dataset.launch,c);
+  if(e.target.closest('[data-goto-contact]')){ closeModal(); $('#contact').scrollIntoView({behavior:'smooth'}); setTimeout(()=>$('#mMsg').focus({preventScroll:true}),600); }
+});
+$('#modalClose').addEventListener('click',closeModal);
+modal.addEventListener('click',e=>{ if(e.target===modal) closeModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(stage.classList.contains('on')) closeStage(); else closeModal(); } });
+
+/* Google Apps Script web apps can't answer a JSON preflight, so send plain text to them (still JSON inside) */
+const postHeaders = u => /script\.google\.com/.test(u)
+  ? {'Content-Type':'text/plain;charset=utf-8'}
+  : {'Content-Type':'application/json','Accept':'application/json'};
+
+/* visitor book (opt-in) */
+$('#visitorForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=e.target, msg=$('#vMsg'); msg.className='msg';
+  if(f.website.value) return; // honeypot
+  const name=f.name.value.trim(), li=f.linkedin.value.trim(), note=f.note.value.trim();
+  if(!name){ msg.textContent='Please tell me your name.'; msg.classList.add('err'); return; }
+  let url; try{ url=new URL(li); }catch(_){ url=null; }
+  if(!url || !/(^|\.)linkedin\.com$/i.test(url.hostname) || !/^\/(in|pub)\//i.test(url.pathname)){
+    msg.textContent='Please enter a valid LinkedIn profile URL (linkedin.com/in/…).'; msg.classList.add('err'); return; }
+  if(!$('#vConsent').checked){ msg.textContent='Please tick the consent box to continue.'; msg.classList.add('err'); return; }
+
+  const payload={kind:'visitor-book',_subject:'Portfolio visitor: '+name,name,linkedin:url.href,note,page:location.href,submittedAt:new Date().toISOString()};
+  if(!CONFIG.visitorEndpoint){
+    const body=`Name: ${name}\nLinkedIn: ${url.href}\n\n${note}`;
+    location.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent('Portfolio visitor: '+name)}&body=${encodeURIComponent(body)}`;
+    msg.textContent='Opening your email app to send this to James…'; msg.classList.add('ok'); return;
+  }
+  try{
+    const r=await fetch(CONFIG.visitorEndpoint,{method:'POST',headers:postHeaders(CONFIG.visitorEndpoint),body:JSON.stringify(payload)});
+    if(!r.ok) throw new Error(r.status);
+    f.reset(); msg.textContent='Thank you! You\'re in the book. ✨ I\'ll be in touch.'; msg.classList.add('ok');
+  }catch(err){ msg.textContent='Something went wrong. Please try again, or message me on LinkedIn.'; msg.classList.add('err'); }
+});
+
+/* contact message form */
+$('#msgForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=e.target, out=$('#mMsgOut'); out.className='msg';
+  if(f.website.value) return; // honeypot
+  const name=f.name.value.trim(), email=f.email.value.trim(), message=f.message.value.trim();
+  const fail=t=>{ out.textContent=t; out.classList.add('err'); };
+  if(!name) return fail('Please tell me your name.');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return fail('Please enter a valid email so I can reply.');
+  if(message.length<5) return fail('Please write a short message.');
+
+  const endpoint=CONFIG.messageEndpoint||CONFIG.visitorEndpoint;
+  if(!endpoint){
+    const body=`${message}\n\n— ${name} (${email})`;
+    location.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent('Portfolio message from '+name)}&body=${encodeURIComponent(body)}`;
+    out.textContent='Opening your email app to send this to James…'; out.classList.add('ok'); return;
+  }
+  const btn=f.querySelector('button[type=submit]'); btn.disabled=true;
+  try{
+    const r=await fetch(endpoint,{method:'POST',headers:postHeaders(endpoint),
+      body:JSON.stringify({kind:'message',_subject:'Portfolio message from '+name,name,email,message,page:location.href,submittedAt:new Date().toISOString()})});
+    if(!r.ok) throw new Error(r.status);
+    f.reset(); out.textContent='Sent! Thanks for reaching out. I\'ll reply soon. ✨'; out.classList.add('ok');
+  }catch(err){ fail('Something went wrong. Please try again, or email me directly.'); }
+  finally{ btn.disabled=false; }
+});
+
+observeReveals();
+</script>
+</body>
+</html>
