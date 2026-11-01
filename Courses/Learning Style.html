@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#2d2a23">
+<title>Learning Preference Discovery Test</title>
+<!-- Fonts load from Google Fonts when online; the page falls back to Georgia / system fonts offline. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   THEME: "Learning Design Edition" (the portfolio's design system)
+   Warm charcoal paper, 2px rules, hard offset shadows, pill buttons,
+   Fraunces / Inter / Space Mono, one italic accent word per headline.
+   Each learning preference owns one colour, revealed only in the results:
+     Visual = periwinkle   Auditory = coral   Tactile = mint
+   ===================================================================== */
+:root{
+  color-scheme:dark;
+  --paper:#2d2a23; --paper-2:#26231d; --ink:#fefdf9; --muted:#b4ac9c;
+  --accent:#ff6a4d; --accent-2:#8f8af0; --sun:#ffc93c; --mint:#8fe3c0; --pink:#ffb3c7;
+  --rule:2px solid #595957; --shadow:#14120f; --cream:#f4efe6; --dark:#16130f;
+  --vis:#8f8af0; --aud:#ff6a4d; --tac:#8fe3c0;
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --mono:'Space Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%}
+html{background:var(--paper);-webkit-text-size-adjust:100%;text-size-adjust:100%;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:clamp(15px,1.4vw,17px);line-height:1.5;overflow:hidden}
+button,input,textarea{font:inherit;color:inherit}
+::selection{background:var(--accent);color:#fff}
+:focus-visible{outline:3px solid var(--accent-2);outline-offset:3px}
+h1,h2,h3{font-family:var(--serif);line-height:1.02}
+h1:focus,h2:focus{outline:none}
+em{font-style:italic}
+
+/* film grain, as on the portfolio */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:300;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* =====================================================================
+   FRAME: ticker / top bar / stage (ONE screen at a time) / bottom nav
+   ===================================================================== */
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.ticker{flex:none;background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;border-bottom:var(--rule)}
+.ticker-track{display:inline-flex;gap:3rem;padding:.3rem 0;animation:slide 40s linear infinite}
+.ticker span{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+.topbar{flex:none;background:var(--paper);border-bottom:var(--rule);padding:8px clamp(14px,3vw,28px) 10px}
+.topbar-row,.progress-wrap{max-width:1200px;margin:0 auto}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:800;font-size:1.2rem;letter-spacing:-.02em;min-width:0}
+.brand svg{width:26px;height:26px;color:var(--sun);flex:none}
+.brand i{color:var(--accent);font-style:normal}
+.brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.sec-pill{border:var(--rule);border-radius:99px;padding:1px 10px;font-weight:700;background:var(--paper-2)}
+.progress-wrap{display:flex;align-items:center;gap:12px;margin-top:6px}
+.progress{flex:1;height:12px;background:var(--paper-2);border:var(--rule);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--vis),var(--aud) 55%,var(--tac));border-radius:99px;transition:width .45s ease}
+.percent{font-family:var(--mono);font-weight:700;min-width:4ch;text-align:right;font-size:.8rem}
+
+.stage{position:relative;flex:1;min-height:0;overflow:hidden}
+.bottombar{flex:none;background:var(--paper);border-top:var(--rule);padding:10px clamp(14px,3vw,28px) 12px}
+.bottombar-row{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-hint{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;flex:1}
+.nav-hint.need{color:var(--sun)}
+
+.screen{
+  position:absolute;inset:0;display:flex;overflow-x:hidden;overflow-y:auto;
+  padding:clamp(10px,2vh,22px) clamp(14px,3vw,32px) clamp(14px,2.4vh,26px);
+  opacity:0;visibility:hidden;transform:translateX(40px) scale(.99);
+  transition:opacity .38s ease,transform .38s ease,visibility 0s linear .38s;
+}
+.screen.before{transform:translateX(-40px) scale(.99)}
+.screen.active{opacity:1;visibility:visible;transform:none;transition:opacity .38s ease,transform .38s ease,visibility 0s}
+.inner{margin:auto;width:100%;max-width:1120px;display:flex;flex-direction:column;gap:clamp(10px,1.8vh,18px);position:relative;z-index:1}
+.stack{display:flex;flex-direction:column;gap:clamp(8px,1.5vh,14px);min-width:0}
+.grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(14px,2.6vw,36px);align-items:center}
+.grid-2>*{min-width:0}
+
+/* decorative shapes behind the content */
+.deco{position:absolute;pointer-events:none;z-index:0}
+.deco.dots{width:210px;height:210px;background-image:radial-gradient(rgba(254,253,249,.13) 2px,transparent 2.4px);background-size:16px 16px;border-radius:50%}
+.deco.star{font-family:var(--serif);font-size:7rem;line-height:1;opacity:.1;color:var(--sun)}
+.deco.ring{width:150px;height:150px;border-radius:50%;border:3px dashed rgba(254,253,249,.14)}
+.deco.sq{width:120px;height:120px;border:3px solid rgba(254,253,249,.09);border-radius:26px;transform:rotate(14deg)}
+
+/* =====================================================================
+   BUTTONS, PILLS, TYPE
+   ===================================================================== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:10px 22px;border:var(--rule);border-radius:99px;
+  font-weight:600;font-size:.95rem;cursor:pointer;text-align:center;background:var(--paper);color:var(--ink);box-shadow:4px 4px 0 var(--shadow);
+  transition:transform .15s,box-shadow .15s,opacity .15s}
+.btn:hover:not(:disabled){transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow)}
+.btn:active:not(:disabled){transform:translate(4px,4px);box-shadow:0 0 0 var(--shadow)}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn-primary{background:var(--sun);color:var(--dark)}
+.btn-hot{background:var(--accent);color:var(--dark)}
+.btn-mint{background:var(--mint);color:var(--dark)}
+.btn-ghost{background:var(--paper);color:var(--ink)}
+.btn-lg{min-height:54px;padding:12px 30px;font-size:1.05rem}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+
+.eyebrow{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;border:var(--rule);border-radius:99px;padding:3px 12px;background:var(--paper)}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c,var(--accent))}
+.chip{display:inline-flex;align-items:center;gap:6px;border:var(--rule);border-radius:99px;padding:3px 12px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;background:var(--mint);color:var(--dark);font-weight:700}
+.chip.pink{background:var(--pink)} .chip.sun{background:var(--sun)} .chip.peri{background:var(--accent-2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+h1{font-weight:900;font-size:clamp(2.2rem,5.6vw,4.4rem);letter-spacing:-.04em;line-height:.96}
+h2{font-weight:800;font-size:clamp(1.7rem,3.8vw,3rem);letter-spacing:-.035em;line-height:1}
+h1 em,h2 em{font-weight:400;color:var(--accent-2)}
+h1 em{font-weight:500;color:var(--accent)}
+h3{font-size:1.1rem;font-weight:800}
+.lead{font-family:var(--serif);font-weight:400;font-size:clamp(1.05rem,1.9vw,1.35rem);line-height:1.35}
+.muted{color:var(--muted)}
+.card{background:var(--paper);border:var(--rule);border-radius:16px;box-shadow:6px 6px 0 var(--shadow);padding:clamp(14px,2.2vh,22px) clamp(16px,2.4vw,26px)}
+.hl{color:var(--sun);background:linear-gradient(transparent 86%,var(--mint) 86%,var(--mint) 94%,transparent 94%)}
+
+/* tags and stickers */
+.sticker{position:absolute;display:grid;place-items:center;text-align:center;font-family:var(--mono);font-weight:700;text-transform:uppercase;font-size:.66rem;letter-spacing:.06em;border:var(--rule);color:var(--dark);z-index:3}
+.sticker.round{width:92px;height:92px;border-radius:50%}
+.sticker.tag{padding:6px 12px;border-radius:8px}
+@keyframes wob{50%{transform:rotate(-6deg) scale(1.07)}}
+.wob{animation:wob 5s ease-in-out infinite}
+
+/* big spinning ring-type sticker */
+.ring-stk{position:relative;width:clamp(96px,16vh,130px);aspect-ratio:1;display:grid;place-items:center;flex:none}
+.ring-stk svg.ring{position:absolute;inset:-14px;width:calc(100% + 28px);height:calc(100% + 28px);overflow:visible;animation:edspin 16s linear infinite}
+.ring-stk text{font-family:var(--mono);font-size:10.5px;font-weight:700;fill:var(--ink);stroke:var(--dark);stroke-width:3px;stroke-linejoin:round;paint-order:stroke}
+.ring-stk .disc{width:100%;height:100%;border-radius:50%;background:var(--c,var(--sun));color:var(--dark);border:var(--rule);box-shadow:5px 5px 0 var(--shadow);display:grid;place-items:center}
+.ring-stk .disc svg{width:46%;height:46%}
+@keyframes edspin{to{transform:rotate(360deg)}}
+
+/* icons */
+.ico{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* =====================================================================
+   SCREEN: INTRO (arch collage)
+   ===================================================================== */
+.arch-wrap{position:relative;justify-self:center;width:min(100%,clamp(240px,32vh,380px));padding:10px 20px 10px 8px}
+.arch{aspect-ratio:4/5;border:var(--rule);border-radius:200px 200px 24px 24px;background:var(--sun);box-shadow:10px 10px 0 var(--shadow);position:relative;overflow:hidden;
+  background-image:radial-gradient(rgba(22,19,15,.16) 1.4px,transparent 1.8px);background-size:12px 12px}
+.orb{position:absolute;display:grid;place-items:center;border-radius:50%;border:var(--rule);color:var(--dark);box-shadow:5px 5px 0 var(--shadow)}
+.orb svg{width:52%;height:52%}
+.orb.o1{width:56%;aspect-ratio:1;left:8%;top:16%;background:var(--vis);transform:rotate(-8deg)}
+.orb.o2{width:50%;aspect-ratio:1;right:6%;top:36%;background:var(--aud);transform:rotate(10deg)}
+.orb.o3{width:52%;aspect-ratio:1;left:20%;bottom:6%;background:var(--tac);transform:rotate(-4deg)}
+.float{animation:floaty 6s ease-in-out infinite}
+.o2.float{animation-delay:-2s}.o3.float{animation-delay:-4s}
+@keyframes floaty{50%{translate:0 -8px}}
+
+/* =====================================================================
+   SCREEN: DISCOVER (input vs output)
+   ===================================================================== */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.4vw,28px)}
+.duo .card{position:relative;padding-top:clamp(18px,3vh,28px);transition:transform .2s}
+.duo .card:nth-child(1){transform:rotate(-1deg);border-top:10px solid var(--vis)}
+.duo .card:nth-child(2){transform:rotate(1deg);border-top:10px solid var(--aud)}
+.duo .card:hover{transform:rotate(0) translateY(-4px)}
+.duo .num{font-family:var(--serif);font-weight:900;font-size:clamp(3rem,10vh,5.2rem);line-height:.85;color:transparent;-webkit-text-stroke:2px var(--c);text-shadow:5px 5px 0 var(--shadow)}
+.duo h3{font-size:clamp(1.3rem,2.6vw,1.9rem);letter-spacing:-.02em;margin:6px 0 4px}
+.duo h3 em{color:var(--c);font-weight:400}
+.trio{display:flex;gap:10px;flex-wrap:wrap}
+.trio .chip{font-size:.72rem;padding:5px 14px}
+.trio .chip .ico{font-size:1rem}
+
+/* =====================================================================
+   SCREEN: GROUND RULES (sticky notes)
+   ===================================================================== */
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,22px)}
+.note{position:relative;background:var(--cream);color:var(--dark);border:2px solid var(--cream);border-radius:4px 14px 4px 14px;padding:clamp(14px,2.6vh,22px) 16px 14px;box-shadow:6px 6px 0 var(--c,var(--accent));transform:rotate(var(--r,0deg));transition:transform .2s;font-weight:600;line-height:1.3}
+.note:hover{transform:rotate(0) translateY(-4px)}
+.note::before{content:"";position:absolute;top:-12px;left:50%;width:70px;height:22px;margin-left:-35px;background:rgba(255,201,60,.75);transform:rotate(-3deg);border:1px solid rgba(22,19,15,.15)}
+.note b{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#6a6252;margin-bottom:4px}
+.note:nth-child(1){--r:-1.6deg;--c:var(--accent)}.note:nth-child(2){--r:1.2deg;--c:var(--accent-2)}
+.note:nth-child(3){--r:1deg;--c:var(--mint)}.note:nth-child(4){--r:-1.2deg;--c:var(--sun)}
+.banner{display:flex;align-items:center;gap:14px;background:var(--pink);color:var(--dark);border:var(--rule);border-radius:14px;padding:10px 16px;box-shadow:5px 5px 0 var(--shadow);transform:rotate(-.5deg)}
+.banner strong{font-family:var(--serif);font-size:clamp(1.1rem,2vw,1.4rem);line-height:1.1}
+
+/* =====================================================================
+   SCREEN: SECTION DIVIDERS (with marquee)
+   ===================================================================== */
+.screen.divider{padding:0;flex-direction:column}
+.screen.divider .inner{flex:1;justify-content:center;align-items:flex-start;padding:clamp(10px,2vh,24px) clamp(14px,3vw,32px);margin:auto;gap:clamp(8px,1.8vh,16px)}
+.divider-grid{display:flex;align-items:center;justify-content:space-between;gap:24px;width:100%}
+.mega{font-family:var(--serif);font-weight:900;letter-spacing:-.05em;line-height:.88;font-size:clamp(3rem,13vw,9.5rem)}
+.mega em{display:block;font-weight:400;color:var(--c);margin-left:.08em}
+.divider .sub{font-family:var(--serif);font-size:clamp(1.15rem,2.2vw,1.7rem);max-width:30ch;line-height:1.25}
+.marquee{flex:none;overflow:hidden;border-top:var(--rule);background:var(--c,var(--accent));color:var(--dark);padding:10px 0;white-space:nowrap}
+.marquee div{display:inline-flex;gap:2.2rem;animation:slide 28s linear infinite;font-family:var(--serif);font-weight:800;font-size:clamp(1.4rem,3.4vh,2.1rem);letter-spacing:-.02em}
+.marquee .o{-webkit-text-stroke:1.5px var(--dark);color:transparent;font-style:italic}
+
+/* =====================================================================
+   SCREENS: QUESTIONS
+   ===================================================================== */
+.q-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(16px,3vw,44px);align-items:center}
+.q-grid>*{min-width:0}
+.q-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pips{display:flex;gap:6px}
+.pip{width:14px;height:14px;border-radius:50%;border:var(--rule);background:var(--paper-2);transition:background .2s,transform .2s}
+.pip.done{background:var(--sun);border-color:var(--dark)}
+.pip.now{outline:3px solid var(--ink);outline-offset:2px;transform:scale(1.1)}
+.bignum{font-family:var(--serif);font-weight:900;font-size:clamp(4rem,17vh,9rem);line-height:.85;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:2px var(--c);text-shadow:6px 6px 0 var(--shadow);user-select:none}
+.q-text{font-family:var(--serif);font-weight:800;font-size:clamp(1.45rem,3vw,2.4rem);letter-spacing:-.03em;line-height:1.08}
+.q-hint{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.opts{display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px)}
+.opt{position:relative;display:flex;align-items:center;gap:14px;padding:clamp(10px,1.8vh,16px) 16px;border:var(--rule);border-radius:16px;background:var(--paper);cursor:pointer;
+  box-shadow:5px 5px 0 var(--shadow);transition:transform .15s,box-shadow .15s,background .15s,border-color .15s}
+.opt:nth-child(1){transform:rotate(-.5deg)}.opt:nth-child(2){transform:rotate(.4deg)}.opt:nth-child(3){transform:rotate(-.3deg)}
+.opt:hover{transform:translate(2px,2px) rotate(0);box-shadow:3px 3px 0 var(--shadow);background:var(--paper-2)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt-key{flex:none;width:38px;height:38px;border-radius:50%;border:var(--rule);display:grid;place-items:center;font-family:var(--serif);font-weight:800;font-size:1.15rem;background:var(--paper-2);transition:background .15s,transform .25s}
+.opt-body{flex:1;min-width:0;font-weight:600;line-height:1.3}
+.opt-check{flex:none;width:26px;height:26px;border-radius:50%;background:var(--sun);color:var(--dark);border:var(--rule);display:grid;place-items:center;font-weight:900;font-size:.85rem;opacity:0;transform:scale(.3) rotate(-30deg);transition:opacity .2s,transform .35s cubic-bezier(.3,1.6,.5,1)}
+.opt:has(input:checked){border-color:var(--sun);background:#34301f;transform:translate(2px,2px) rotate(0);box-shadow:3px 3px 0 var(--sun)}
+.opt:has(input:checked) .opt-key{background:var(--sun);color:var(--dark);border-color:var(--dark);transform:rotate(-10deg) scale(1.08)}
+.opt:has(input:checked) .opt-check{opacity:1;transform:none}
+.opt:has(input:focus-visible){outline:3px solid var(--accent-2);outline-offset:3px}
+/* burst of confetti dots when you choose */
+.burst{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none;z-index:5}
+.burst i{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--bc);animation:burst .7s ease-out forwards}
+@keyframes burst{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+
+/* =====================================================================
+   SCREENS: RESULTS
+   ===================================================================== */
+.totems{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,22px);align-items:end;margin-top:14px}
+.totem{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--paper);border:var(--rule);border-radius:16px;box-shadow:6px 6px 0 var(--shadow);padding:clamp(10px,1.8vh,16px) 12px;border-top:10px solid var(--c)}
+.totem.top{background:#34301f;transform:translateY(-6px);box-shadow:8px 8px 0 var(--c)}
+.totem .orb2{width:clamp(38px,6vh,52px);aspect-ratio:1;border-radius:50%;background:var(--c);color:var(--dark);border:var(--rule);display:grid;place-items:center;font-size:1.5rem}
+.totem .name{font-family:var(--serif);font-weight:800;font-size:clamp(1.05rem,2vw,1.35rem);letter-spacing:-.02em;text-align:center}
+.totem .name small{display:block;font-family:var(--mono);font-size:.6rem;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.blocks{display:flex;flex-direction:column-reverse;gap:5px;width:70%}
+.blk{height:clamp(14px,3.6vh,28px);border:var(--rule);border-radius:8px;background:var(--paper-2);transition:background .3s,box-shadow .3s}
+.blk.on{background:var(--c);border-color:var(--dark);box-shadow:inset 0 -4px 0 rgba(22,19,15,.22)}
+.count{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,6vh,3.4rem);line-height:.9;letter-spacing:-.04em}
+.count small{font-size:.4em;color:var(--muted);font-weight:500;letter-spacing:0}
+.strength{font-family:var(--mono);font-size:.64rem;letter-spacing:.07em;text-transform:uppercase;text-align:center;border:var(--rule);border-radius:99px;padding:2px 10px;background:var(--paper-2);color:var(--muted)}
+.totem.top .strength{background:var(--c);color:var(--dark);border-color:var(--dark);font-weight:700}
+.crown{position:absolute;top:-22px;right:-8px;transform:rotate(10deg);background:var(--sun);color:var(--dark);border:var(--rule);font-family:var(--mono);font-weight:700;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;box-shadow:3px 3px 0 var(--shadow)}
+.verdict{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.verdict .lead b{color:var(--c)}
+.note-small{font-size:.8rem;color:var(--muted)}
+
+/* meaning panels */
+.panels{display:grid;gap:clamp(12px,2vw,24px)}
+.panels.two{grid-template-columns:1fr 1fr}
+.panel{position:relative;background:var(--paper);border:var(--rule);border-radius:18px;box-shadow:8px 8px 0 var(--shadow);overflow:hidden}
+.panel-head{display:flex;align-items:center;gap:14px;background:var(--c);color:var(--dark);padding:clamp(10px,1.8vh,16px) 20px;border-bottom:var(--rule)}
+.panel-head .orb2{width:48px;height:48px;flex:none;border-radius:50%;background:var(--dark);color:var(--c);display:grid;place-items:center;font-size:1.7rem;border:var(--rule)}
+.panel-head h3{font-size:clamp(1.3rem,2.6vw,1.9rem);letter-spacing:-.03em}
+.panel-head small{display:block;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase}
+.panel-body{padding:clamp(10px,1.8vh,16px) 20px clamp(12px,2vh,18px);display:flex;flex-direction:column;gap:clamp(6px,1.3vh,12px)}
+.panel-body .says{font-family:var(--serif);font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.3}
+.likes{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.likes li{border:var(--rule);border-radius:99px;padding:3px 12px;font-size:.88rem;font-weight:600;background:var(--paper-2)}
+.tip{border:var(--rule);border-left:8px solid var(--c);border-radius:12px;background:var(--paper-2);padding:8px 14px;font-size:.95rem}
+.tip b{display:block;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--c);margin-bottom:2px}
+.also{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* profile */
+.prof{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(14px,2.6vw,36px);align-items:center}
+.prof>*{min-width:0}
+.stamp-card{position:relative;background:var(--cream);color:var(--dark);border:2px solid var(--cream);border-radius:20px;box-shadow:10px 10px 0 var(--accent);padding:clamp(16px,3vh,28px) clamp(18px,2.6vw,30px);transform:rotate(-1deg)}
+.stamp-card .kick{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#6a6252}
+.stamp-card h2{font-size:clamp(2rem,5vw,3.8rem);letter-spacing:-.045em;line-height:.95;margin:6px 0 10px;color:var(--dark)}
+.stamp-card h2 .w-vis{color:#5b55d6}.stamp-card h2 .w-aud{color:#e0482b}.stamp-card h2 .w-tac{color:#128a5f}
+.stamp-card h2 small{display:block;font-family:var(--mono);font-size:.26em;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#6a6252;margin:2px 0}
+.stamp-card .row{display:flex;gap:8px;flex-wrap:wrap}
+.stamp-card .chip{background:var(--dark);color:var(--cream);border-color:var(--dark)}
+.stamp-card .corner{position:absolute;right:-14px;top:-18px;transform:rotate(12deg)}
+.matrix{display:grid;grid-template-columns:auto repeat(3,1fr);gap:6px;align-items:stretch;width:min(100%,56vh);margin:0 auto}
+.mx-cap{max-width:56vh;margin-left:auto;margin-right:auto}
+.matrix .h{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;place-items:center;text-align:center}
+.matrix .h.row{writing-mode:vertical-rl;transform:rotate(180deg)}
+.cell{aspect-ratio:1;border:var(--rule);border-radius:12px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;gap:2px;font-size:1.05rem;color:var(--muted);position:relative}
+.cell .ico{width:1em;height:1em}
+.cell.me{background:var(--sun);color:var(--dark);border-color:var(--dark);box-shadow:4px 4px 0 var(--shadow);transform:scale(1.1) rotate(-3deg);z-index:2}
+.mx-cap{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:6px}
+
+/* patterns */
+.pat{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.8vw,18px)}
+.pcard{position:relative;background:var(--paper);border:var(--rule);border-radius:16px;box-shadow:5px 5px 0 var(--shadow);padding:clamp(10px,1.8vh,16px) 16px;display:flex;gap:12px;opacity:.62;transition:opacity .2s,transform .2s}
+.pcard.you{opacity:1;background:#34301f;border-color:var(--sun);box-shadow:6px 6px 0 var(--sun)}
+.pcard .n{font-family:var(--serif);font-weight:900;font-size:2.2rem;line-height:.9;color:transparent;-webkit-text-stroke:2px var(--sun);flex:none}
+.pcard h3{font-size:1.02rem;margin-bottom:2px}
+.pcard p{font-size:.86rem;color:var(--muted);line-height:1.35}
+.pcard.you p{color:var(--ink)}
+.pcard .yes{position:absolute;right:10px;top:-11px;background:var(--sun);color:var(--dark);border:var(--rule);font-family:var(--mono);font-weight:700;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:2px 10px;border-radius:99px;transform:rotate(4deg)}
+
+/* reflection notebook */
+.nb{position:relative;background:var(--cream);color:var(--dark);border:2px solid var(--cream);border-radius:6px 18px 18px 6px;box-shadow:10px 10px 0 var(--c,var(--accent));padding:clamp(14px,2.4vh,22px) 22px 18px 62px;transform:rotate(-.5deg);
+  background-image:repeating-linear-gradient(transparent,transparent 31px,#cfd8e6 31px,#cfd8e6 32px)}
+.nb::before{content:"";position:absolute;left:38px;top:0;bottom:0;width:2px;background:#e9867a}
+.nb .rings{position:absolute;left:11px;top:16px;bottom:16px;display:flex;flex-direction:column;justify-content:space-around}
+.nb .rings i{display:block;width:17px;height:17px;border-radius:50%;background:var(--dark)}
+.nb h3{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#6a6252}
+.nb .prompt{font-family:var(--serif);font-weight:800;font-size:clamp(1.3rem,2.6vw,2rem);letter-spacing:-.025em;line-height:1.1;margin:4px 0 10px}
+.nb textarea{width:100%;min-height:clamp(90px,16vh,150px);resize:none;border:2px solid var(--dark);border-radius:0;background:rgba(255,255,255,.75);color:var(--dark);padding:10px 12px;font-family:var(--sans);font-size:1rem;line-height:1.4}
+.nb textarea::placeholder{color:#7c7566}
+.nb .count-c{text-align:right;font-family:var(--mono);font-size:.64rem;color:#6a6252;margin-top:2px}
+.mine{display:flex;gap:10px;flex-wrap:wrap}
+.mine .chip b{font-weight:700;opacity:.7;margin-right:4px}
+.fromres{border:var(--rule);border-left:8px solid var(--mint);border-radius:12px;background:var(--paper-2);padding:10px 16px}
+.fromres b{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mint);margin-bottom:2px}
+.fromres p+p{margin-top:4px}
+
+/* takeaway */
+.reminders{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rem{display:flex;align-items:center;gap:12px;background:var(--paper);border:var(--rule);border-radius:14px;box-shadow:4px 4px 0 var(--shadow);padding:10px 14px;font-weight:600;line-height:1.3;border-left:8px solid var(--c)}
+.rem .orb2{flex:none;width:36px;height:36px;border-radius:50%;background:var(--c);color:var(--dark);border:var(--rule);display:grid;place-items:center;font-size:1.15rem}
+.goal{position:relative;background:var(--accent);color:var(--dark);border:var(--rule);border-radius:16px;padding:clamp(12px,2.2vh,20px) clamp(16px,2.4vw,26px);box-shadow:8px 8px 0 var(--shadow)}
+.goal p{font-family:var(--serif);font-weight:800;font-size:clamp(1.05rem,1.9vw,1.4rem);line-height:1.2;letter-spacing:-.015em}
+.finish-msg{background:rgba(143,227,192,.13);border:2px solid var(--mint);border-radius:12px;padding:10px 16px;font-weight:600}
+.copied{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mint)}
+
+/* confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:250}
+.confetti i{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;background:var(--cc);animation:fall var(--t) cubic-bezier(.3,.6,.5,1) var(--d) forwards;opacity:0}
+@keyframes fall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:1;transform:translateY(105vh) rotate(var(--rot))}}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+@media (max-width:980px){
+  .panels.two{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .grid-2,.q-grid,.prof{grid-template-columns:1fr}
+  .duo,.notes,.pat,.reminders{grid-template-columns:1fr}
+  .nav-hint{display:none}
+  .bottombar-row .btn{flex:1}
+  .ticker{display:none}
+  .divider-grid .ring-stk{display:none}
+  .arch-wrap{width:min(60%,200px)}
+  .bignum{font-size:clamp(3rem,10vh,5rem)}
+  .stamp-card .corner{right:0;top:-22px}
+  .matrix{width:min(100%,34vh)}
+  .stamp-card h2{font-size:clamp(1.8rem,7vw,2.6rem)}
+}
+@media (max-width:520px){
+  body{font-size:14.5px;line-height:1.4}
+  .brand{font-size:1.02rem}
+  .meta{font-size:.62rem}
+  .sec-pill{display:none}
+  .btn{padding:8px 14px;min-height:44px}
+  .screen{padding:8px 14px 12px}
+  .inner{gap:8px}
+  .card,.note,.panel-body{padding-left:12px;padding-right:12px}
+  .opt{padding:8px 12px;gap:10px}
+  .opt-key{width:32px;height:32px}
+  .totem{padding:8px 6px}
+  .totem .name small{display:none}
+  .strength{font-size:.52rem;padding:1px 6px}
+  .nb{padding:10px 12px 12px 44px}
+  .nb::before{left:30px}
+  .matrix .h.row{display:none}
+  .matrix{grid-template-columns:repeat(3,1fr)}
+  .matrix .h.corner{display:none}
+  .bottombar{padding:8px 14px 10px}
+  .topbar{padding:6px 14px 8px}
+  .pcard{padding:7px 12px;gap:8px}
+  .pcard .n{font-size:1.5rem}
+  .pcard h3{font-size:.95rem}
+  .pcard p{font-size:.76rem;line-height:1.3}
+  .rem{padding:6px 10px;font-size:.84rem;gap:8px}
+  .rem .orb2{width:28px;height:28px}
+  .reminders{gap:6px}
+  .goal{padding:8px 14px;box-shadow:5px 5px 0 var(--shadow)}
+  .goal p{font-size:.95rem}
+  .lead{font-size:1rem}
+  .stamp-card{padding:12px 16px}
+  .matrix{width:min(100%,34vh)}
+}
+@media (max-height:780px){ .ticker{display:none} .deco.star{display:none} }
+@media (max-height:640px){ body{font-size:15px} }
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important}
+  .confetti{display:none}
+}
+noscript{display:block;padding:20px;background:var(--sun);color:var(--dark)}
+</style>
+</head>
+
+<body>
+<!-- shared icons (eye, ear, hand) + ring path -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-ear" viewBox="0 0 24 24"><path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0"/><path d="M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <path id="edRing" d="M15 60a45 45 0 1 1 90 0a45 45 0 1 1-90 0"/>
+</defs></svg>
+
+<noscript>This assessment needs JavaScript enabled to run.</noscript>
+
+<div class="app" id="app">
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width:2.2"><use href="#i-spark"/></svg>
+        <span>Learning<i>.</i>Preference</span>
+      </div>
+      <div class="meta">
+        <span class="sec-pill" id="secPill">Welcome</span>
+        <span aria-hidden="true">Screen <b id="screenNow">1</b> of <b id="screenTotal">22</b></span>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress" id="progress" role="progressbar" aria-label="Assessment progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="percent" id="percent" aria-hidden="true">0%</span>
+    </div>
+  </header>
+
+  <!-- ===== STAGE: exactly one .screen is visible at a time ===== -->
+  <main class="stage" id="stage">
+
+    <!-- 1. INTRO -->
+    <section class="screen" data-id="intro" data-sec="Welcome" data-title="Welcome" aria-labelledby="t-intro">
+      <i class="deco dots" style="left:-60px;top:6%"></i><i class="deco star" style="right:2%;bottom:4%">✺</i>
+      <div class="inner grid-2">
+        <div class="stack">
+          <div class="chips"><span class="chip">⏱ 5 minutes</span><span class="chip pink">Self-assessment</span></div>
+          <p class="eyebrow" style="--c:var(--sun)">Learning Preference Discovery Test</p>
+          <h1 id="t-intro" tabindex="-1">Discover how you <em>learn</em> &amp; share <span class="hl">what you know</span></h1>
+          <p class="lead">Everyone has different ways of receiving information and sharing what they know.</p>
+          <div class="actions"><button class="btn btn-hot btn-lg" type="button" data-go="next">Start the test →</button></div>
+        </div>
+        <div class="arch-wrap">
+          <div class="arch" aria-hidden="true">
+            <div class="orb o1 float"><svg class="ico" viewBox="0 0 24 24"><use href="#i-eye"/></svg></div>
+            <div class="orb o2 float"><svg class="ico" viewBox="0 0 24 24"><use href="#i-ear"/></svg></div>
+            <div class="orb o3 float"><svg class="ico" viewBox="0 0 24 24"><use href="#i-hand"/></svg></div>
+          </div>
+          <div class="sticker round wob" style="background:var(--pink);top:0;right:0;transform:rotate(12deg)">No wrong<br>answers!</div>
+          <div class="sticker tag" style="background:var(--mint);bottom:22px;left:-4px;transform:rotate(-8deg)">8 questions</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. TWO THINGS YOU'LL DISCOVER -->
+    <section class="screen" data-id="discover" data-sec="Welcome" data-title="Two things you will discover" aria-labelledby="t-discover">
+      <i class="deco ring" style="right:3%;top:5%"></i><i class="deco sq" style="left:1%;bottom:6%"></i>
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--accent-2)">Before we begin</p>
+          <h2 id="t-discover" tabindex="-1">This short test reveals <em>two</em> things</h2>
+          <p class="lead">Some people prefer looking at images and diagrams. Others learn better by listening to explanations, while some prefer trying things out through hands-on activities.</p>
+        </div>
+        <div class="duo">
+          <div class="card" style="--c:var(--vis)">
+            <span class="num" aria-hidden="true">01</span>
+            <h3>Learning <em>Input</em></h3>
+            <p>How do you prefer to <b>receive and absorb</b> new information?</p>
+          </div>
+          <div class="card" style="--c:var(--aud)">
+            <span class="num" aria-hidden="true">02</span>
+            <h3>Learning <em>Output</em></h3>
+            <p>How do you prefer to <b>demonstrate or share</b> what you have learned?</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. GROUND RULES -->
+    <section class="screen" data-id="rules" data-sec="Welcome" data-title="Ground rules" aria-labelledby="t-rules">
+      <i class="deco dots" style="right:0;bottom:0"></i>
+      <div class="inner grid-2" style="align-items:center">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--mint)">Instructions</p>
+          <h2 id="t-rules" tabindex="-1">Four simple <em>ground rules</em></h2>
+          <div class="banner"><svg class="ico" viewBox="0 0 24 24" style="font-size:1.8rem;flex:none"><use href="#i-spark"/></svg><strong>There are no right or wrong answers.</strong></div>
+          <p class="muted">What you'll walk away with:</p>
+          <div class="chips"><span class="chip peri">Understand · your preferences for absorbing information</span><span class="chip sun">Apply · use them when learning &amp; sharing</span></div>
+        </div>
+        <div class="notes">
+          <div class="note"><b>Rule 01</b>Read each situation carefully.</div>
+          <div class="note"><b>Rule 02</b>Select only ONE answer per question.</div>
+          <div class="note"><b>Rule 03</b>Choose what you would naturally prefer, not what you think is the best answer.</div>
+          <div class="note"><b>Rule 04</b>Answer all eight questions.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. DIVIDER: INPUT -->
+    <section class="screen divider" data-id="divA" data-sec="Part A · Input" data-title="Part A: Learning Input" aria-labelledby="t-divA" style="--c:var(--vis)">
+      <div class="inner">
+        <div class="divider-grid">
+          <div class="stack">
+            <p class="eyebrow">Part A · Questions 1–4</p>
+            <h2 class="mega" id="t-divA" tabindex="-1">Learning<em>Input</em></h2>
+            <p class="sub">How do you prefer to absorb new information?</p>
+          </div>
+          <div class="ring-stk" data-ring="ABSORB"></div>
+        </div>
+      </div>
+      <div class="marquee" aria-hidden="true"><div data-marquee="Absorb|Notice|Take it in|Absorb|Notice|Take it in"></div></div>
+    </section>
+
+    <!-- 5–8. QUESTIONS 1–4 (filled by script) -->
+    <section class="screen" data-q="0"></section>
+    <section class="screen" data-q="1"></section>
+    <section class="screen" data-q="2"></section>
+    <section class="screen" data-q="3"></section>
+
+    <!-- 9. DIVIDER: OUTPUT -->
+    <section class="screen divider" data-id="divB" data-sec="Part B · Output" data-title="Part B: Learning Output" aria-labelledby="t-divB" style="--c:var(--aud)">
+      <div class="inner">
+        <div class="divider-grid">
+          <div class="stack">
+            <p class="eyebrow">Part B · Questions 5–8</p>
+            <h2 class="mega" id="t-divB" tabindex="-1">Learning<em>Output</em></h2>
+            <p class="sub">How do you prefer to share or demonstrate what you have learned?</p>
+          </div>
+          <div class="ring-stk" data-ring="SHARE"></div>
+        </div>
+      </div>
+      <div class="marquee" aria-hidden="true"><div data-marquee="Share|Show|Teach|Share|Show|Teach"></div></div>
+    </section>
+
+    <!-- 10–13. QUESTIONS 5–8 -->
+    <section class="screen" data-q="4"></section>
+    <section class="screen" data-q="5"></section>
+    <section class="screen" data-q="6"></section>
+    <section class="screen" data-q="7"></section>
+
+    <!-- 14. INPUT SCORE -->
+    <section class="screen" data-id="inScore" data-sec="Results" data-title="Your Learning Input score" aria-labelledby="t-inScore" style="--c:var(--vis)">
+      <i class="deco dots" style="left:-60px;top:4%"></i>
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--vis)">Results · Part A</p>
+          <h2 id="t-inScore" tabindex="-1">Your learning <em>input</em> score</h2>
+        </div>
+        <div class="totems" id="inTotems"></div>
+        <div class="verdict" id="inVerdict"></div>
+        <p class="note-small">Each block is one of your 4 answers. These scores describe the preferences you expressed here. They do not measure intelligence, ability, or actual learning effectiveness.</p>
+      </div>
+    </section>
+
+    <!-- 15. INPUT MEANING -->
+    <section class="screen" data-id="inMean" data-sec="Results" data-title="What your input preference means" aria-labelledby="t-inMean">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--vis)">Understanding your results</p>
+          <h2 id="t-inMean" tabindex="-1">How you like to <em>receive</em> information</h2>
+        </div>
+        <div class="panels" id="inPanels"></div>
+      </div>
+    </section>
+
+    <!-- 16. OUTPUT SCORE -->
+    <section class="screen" data-id="outScore" data-sec="Results" data-title="Your Learning Output score" aria-labelledby="t-outScore" style="--c:var(--aud)">
+      <i class="deco ring" style="right:2%;top:4%"></i>
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--aud)">Results · Part B</p>
+          <h2 id="t-outScore" tabindex="-1">Your learning <em>output</em> score</h2>
+        </div>
+        <div class="totems" id="outTotems"></div>
+        <div class="verdict" id="outVerdict"></div>
+        <p class="note-small">Each block is one of your 4 answers. Receiving information and communicating knowledge are different activities, so your two scores can differ.</p>
+      </div>
+    </section>
+
+    <!-- 17. OUTPUT MEANING -->
+    <section class="screen" data-id="outMean" data-sec="Results" data-title="What your output preference means" aria-labelledby="t-outMean">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--aud)">Understanding your results</p>
+          <h2 id="t-outMean" tabindex="-1">How you like to <em>share</em> what you know</h2>
+        </div>
+        <div class="panels" id="outPanels"></div>
+      </div>
+    </section>
+
+    <!-- 18. PROFILE -->
+    <section class="screen" data-id="profile" data-sec="Results" data-title="Your learning preference profile" aria-labelledby="t-profile">
+      <i class="deco star" style="left:1%;top:3%">✺</i>
+      <div class="inner prof">
+        <div class="stack">
+          <div class="stamp-card">
+            <div class="sticker round wob corner" style="background:var(--sun)">Your<br>profile</div>
+            <p class="kick">My learning preference profile</p>
+            <h2 id="t-profile" tabindex="-1"></h2>
+            <div class="row" id="profChips"></div>
+          </div>
+          <p class="note-small">Your preferred way of receiving information may differ from how you prefer to share it. This is completely normal.</p>
+        </div>
+        <div>
+          <div class="matrix" id="matrix" role="img" aria-label="Profile grid"></div>
+          <p class="mx-cap" id="mxCap">Input (rows) × Output (columns)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 19. PATTERNS -->
+    <section class="screen" data-id="patterns" data-sec="Results" data-title="What your results mean" aria-labelledby="t-patterns">
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--sun)">Interpretation</p>
+          <h2 id="t-patterns" tabindex="-1">What your results <em>mean</em></h2>
+        </div>
+        <div class="pat" id="patterns"></div>
+        <p class="note-small">Highlighted cards describe your results. These scores describe preferences expressed in this assessment, not intelligence, ability, or learning effectiveness.</p>
+      </div>
+    </section>
+
+    <!-- 20. REFLECT 1 -->
+    <section class="screen" data-id="ref1" data-sec="Reflect" data-title="Reflection: improve how you learn" aria-labelledby="t-ref1" style="--c:var(--vis)">
+      <div class="inner grid-2">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--mint)">Apply what you learned · 1 of 2</p>
+          <h2 style="font-size:clamp(1.6rem,3.4vw,2.6rem)">Now make it <em>yours</em></h2>
+          <div class="mine" id="mine1"></div>
+          <div class="fromres" id="hint1"></div>
+        </div>
+        <div class="nb">
+          <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <h3>Reflection</h3>
+          <p class="prompt" id="t-ref1" tabindex="-1">What is one thing you can do to improve the way you learn?</p>
+          <textarea id="refLearn" maxlength="400" aria-labelledby="t-ref1" placeholder="Type your answer here…"></textarea>
+          <p class="count-c"><span id="cLearn">0</span> / 400</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 21. REFLECT 2 -->
+    <section class="screen" data-id="ref2" data-sec="Reflect" data-title="Reflection: improve how you share knowledge" aria-labelledby="t-ref2" style="--c:var(--aud)">
+      <div class="inner grid-2">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--mint)">Apply what you learned · 2 of 2</p>
+          <h2 style="font-size:clamp(1.6rem,3.4vw,2.6rem)">One more <em>nudge</em></h2>
+          <div class="mine" id="mine2"></div>
+          <div class="fromres" id="hint2"></div>
+        </div>
+        <div class="nb">
+          <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <h3>Reflection</h3>
+          <p class="prompt" id="t-ref2" tabindex="-1">What is one thing you can do to improve how you share knowledge with others?</p>
+          <textarea id="refShare" maxlength="400" aria-labelledby="t-ref2" placeholder="Type your answer here…"></textarea>
+          <p class="count-c"><span id="cShare">0</span> / 400</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 22. TAKEAWAY -->
+    <section class="screen" data-id="takeaway" data-sec="Takeaway" data-title="Final takeaway" aria-labelledby="t-takeaway">
+      <i class="deco dots" style="right:0;top:2%"></i>
+      <div class="inner">
+        <div class="stack">
+          <p class="eyebrow" style="--c:var(--accent)">Final takeaway</p>
+          <h2 id="t-takeaway" tabindex="-1">There is no single <em>best</em> way to learn or share</h2>
+          <p class="lead">Understanding your preferences can help you make better choices about how you approach learning activities and communicate information.</p>
+        </div>
+        <div class="reminders">
+          <div class="rem" style="--c:var(--vis)"><span class="orb2"><svg class="ico" viewBox="0 0 24 24"><use href="#i-eye"/></svg></span>Use visual materials when they help clarify information.</div>
+          <div class="rem" style="--c:var(--aud)"><span class="orb2"><svg class="ico" viewBox="0 0 24 24"><use href="#i-ear"/></svg></span>Listen, discuss, and explain ideas when verbal interaction is useful.</div>
+          <div class="rem" style="--c:var(--tac)"><span class="orb2"><svg class="ico" viewBox="0 0 24 24"><use href="#i-hand"/></svg></span>Practice and experiment when hands-on experience is helpful.</div>
+          <div class="rem" style="--c:var(--sun)"><span class="orb2"><svg class="ico" viewBox="0 0 24 24"><use href="#i-spark"/></svg></span>Be open to combining different approaches.</div>
+        </div>
+        <div class="goal"><p>The goal is not to limit yourself to one learning preference. The goal is to become a more flexible and effective learner and knowledge sharer.</p></div>
+        <div class="actions">
+          <button class="btn btn-hot btn-lg" id="finishBtn" type="button">Finish ✓</button>
+          <button class="btn btn-mint" id="copyBtn" type="button">Copy my results</button>
+          <button class="btn btn-ghost" id="retakeBtn" type="button">↺ Retake the test</button>
+          <span class="copied" id="copiedMsg" role="status" aria-live="polite"></span>
+        </div>
+        <div class="finish-msg" id="finishMsg" role="status" tabindex="-1" hidden>🎉 <b>End of assessment.</b> Thank you for taking the Learning Preference Discovery Test. You can now close this window.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bottombar">
+    <div class="bottombar-row">
+      <button class="btn btn-ghost" id="prevBtn" type="button">← Previous</button>
+      <span class="nav-hint" id="navHint" aria-live="polite">Use the buttons or the ← → arrow keys</span>
+      <button class="btn btn-primary" id="nextBtn" type="button">Next →</button>
+    </div>
+  </footer>
+</div>
+
+<div id="announcer" aria-live="polite" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"></div>
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+
+<script>
+(function () {
+  "use strict";
+  /* ---------- helpers ---------- */
+  const $  = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const icon = id => '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#' + id + '"/></svg>';
+
+  /* =====================================================================
+     DATA: preferences, questions, interpretation text
+     Option A = Visual, B = Auditory, C = Tactile / Kinesthetic
+     ===================================================================== */
+  const ORDER = ["vis", "aud", "tac"];
+  const PREF = {
+    vis: { name: "Visual",   full: "Visual",              color: "var(--vis)", w: "w-vis", ico: "i-eye",
+           says: "Seeing information helps you engage with and process new ideas.",
+           likes: ["Charts, diagrams, and infographics", "Videos and demonstrations", "Written instructions and visual guides", "Color-coded notes and mind maps"],
+           inTip: "You may find it helpful to use diagrams, illustrations, videos, and visual summaries when learning something new.",
+           outTip: "You may enjoy sharing information through presentations, diagrams, visual guides, and infographics." },
+    aud: { name: "Auditory", full: "Auditory",            color: "var(--aud)", w: "w-aud", ico: "i-ear",
+           says: "Hearing information and discussing ideas help you engage with new concepts.",
+           likes: ["Verbal explanations", "Group discussions", "Podcasts and recorded lessons", "Asking questions and explaining ideas aloud"],
+           inTip: "You may find it helpful to listen to explanations, join discussions, and talk through unfamiliar concepts.",
+           outTip: "You may enjoy sharing knowledge through presentations, discussions, verbal explanations, and storytelling." },
+    tac: { name: "Tactile",  full: "Tactile / Kinesthetic", color: "var(--tac)", w: "w-tac", ico: "i-hand",
+           says: "Hands-on experiences and active participation help you engage with information.",
+           likes: ["Practical exercises", "Simulations and role-playing", "Hands-on demonstrations", "Learning by doing and experimenting"],
+           inTip: "You may find it helpful to practice new skills, explore tools, participate in simulations, and perform real-world activities.",
+           outTip: "You may enjoy teaching others through demonstrations, practical exercises, role-playing, and guided activities." }
+  };
+  const QUESTIONS = [
+    { part: "input", text: "You are introduced to a new process at work. How would you prefer to learn it?",
+      o: ["Look at a diagram or step-by-step visual guide.", "Listen to someone explain the process.", "Try the process yourself with guidance."] },
+    { part: "input", text: "You need to understand a new and unfamiliar topic. What would help you most?",
+      o: ["Watch a video or review illustrations about the topic.", "Listen to a discussion, podcast, or verbal explanation.", "Participate in an activity or practical exercise."] },
+    { part: "input", text: "You are learning how to use a new software application. What would you prefer?",
+      o: ["Follow screenshots and visual instructions.", "Listen to someone walk you through the application.", "Explore the application and practice using its features."] },
+    { part: "input", text: "You need to remember important information from a training session. What would you naturally do?",
+      o: ["Review notes, diagrams, or visual summaries.", "Recall what the facilitator said or discuss the topic with someone.", "Repeat the activity or practice the skill yourself."] },
+    { part: "output", text: "You have learned a new process and need to teach it to a colleague. How would you prefer to explain it?",
+      o: ["Create a flowchart, infographic, or visual presentation.", "Explain the process verbally or through a discussion.", "Demonstrate the process and let your colleague try it."] },
+    { part: "output", text: "Your manager asks you to share key takeaways from a training session. What would you prefer to do?",
+      o: ["Prepare a visual presentation or summary document.", "Give a short verbal presentation or talk about your insights.", "Conduct a demonstration or practical activity."] },
+    { part: "output", text: "You need to help a colleague understand a new work procedure. What would you naturally choose?",
+      o: ["Show them a visual guide or illustrated instructions.", "Talk them through the steps and answer their questions.", "Guide them while they perform the procedure themselves."] },
+    { part: "output", text: "You are asked to demonstrate that you have mastered a new skill. How would you prefer to show your understanding?",
+      o: ["Create a visual output, such as a diagram or presentation.", "Explain the concepts and answer questions about them.", "Perform the task or demonstrate the skill in practice."] }
+  ];
+  const STRENGTH = { 4: "Strong preference", 3: "Clear preference", 2: "Shared preference", 1: "Less frequently selected", 0: "Not selected" };
+  const LETTERS = ["A", "B", "C"];
+  const BCOLORS = ["#ffc93c", "#ff6a4d", "#8f8af0", "#8fe3c0", "#ffb3c7"];
+
+  /* ---------- state (kept when moving back and forth) ---------- */
+  const answers = Array(QUESTIONS.length).fill(null);   // "vis" | "aud" | "tac"
+  const reflect = { learn: "", share: "" };
+  let current = 0, completed = false;
+
+  /* =====================================================================
+     SCORING
+     ===================================================================== */
+  const counts = part => {
+    const c = { vis: 0, aud: 0, tac: 0 };
+    QUESTIONS.forEach((q, i) => { if (q.part === part && answers[i]) c[answers[i]]++; });
+    return c;
+  };
+  const dominant = c => {
+    const max = Math.max(c.vis, c.aud, c.tac);
+    return { max, keys: ORDER.filter(k => c[k] === max) };
+  };
+  const names = keys => keys.map(k => PREF[k].name).join(" + ");
+  const allAnswered = () => answers.every(Boolean);
+  function profileInfo() {
+    const ic = counts("input"), oc = counts("output");
+    const di = dominant(ic), dO = dominant(oc);
+    const same = di.keys.join() === dO.keys.join();
+    const inName = names(di.keys), outName = names(dO.keys);
+    return { ic, oc, di, dO, same, inName, outName,
+             label: same ? inName + " Learner and Sharer" : inName + " Learner, " + outName + " Sharer" };
+  }
+
+  /* =====================================================================
+     BUILD: question screens, rings, marquees, ticker
+     ===================================================================== */
+  const screens = $$(".screen");
+  const QCOLOR = ["var(--sun)", "var(--accent-2)", "var(--mint)", "var(--pink)"];
+  $$("[data-q]").forEach(sec => {
+    const qi = +sec.dataset.q, q = QUESTIONS[qi], out = q.part === "output";
+    const partNo = out ? qi - 3 : qi + 1;
+    sec.dataset.id = "q" + (qi + 1);
+    sec.dataset.sec = out ? "Part B · Output" : "Part A · Input";
+    sec.dataset.title = "Question " + (qi + 1) + " of 8";
+    sec.setAttribute("aria-labelledby", "t-q" + qi);
+    sec.style.setProperty("--c", QCOLOR[qi % 4]);
+    sec.innerHTML =
+      '<i class="deco ' + (qi % 2 ? "ring" : "dots") + '" style="' + (qi % 2 ? "right:2%;top:4%" : "left:-60px;bottom:2%") + '"></i>' +
+      '<div class="inner q-grid">' +
+        '<div class="stack">' +
+          '<div class="q-top"><span class="eyebrow" style="--c:' + (out ? "var(--aud)" : "var(--vis)") + '">' + (out ? "Part B · Learning Output" : "Part A · Learning Input") + ' · ' + partNo + ' of 4</span>' +
+          '<div class="pips" aria-hidden="true">' + QUESTIONS.map((_, k) => '<span class="pip' + (k === qi ? " now" : "") + '" data-pip="' + k + '"></span>').join("") + '</div></div>' +
+          '<div class="bignum" aria-hidden="true">0' + (qi + 1) + '</div>' +
+          '<h2 class="q-text" id="t-q' + qi + '" tabindex="-1">' + esc(q.text) + '</h2>' +
+          '<p class="q-hint">Pick one. Choose what you would naturally prefer.</p>' +
+        '</div>' +
+        '<div class="opts" role="radiogroup" aria-labelledby="t-q' + qi + '">' +
+          q.o.map((t, oi) =>
+            '<label class="opt"><input type="radio" name="q' + qi + '" value="' + oi + '">' +
+            '<span class="opt-key">' + LETTERS[oi] + '</span><span class="opt-body">' + esc(t) + '</span>' +
+            '<span class="opt-check" aria-hidden="true">✓</span></label>').join("") +
+        '</div>' +
+      '</div>';
+  });
+
+  /* ring-type sticker (spinning text on a disc) */
+  $$("[data-ring]").forEach(el => {
+    const label = el.dataset.ring, n = Math.max(2, Math.round(27 / (label.length + 3)));
+    const txt = Array(n).fill(label).join(" · ") + " · ";
+    const ls = (282.7 / txt.length - 6.3).toFixed(2);
+    const part = el.closest(".screen").dataset.id === "divA";
+    el.innerHTML = '<svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><text style="letter-spacing:' + ls + 'px"><textPath href="#edRing">' + txt + '</textPath></text></svg>' +
+                   '<div class="disc">' + icon(part ? "i-eye" : "i-hand") + '</div>';
+    el.style.setProperty("--c", part ? "var(--vis)" : "var(--aud)");
+  });
+  /* marquee strips */
+  $$("[data-marquee]").forEach(el => {
+    const words = el.dataset.marquee.split("|");
+    el.innerHTML = Array(5).fill(0).map(() => words.map((w, i) => '<span class="' + (i % 2 ? "o" : "") + '">' + esc(w) + ' ✺</span>').join("")).join("");
+  });
+  /* ticker */
+  const tick = ["Visual", "Auditory", "Tactile / Kinesthetic", "Input", "Output", "No wrong answers", "Know your style"];
+  $("#tickerTrack").innerHTML = [...tick, ...tick, ...tick, ...tick].map(t => "<span>✦ " + esc(t) + "</span>").join("");
+
+  /* =====================================================================
+     NAVIGATION (one screen at a time)
+     ===================================================================== */
+  const TOTAL = screens.length;
+  const prevBtn = $("#prevBtn"), nextBtn = $("#nextBtn"), hint = $("#navHint");
+  $("#screenTotal").textContent = TOTAL;
+  const qIndexOf = el => el.dataset.q === undefined ? -1 : +el.dataset.q;
+  const isGated = () => { const qi = qIndexOf(screens[current]); return qi >= 0 && !answers[qi]; };
+
+  function goTo(i, initial) {
+    i = Math.max(0, Math.min(TOTAL - 1, i));
+    screens.forEach((s, idx) => {
+      const active = idx === i;
+      s.classList.toggle("active", active);
+      s.classList.toggle("before", idx < i);
+      s.setAttribute("aria-hidden", String(!active));
+      try { s.inert = !active; } catch (e) {}
+    });
+    current = i;
+    const pct = Math.round(((i + 1) / TOTAL) * 100);
+    $("#screenNow").textContent = i + 1;
+    $("#percent").textContent = pct + "%";
+    $("#progressFill").style.width = pct + "%";
+    const pb = $("#progress");
+    pb.setAttribute("aria-valuenow", pct);
+    pb.setAttribute("aria-valuetext", "Screen " + (i + 1) + " of " + TOTAL + ", " + pct + " percent");
+    $("#secPill").textContent = screens[i].dataset.sec || "";
+    screens[i].scrollTop = 0;
+    enter(screens[i]);
+    updateNav();
+    if (!initial) {
+      $("#announcer").textContent = "Screen " + (i + 1) + " of " + TOTAL + ": " + screens[i].dataset.title;
+      const h = $("h1, h2, .prompt", screens[i]);
+      if (h) h.focus({ preventScroll: true });
+    }
+  }
+
+  function updateNav() {
+    prevBtn.disabled = current === 0;
+    const qi = qIndexOf(screens[current]);
+    const last = current === TOTAL - 1;
+    nextBtn.textContent = last ? (completed ? "Completed ✓" : "Finish ✓") : (qi === QUESTIONS.length - 1 ? "See my results →" : "Next →");
+    nextBtn.disabled = last ? completed : isGated();
+    hint.classList.toggle("need", isGated());
+    hint.textContent = isGated() ? "Choose an answer to continue" : "Use the buttons or the ← → arrow keys";
+  }
+
+  const next = () => { if (nextBtn.disabled) return; current === TOTAL - 1 ? finish() : goTo(current + 1); };
+  const prev = () => { if (!prevBtn.disabled) goTo(current - 1); };
+  prevBtn.addEventListener("click", prev);
+  nextBtn.addEventListener("click", next);
+  $$("[data-go='next']").forEach(b => b.addEventListener("click", next));
+
+  document.addEventListener("keydown", e => {
+    const t = e.target;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (t && (t.tagName === "INPUT" && t.type !== "radio" || t.tagName === "TEXTAREA")) return;
+    if (e.key === "ArrowRight") { next(); }
+    else if (e.key === "ArrowLeft") { prev(); }
+    else {
+      const qi = qIndexOf(screens[current]);
+      const k = e.key.toLowerCase();
+      const oi = ["a", "b", "c"].indexOf(k) >= 0 ? ["a", "b", "c"].indexOf(k) : ["1", "2", "3"].indexOf(k);
+      if (qi >= 0 && oi >= 0) { const r = $$("input", screens[current])[oi]; if (r) { r.checked = true; r.dispatchEvent(new Event("change", { bubbles: true })); } }
+    }
+  });
+
+  /* =====================================================================
+     ANSWERING
+     ===================================================================== */
+  function burst(el) {
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const b = document.createElement("span"); b.className = "burst";
+    for (let k = 0; k < 12; k++) {
+      const a = (k / 12) * Math.PI * 2, d = 46 + Math.random() * 36, i = document.createElement("i");
+      i.style.setProperty("--dx", Math.cos(a) * d * 1.6 + "px"); i.style.setProperty("--dy", Math.sin(a) * d + "px");
+      i.style.setProperty("--bc", BCOLORS[k % BCOLORS.length]); b.appendChild(i);
+    }
+    el.appendChild(b); setTimeout(() => b.remove(), 800);
+  }
+  function refreshPips() {
+    $$("[data-pip]").forEach(p => p.classList.toggle("done", !!answers[+p.dataset.pip]));
+  }
+  $$("[data-q] input[type=radio]").forEach(r => r.addEventListener("change", () => {
+    const sec = r.closest(".screen"), qi = +sec.dataset.q;
+    answers[qi] = ORDER[+r.value];
+    burst(r.closest(".opt"));
+    refreshPips(); updateNav();
+  }));
+
+  /* =====================================================================
+     RESULTS RENDERING (runs each time a results screen is entered)
+     ===================================================================== */
+  function countUp(el, to) {
+    if (!to) { el.textContent = "0"; return; }
+    let n = 0; const step = () => { n++; el.textContent = n; if (n < to) setTimeout(step, 140); }; step();
+  }
+  function renderTotems(part, mount, verdictMount) {
+    const c = counts(part), d = dominant(c), tied = d.keys.length > 1;
+    mount.innerHTML = ORDER.map(k => {
+      const p = PREF[k], top = d.keys.includes(k);
+      return '<div class="totem' + (top ? " top" : "") + '" style="--c:' + p.color + '">' +
+        (top ? '<span class="crown">' + (tied ? "Tied top" : "Top pick") + '</span>' : "") +
+        '<span class="orb2">' + icon(p.ico) + '</span>' +
+        '<div class="name">' + esc(p.name) + '<small>' + (k === "vis" ? "Answer A" : k === "aud" ? "Answer B" : "Answer C") + '</small></div>' +
+        '<div class="blocks" aria-hidden="true">' + [0, 1, 2, 3].map(b => '<span class="blk" data-on="' + (b < c[k] ? 1 : 0) + '" style="transition-delay:' + (b * 140) + 'ms"></span>').join("") + '</div>' +
+        '<div class="count"><span data-cnt="' + c[k] + '">0</span><small> / 4</small></div>' +
+        '<span class="strength">' + STRENGTH[c[k]] + '</span></div>';
+    }).join("");
+    const lead = part === "input" ? "preferred way of receiving information" : "preferred way of sharing what you have learned";
+    const others = ORDER.filter(k => !d.keys.includes(k)).map(k => PREF[k].name + " " + c[k]).join(", ");
+    verdictMount.style.setProperty("--c", PREF[d.keys[0]].color);
+    verdictMount.innerHTML = '<p class="lead">Your highest score, your ' + lead + ', is <b>' + esc(names(d.keys)) + '</b> (' + d.max + ' out of 4: ' + STRENGTH[d.max].toLowerCase() + ').' +
+      (tied ? ' You have <b>shared preferences</b>: you may enjoy combining approaches.' : '') + '</p>';
+    // animate blocks and counters shortly after the screen appears
+    setTimeout(() => {
+      $$(".blk", mount).forEach(b => { if (b.dataset.on === "1") b.classList.add("on"); });
+      $$("[data-cnt]", mount).forEach(s => countUp(s, +s.dataset.cnt));
+    }, 350);
+  }
+  function renderPanels(part, mount) {
+    const c = counts(part), d = dominant(c);
+    mount.className = "panels" + (d.keys.length > 1 ? " two" : "");
+    mount.innerHTML = d.keys.map(k => {
+      const p = PREF[k], inp = part === "input";
+      return '<div class="panel" style="--c:' + p.color + '"><div class="panel-head"><span class="orb2">' + icon(p.ico) + '</span>' +
+        '<div><small>' + (inp ? "Your input preference" : "Your output preference") + '</small><h3>' + esc(p.full) + '</h3></div></div>' +
+        '<div class="panel-body"><p class="says"><b>Your preference:</b> ' + esc(p.says) + '</p>' +
+        '<div><p class="also" style="margin-bottom:6px">You may prefer</p><ul class="likes">' + p.likes.map(l => '<li>' + esc(l) + '</li>').join("") + '</ul></div>' +
+        '<div class="tip"><b>If ' + esc(p.name) + ' is your dominant ' + (inp ? "Input" : "Output") + ' preference</b>' + esc(inp ? p.inTip : p.outTip) + '</div></div></div>';
+    }).join("");
+  }
+  function renderProfile() {
+    const P = profileInfo();
+    const h = $("#t-profile");
+    const word = (keys) => keys.map(k => '<span class="' + PREF[k].w + '">' + esc(PREF[k].name) + '</span>').join(" + ");
+    h.innerHTML = P.same
+      ? word(P.di.keys) + " Learner<small>and</small>Sharer"
+      : word(P.di.keys) + " Learner<small>and</small>" + word(P.dO.keys) + " Sharer";
+    $("#profChips").innerHTML = '<span class="chip">Input: ' + esc(P.inName) + '</span><span class="chip">Output: ' + esc(P.outName) + '</span>';
+    let m = '<span class="h corner"></span>' + ORDER.map(k => '<span class="h">Shares ' + icon(PREF[k].ico).replace('class="ico"', 'class="ico" style="font-size:1.1rem"') + '</span>').join("");
+    ORDER.forEach(i => {
+      m += '<span class="h row">Learns</span>'.replace("Learns", "Learns") ;
+      ORDER.forEach(o => {
+        const me = P.di.keys.includes(i) && P.dO.keys.includes(o);
+        m += '<span class="cell' + (me ? " me" : "") + '" title="' + esc(PREF[i].name + " Learner, " + PREF[o].name + " Sharer") + '">' + icon(PREF[i].ico) + icon(PREF[o].ico) + '</span>';
+      });
+    });
+    $("#matrix").innerHTML = m;
+    // row header icons: put eye/ear/hand in the row label for clarity
+    $$("#matrix .h.row").forEach((el, n) => { el.innerHTML = 'Learns ' + icon(PREF[ORDER[n]].ico); el.style.writingMode = "horizontal-tb"; el.style.transform = "none"; el.style.fontSize = "1.1rem"; el.innerHTML = icon(PREF[ORDER[n]].ico); });
+    $("#matrix").setAttribute("aria-label", "Profile grid. Your profile: " + P.label);
+    $("#mxCap").textContent = "Rows: how you learn · Columns: how you share";
+    $("#matrix").style.setProperty("--x", "1");
+  }
+  function renderPatterns() {
+    const P = profileInfo();
+    const secs = [P.ic, P.oc].map(dominant);
+    const flags = [
+      secs.some(d => d.max >= 3),
+      secs.some(d => d.keys.length > 1),
+      secs.some(d => d.max === 2 && d.keys.length === 1),
+      P.di.keys.join() !== P.dO.keys.join()
+    ];
+    const cards = [
+      ["One dominant preference", "Score 3 or 4 in one category and you have a clear or strong preference. You may enjoy using that approach when receiving or sharing information."],
+      ["Two equally preferred approaches", "If two categories tie for the highest score, you have shared preferences. You may enjoy combining approaches depending on the topic, situation, or activity."],
+      ["No clear dominant preference", "Score evenly across categories and you may have flexible preferences, comfortable receiving or sharing information in different ways. (With 4 questions, a 2-1-1 split is the most even result.)"],
+      ["Different input and output", "How you prefer to receive information may differ from how you prefer to share it. For example, you may like videos to understand a concept but prefer explaining it verbally. This is completely normal."]
+    ];
+    $("#patterns").innerHTML = cards.map((c, i) =>
+      '<div class="pcard' + (flags[i] ? " you" : "") + '">' + (flags[i] ? '<span class="yes">That\'s you</span>' : "") +
+      '<span class="n" aria-hidden="true">' + (i + 1) + '</span><div><h3>' + esc(c[0]) + '</h3><p>' + esc(c[1]) + '</p></div></div>').join("");
+  }
+  function renderReflect() {
+    const P = profileInfo();
+    const chips = '<span class="chip peri"><b>Input</b>' + esc(P.inName) + '</span><span class="chip pink"><b>Output</b>' + esc(P.outName) + '</span>';
+    $("#mine1").innerHTML = chips; $("#mine2").innerHTML = chips;
+    $("#hint1").innerHTML = '<b>From your results</b>' + P.di.keys.map(k => '<p>' + esc(PREF[k].inTip) + '</p>').join("");
+    $("#hint2").innerHTML = '<b>From your results</b>' + P.dO.keys.map(k => '<p>' + esc(PREF[k].outTip) + '</p>').join("");
+  }
+
+  const entered = {};
+  function enter(sec) {
+    const id = sec.dataset.id;
+    if (id === "inScore") renderTotems("input", $("#inTotems"), $("#inVerdict"));
+    else if (id === "inMean") renderPanels("input", $("#inPanels"));
+    else if (id === "outScore") renderTotems("output", $("#outTotems"), $("#outVerdict"));
+    else if (id === "outMean") renderPanels("output", $("#outPanels"));
+    else if (id === "profile") { renderProfile(); confetti(); }
+    else if (id === "patterns") renderPatterns();
+    else if (id === "ref1" || id === "ref2") renderReflect();
+    else if (id === "takeaway" && !entered.takeaway) { entered.takeaway = true; }
+    refreshPips();
+  }
+
+  /* =====================================================================
+     CONFETTI, REFLECTION INPUTS, COPY, FINISH, RETAKE
+     ===================================================================== */
+  function confetti() {
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const box = $("#confetti"); box.innerHTML = "";
+    for (let k = 0; k < 34; k++) {
+      const i = document.createElement("i");
+      i.style.left = Math.random() * 100 + "vw";
+      i.style.setProperty("--cc", BCOLORS[k % BCOLORS.length]);
+      i.style.setProperty("--t", 2 + Math.random() * 1.6 + "s");
+      i.style.setProperty("--d", Math.random() * .7 + "s");
+      i.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
+      box.appendChild(i);
+    }
+    setTimeout(() => { box.innerHTML = ""; }, 4600);
+  }
+  $("#refLearn").addEventListener("input", e => { reflect.learn = e.target.value; $("#cLearn").textContent = e.target.value.length; });
+  $("#refShare").addEventListener("input", e => { reflect.share = e.target.value; $("#cShare").textContent = e.target.value.length; });
+
+  function resultsText() {
+    const P = profileInfo(), fmt = c => "Visual " + c.vis + ", Auditory " + c.aud + ", Tactile " + c.tac;
+    return ["LEARNING PREFERENCE DISCOVERY TEST: MY RESULTS", "",
+      "Learning Input: " + P.inName + " (" + P.di.max + "/4)  [" + fmt(P.ic) + "]",
+      "Learning Output: " + P.outName + " (" + P.dO.max + "/4)  [" + fmt(P.oc) + "]",
+      "My Combined Profile: " + P.label, "",
+      "One thing I can do to improve the way I learn:", reflect.learn || "(not answered)", "",
+      "One thing I can do to improve how I share knowledge with others:", reflect.share || "(not answered)", "",
+      "These scores describe the preferences expressed in this assessment. They do not measure intelligence, ability, or learning effectiveness."].join("\n");
+  }
+  $("#copyBtn").addEventListener("click", async () => {
+    const msg = $("#copiedMsg"), text = resultsText();
+    try { await navigator.clipboard.writeText(text); msg.textContent = "Copied to clipboard ✓"; }
+    catch (e) {
+      const ta = document.createElement("textarea"); ta.value = text; ta.style.cssText = "position:fixed;left:-9999px";
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand("copy"); } catch (_) {}
+      ta.remove(); msg.textContent = ok ? "Copied to clipboard ✓" : "Couldn't copy. Select and copy manually.";
+    }
+  });
+
+  function finish() {
+    completed = true;
+    $("#finishMsg").hidden = false; $("#finishBtn").disabled = true; $("#finishBtn").textContent = "Completed ✓";
+    updateNav(); confetti(); $("#finishMsg").focus();
+  }
+  $("#finishBtn").addEventListener("click", finish);
+
+  $("#retakeBtn").addEventListener("click", () => {
+    answers.fill(null); reflect.learn = reflect.share = ""; completed = false;
+    $$("[data-q] input").forEach(r => { r.checked = false; });
+    $("#refLearn").value = ""; $("#refShare").value = ""; $("#cLearn").textContent = "0"; $("#cShare").textContent = "0";
+    $("#finishMsg").hidden = true; $("#finishBtn").disabled = false; $("#finishBtn").textContent = "Finish ✓"; $("#copiedMsg").textContent = "";
+    goTo(0);
+  });
+
+  goTo(0, true);
+})();
+</script>
+</body>
+</html>
